@@ -8,3 +8,4 @@ MessageBus::MessageBus() {
 
 MessageBus::~MessageBus() {
 }
+
