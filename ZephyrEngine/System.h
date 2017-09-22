@@ -2,6 +2,8 @@
 #include "Msg.h"
 #include "MessageBus.h"
 
+class MessageBus;
+
 class System {
 public:
 	System(MessageBus* mbus);
@@ -11,8 +13,7 @@ public:
 
 private:
 
-	MessageBus *msgBus;
+	MessageBus* msgBus;
 	//// Usage: msgBus->postMessage(msg);
 };
-
 

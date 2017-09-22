@@ -2,7 +2,9 @@
 
 
 
-Msg::Msg() {
+Msg::Msg(int t, std::string d) {
+	type = t;
+	data = d;
 }
 
 
