@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Zehpyr", "Zehpyr\Zehpyr.vcxproj", "{92B0E3EE-45CE-4955-89F9-525B0B9FAD43}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZephyrEngine", "ZephyrEngine\ZephyrEngine.vcxproj", "{80299868-416B-4891-BDDF-E3E9835C1D6B}"
 EndProject
 Global
@@ -15,14 +13,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{92B0E3EE-45CE-4955-89F9-525B0B9FAD43}.Debug|x64.ActiveCfg = Debug|x64
-		{92B0E3EE-45CE-4955-89F9-525B0B9FAD43}.Debug|x64.Build.0 = Debug|x64
-		{92B0E3EE-45CE-4955-89F9-525B0B9FAD43}.Debug|x86.ActiveCfg = Debug|Win32
-		{92B0E3EE-45CE-4955-89F9-525B0B9FAD43}.Debug|x86.Build.0 = Debug|Win32
-		{92B0E3EE-45CE-4955-89F9-525B0B9FAD43}.Release|x64.ActiveCfg = Release|x64
-		{92B0E3EE-45CE-4955-89F9-525B0B9FAD43}.Release|x64.Build.0 = Release|x64
-		{92B0E3EE-45CE-4955-89F9-525B0B9FAD43}.Release|x86.ActiveCfg = Release|Win32
-		{92B0E3EE-45CE-4955-89F9-525B0B9FAD43}.Release|x86.Build.0 = Release|Win32
 		{80299868-416B-4891-BDDF-E3E9835C1D6B}.Debug|x64.ActiveCfg = Debug|x64
 		{80299868-416B-4891-BDDF-E3E9835C1D6B}.Debug|x64.Build.0 = Debug|x64
 		{80299868-416B-4891-BDDF-E3E9835C1D6B}.Debug|x86.ActiveCfg = Debug|Win32
