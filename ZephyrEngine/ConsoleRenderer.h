@@ -82,8 +82,9 @@ public:
 	//constructor for the Renderer
 	Renderer() {
 		//makes some space on the screen
-		for (int k = 0; k<20; k++)
+		for (int k = 0; k < 20; k++) {
 			std::cout << "\n";
+		}
 	}
 
 	/*
@@ -132,9 +133,11 @@ private:
 		char c;
 
 		//clear the screenViewArr
-		for (int i = 0; i<20; i++)
-			for (int j = 0; j < 20; j++)
+		for (int i = 0; i < 20; i++) {
+			for (int j = 0; j < 20; j++) {
 				screenViewArr[i][j] = '_';
+			}
+		}
 
 		//set add the renderObj's ot the proper place in the screen array (if they are in view)
 		for (it = renderObjList.begin(); it != renderObjList.end(); ++it) {
