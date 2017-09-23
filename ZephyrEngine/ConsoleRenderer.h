@@ -31,10 +31,25 @@ public:
 	//getters and setters
 	void setX(int x) {
 		xPos = x;
+		if (xPos > 19) {
+			xPos = 19;
+		}
+
+		if (xPos < 0) {
+			xPos = 0;
+		}
 	}
 
 	void setY(int y) {
 		yPos = y;
+
+		if (yPos > 19) {
+			yPos = 19;
+		}
+
+		if (yPos < 0) {
+			yPos = 0;
+		}
 	}
 
 	void setDisplayChar(char c) {
@@ -91,10 +106,16 @@ public:
 	void renderFrame() {
 		updateCameraView();
 
+		// NOTE: THIS CHARACTER DOESN'T WORK IN WINDOWS
+		/*
 		for (int k = 0; k<20; k++)
-			std::cout << "\x1b[A";
+			std::cout << "\x1b[A";	
+		*/
+		
+		// This is the least hacky workaround I could find
+		system("cls");
 
-		for (int i = 0; i<20; i++) {
+		for (int i = 0; i< 20; i++) {
 			for (int j = 0; j < 20; j++) {
 				std::cout << screenViewArr[i][j] << ' ';
 			}

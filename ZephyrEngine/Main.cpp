@@ -1,20 +1,53 @@
 #include "Main.h"
 #include "ctpl_stl.h"
-#include "ConsoleRenderer.h"
+
 
 // insert game object list here
 // List<GameObject> currObjects;
 
 int main(int argc, char *argv[]) { 
+	// create ONE message bus that goes to ALL the systems
+	mbus = new MessageBus();
+	
 	// Create worker thread pool
 	ctpl::thread_pool p(16); // number of threads in pool
 	// for p.push usage, see the ctpl_stl.h header file
 
 
-	// create ONE message bus that goes to ALL the systems
-	MessageBus* mbus = new MessageBus();
+	//////////////////////////////////////////////////////////////////
+	//						SYSTEM CREATION							//
+	//////////////////////////////////////////////////////////////////
 
+	//creates a new renderer object to handle the console display
+	RenderSystem* rs = new RenderSystem(mbus);
+	mbus->addSystem(rs);
+	
 	// create IO system
+	IOSystem* ios = new IOSystem(mbus);
+	mbus->addSystem(ios);
+	
+	std::cout << "All systems created";
+
+	// TEMPORARY LOOP FOR TESTING MESSAGE SYSTEM WITH CONSOLE RENDERER
+	while (true) {
+		ios->checkKeyPresses();
+
+		Msg* renderFrames = new Msg(RENDER_FRAME_TEST, "");
+
+		postMessage(renderFrames);
+		// mbus->postMessage(renderFrames);
+		// note that we can also do mbus->postMessage(renderFrames);
+
+		// can't figure out how to make it all multi threaded so the above is currently single thread version that works
+		//p.push(std::move(postMessage), renderFrames);
+	}
+
+
+
+
+
+
+
 
 	// Load Scene
 
@@ -46,62 +79,5 @@ int main(int argc, char *argv[]) {
 	*/
 	
 	
-	//creates a new renderer object to handle the console display
-	Renderer* rendererPointer = new Renderer();
-
-	//creates some render objects
-	RenderObj* b = new RenderObj('b', 3, 1);
-	rendererPointer->addRenderObj(b);
-
-	RenderObj* c = new RenderObj('c', 1, 4);
-	rendererPointer->addRenderObj(c);
-
-	RenderObj* d = new RenderObj('d', 7, 7);
-	rendererPointer->addRenderObj(d);
-
-	RenderObj* a = new RenderObj('^', 1, 1);
-	rendererPointer->addRenderObj(a);
-
-	//the temporary game loop
-	while (1) {
-		//tell the renderer to render the next frame and wait for a bit
-		rendererPointer->renderFrame();
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
-
-		//update the renderObj between frames and the renderer will update them as well
-		if (GetKeyState('W') & 0x8000) {
-			int temp = a->getX();
-			temp--;
-			a->setX(temp);
-		}
-
-		if (GetKeyState('S') & 0x8000) {
-			int temp = a->getX();
-			temp++;
-			a->setX(temp);
-		}
-
-		if (GetKeyState('A') & 0x8000) {
-			int temp = a->getY();
-			temp--;
-			a->setY(temp);
-		}
-
-		if (GetKeyState('D') & 0x8000) {
-			int temp = a->getY();
-			temp++;
-			a->setY(temp);
-		}
-	}
-
-
-
-	/*
 	
-	SomeSystem* sysOne = new SomeSystem(mbus); // note that SomeSystem must extend from System. Pass in the message bus we created so that they're all using the same bus
-	mbus->someSystem = sysOne;	// add the system to the bus so that the bus has a reference to it
-	
-	*/
-
-
 }

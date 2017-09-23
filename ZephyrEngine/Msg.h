@@ -1,15 +1,17 @@
 #pragma once
 #include <string>
 
+// list all enums
+enum MSG_TYPE {
+	RENDER_FRAME_TEST, UPDATE_TEST_OBJ
+};
+
 class Msg {
 public:
-	Msg(int t, std::string d);
+	Msg(MSG_TYPE t, std::string d);
 	~Msg();
 
-	// name our int types, eg: 001 = RENDER_SCENE
-	// 002 = PLAY_SOUND 
-	// or whatever we decide later.
-	int type;
+	MSG_TYPE type;
 	std::string data;
 
 };

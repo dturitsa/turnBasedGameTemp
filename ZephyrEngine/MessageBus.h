@@ -2,6 +2,7 @@
 #include "Msg.h"
 #include "System.h"
 #include <list>
+#include <iostream>
 
 class System;
 
@@ -11,8 +12,8 @@ public:
 	~MessageBus();
 
 	void postMessage(Msg* m);
-	void addSystem(System s);
+	void addSystem(System* s);
 private:
-	std::list<System> systemList;
+	std::list<System*> systemList;
 };
 

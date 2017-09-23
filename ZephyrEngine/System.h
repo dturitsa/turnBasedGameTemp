@@ -9,11 +9,12 @@ public:
 	System(MessageBus* mbus);
 	~System();
 
-	void handleMessage(Msg *msg);
+	virtual void handleMessage(Msg *msg);
 
+protected:
+	MessageBus* msgBus;
 private:
 
-	MessageBus* msgBus;
-	//// Usage: msgBus->postMessage(msg);
+	
 };
 

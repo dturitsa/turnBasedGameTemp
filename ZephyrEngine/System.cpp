@@ -2,7 +2,9 @@
 #include "System.h"
 
 
+
 System::System(MessageBus* mbus) {
+	msgBus = mbus;
 }
 
 
