@@ -66,6 +66,7 @@ void RenderSystem::handleMessage(Msg *msg) {
 		}
 
 		std::cout << "A POSITION Y AND X: " << a->getY() << " : " << a->getX();
+		std::cout << "\nKEYS BEING PRESSED: " << msg->data;
 		break;
 	default:
 		break;
