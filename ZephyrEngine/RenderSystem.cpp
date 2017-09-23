@@ -65,7 +65,7 @@ void RenderSystem::handleMessage(Msg *msg) {
 			a->setY(19);
 		}
 
-		std::cout << "A POSITION X AND Y: " << a->getX() << " : " << a->getY();
+		std::cout << "A POSITION Y AND X: " << a->getY() << " : " << a->getX();
 		break;
 	default:
 		break;
