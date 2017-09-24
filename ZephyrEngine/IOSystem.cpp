@@ -16,15 +16,15 @@ void IOSystem::checkKeyPresses() {
 	if (GetKeyState('W') & 0x8000) {
 		m->data += "W";
 	}
-	
+
 	if (GetKeyState('S') & 0x8000) {
 		m->data += "S";
 	}
-	
+
 	if (GetKeyState('A') & 0x8000) {
 		m->data += "A";
 	}
-	
+
 	if (GetKeyState('D') & 0x8000) {
 		m->data += "D";
 	}
@@ -44,6 +44,9 @@ void IOSystem::handleMessage(Msg *msg) {
 	System::handleMessage(msg);
 	// personal call 
 	switch (msg->type) {
+	case CHECK_KEY_PRESSES:
+		checkKeyPresses();
+		break;
 	default:
 		break;
 	}

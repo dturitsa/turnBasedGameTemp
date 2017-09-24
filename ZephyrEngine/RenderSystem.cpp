@@ -19,7 +19,10 @@ RenderSystem::RenderSystem(MessageBus* mbus) : System(mbus) {
 RenderSystem::~RenderSystem() {
 }
 
+// Render system must not be rendering over itself. Therefore, use a mutex to for it to do once at a time.
+
 void RenderSystem::handleMessage(Msg *msg) {
+	renderLock.lock();
 	// call the parent first 
 	System::handleMessage(msg);
 
@@ -71,4 +74,6 @@ void RenderSystem::handleMessage(Msg *msg) {
 	default:
 		break;
 	}
+
+	renderLock.unlock();
 }

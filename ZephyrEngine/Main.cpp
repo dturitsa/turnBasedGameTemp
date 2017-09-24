@@ -1,5 +1,4 @@
 #include "Main.h"
-#include "ctpl_stl.h"
 
 
 // insert game object list here
@@ -30,20 +29,18 @@ int main(int argc, char *argv[]) {
 
 	// TEMPORARY LOOP FOR TESTING MESSAGE SYSTEM WITH CONSOLE RENDERER
 	while (true) {
-		ios->checkKeyPresses();
 
+		// Working on its own thread because we used p.push
+		Msg* checkKeyPresses = new Msg(CHECK_KEY_PRESSES, "");
+		p.push(&postMessage, checkKeyPresses);
+
+		// Working on its own thread because we used p.push
 		Msg* renderFrames = new Msg(RENDER_FRAME_TEST, "");
-
-		postMessage(renderFrames);
-		// mbus->postMessage(renderFrames);
+		p.push(&postMessage, renderFrames);
 		// note that we can also do mbus->postMessage(renderFrames);
-
-		// can't figure out how to make it all multi threaded so the above is currently single thread version that works
-		//p.push(std::move(postMessage), renderFrames);
+		// postMessage(renderFrames);
+		// mbus->postMessage(renderFrames);
 	}
-
-
-
 
 
 

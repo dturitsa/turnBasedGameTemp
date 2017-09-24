@@ -3,7 +3,11 @@
 
 // list all enums
 enum MSG_TYPE {
-	RENDER_FRAME_TEST, UPDATE_TEST_OBJ
+	// Temporary Render System
+	RENDER_FRAME_TEST, UPDATE_TEST_OBJ, 
+	
+	// IO System 
+	CHECK_KEY_PRESSES
 };
 
 class Msg {

@@ -1,6 +1,7 @@
 #pragma once
 #include "System.h"
 #include "ConsoleRenderer.h"
+#include <mutex>
 
 class RenderSystem : public System {
 public:
@@ -15,4 +16,6 @@ private:
 	RenderObj* c;
 	RenderObj* d;
 	RenderObj* a;
+
+	std::mutex renderLock;
 };
