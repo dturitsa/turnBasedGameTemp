@@ -55,9 +55,11 @@ int main(int argc, char *argv[]) {
 		//framerate locking testing stuff
 		thisTime = clock();
 		if ((thisTime - lastTime) > 100) {
-			lastTime = thisTime;			
-			mbus->postMessage(renderFrames);
-			mbus->postMessage(checkKeyPresses);
+			lastTime = thisTime;		
+			p.push(&postMessage, checkKeyPresses);
+			p.push(&postMessage, renderFrames);
+			//mbus->postMessage(renderFrames);
+			//mbus->postMessage(checkKeyPresses);
 		}
 		
 
