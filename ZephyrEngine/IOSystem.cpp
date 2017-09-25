@@ -2,7 +2,7 @@
 
 
 IOSystem::IOSystem(MessageBus* mbus) : System(mbus) {
-
+	m = new Msg(UPDATE_TEST_OBJ, "");
 }
 
 
@@ -11,7 +11,7 @@ IOSystem::~IOSystem() {
 
 // checks keypresses
 void IOSystem::checkKeyPresses() {
-	Msg* m = new Msg(UPDATE_TEST_OBJ, "");
+	m->data = "";
 
 	if (GetKeyState('W') & 0x8000) {
 		m->data += "W";

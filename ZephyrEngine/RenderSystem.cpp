@@ -8,7 +8,7 @@ RenderSystem::RenderSystem(MessageBus* mbus) : System(mbus) {
 	b = new RenderObj('b', 3, 1);
 	c = new RenderObj('c', 1, 4);
 	d = new RenderObj('d', 7, 7);
-	a = new RenderObj('^', 1, 1);
+	a = new RenderObj('^', 10, 10);
 	rendererPointer->addRenderObj(b);
 	rendererPointer->addRenderObj(c);
 	rendererPointer->addRenderObj(d);
@@ -30,46 +30,51 @@ void RenderSystem::handleMessage(Msg *msg) {
 	switch (msg->type) {
 	case RENDER_FRAME_TEST:
 		rendererPointer->renderFrame();
+		
 		break;
 	case UPDATE_TEST_OBJ:
+		//std::cout << "this";
+		
 		// based on which data strng we got (representing direction to move), we update the a obj
 		// Normally this wouldn't be done in the render system class but we dont have the other systems set up yet
-		if ((msg->data).find("W") != std::string::npos) {
+		if ((msg->data).compare("W") != std::string::npos) {
 			// W was pressed
 			int temp = a->getX();
 			temp--;
-			a->setX(temp);
+
 		}
 
-		if ((msg->data).compare("S") != std::string::npos) {
+		else if ((msg->data).compare("S") != std::string::npos) {
 			// S was pressed
 			int temp = a->getX();
 			temp++;
 			a->setX(temp);
+			
 		}
 
-		if ((msg->data).compare("A") != std::string::npos) {
+		else if ((msg->data).compare("A") != std::string::npos) {
 			// A was pressed
 			int temp = a->getY();
 			temp--;
 			a->setY(temp);
 		}
 
-		if ((msg->data).compare("D") != std::string::npos) {
+		else if ((msg->data).compare("D") != std::string::npos) {
 			// D was pressed
 			int temp = a->getY();
 			temp++;
 			a->setY(temp);
 		}
 
-		if ((msg->data).compare("Z") != std::string::npos) {
+		else if ((msg->data).compare("Z") != std::string::npos) {
 			// Z was pressed
 			a->setX(19);
 			a->setY(19);
 		}
-
-		std::cout << "A POSITION Y AND X: " << a->getY() << " : " << a->getX();
-		std::cout << "\nKEYS BEING PRESSED: " << msg->data;
+		
+		//std::cout << "A POSITION Y AND X: " << a->getY() << " : " << a->getX();
+		//std::cout << "\nKEYS BEING PRESSED: " << msg->data;
+		
 		break;
 	default:
 		break;

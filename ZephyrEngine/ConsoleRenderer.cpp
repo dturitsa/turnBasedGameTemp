@@ -23,6 +23,7 @@ RenderObj::RenderObj(char c, int x, int y) {
 	//getters and setters
 	void RenderObj::setX(int x) {
 		xPos = x;
+		/*
 		if (xPos > 19) {
 			xPos = 19;
 		}
@@ -30,11 +31,12 @@ RenderObj::RenderObj(char c, int x, int y) {
 		if (xPos < 0) {
 			xPos = 0;
 		}
+		*/
 	}
 
 	void RenderObj::setY(int y) {
 		yPos = y;
-
+		/*
 		if (yPos > 19) {
 			yPos = 19;
 		}
@@ -42,6 +44,7 @@ RenderObj::RenderObj(char c, int x, int y) {
 		if (yPos < 0) {
 			yPos = 0;
 		}
+		*/
 	}
 
 	void RenderObj::setDisplayChar(char c) {
@@ -65,10 +68,7 @@ RenderObj::RenderObj(char c, int x, int y) {
 
 //constructor for the Renderer
 Renderer::Renderer() {
-		//makes some space on the screen
-		for (int k = 0; k < 20; k++) {
-			std::cout << "\n";
-		}
+
 	}
 
 	/*
@@ -109,13 +109,7 @@ void Renderer::renderFrame() {
 			}
 			std::cout << '\n';
 		}
-	
-		//Framerate testing
-		SYSTEMTIME st;
-		GetSystemTime(&st);
-		int time = st.wMilliseconds;
-		frameCounter++;
-		std::cout << frameCounter << '\n';
+
 
 	}
 

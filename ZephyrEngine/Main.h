@@ -4,6 +4,7 @@
 #include "RenderSystem.h"
 #include "IOSystem.h"
 #include "ctpl_stl.h"
+#include <time.h>
 
 int main(int argc, char *argv[]);
 

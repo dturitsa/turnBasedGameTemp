@@ -27,19 +27,41 @@ int main(int argc, char *argv[]) {
 	
 	std::cout << "All systems created";
 
+	Msg* checkKeyPresses = new Msg(CHECK_KEY_PRESSES, "");
+	Msg* renderFrames = new Msg(RENDER_FRAME_TEST, "");
+
+	//Framerate locking testing
+	clock_t thisTime = clock();
+	clock_t lastTime = thisTime;
+
+
 	// TEMPORARY LOOP FOR TESTING MESSAGE SYSTEM WITH CONSOLE RENDERER
 	while (true) {
 
-		// Working on its own thread because we used p.push
-		Msg* checkKeyPresses = new Msg(CHECK_KEY_PRESSES, "");
-		p.push(&postMessage, checkKeyPresses);
+		// Working on its own thread because we used p.push		
+		//p.push(&postMessage, checkKeyPresses);
 
 		// Working on its own thread because we used p.push
-		Msg* renderFrames = new Msg(RENDER_FRAME_TEST, "");
-		p.push(&postMessage, renderFrames);
+		//p.push(&postMessage, renderFrames);
+
 		// note that we can also do mbus->postMessage(renderFrames);
 		// postMessage(renderFrames);
-		// mbus->postMessage(renderFrames);
+
+		
+
+		
+		
+
+		//framerate locking testing stuff
+		thisTime = clock();
+		if ((thisTime - lastTime) > 100) {
+			lastTime = thisTime;			
+			mbus->postMessage(renderFrames);
+			mbus->postMessage(checkKeyPresses);
+		}
+		
+
+
 	}
 
 

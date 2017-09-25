@@ -12,6 +12,7 @@ public:
 
 	void handleMessage(Msg * msg);
 
+	Msg* m;
 private:
 
 };

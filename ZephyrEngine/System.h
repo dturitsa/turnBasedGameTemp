@@ -13,6 +13,7 @@ public:
 
 protected:
 	MessageBus* msgBus;
+
 private:
 
 	
