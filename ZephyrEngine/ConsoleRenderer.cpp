@@ -91,6 +91,8 @@ void Renderer::removeRenderObj(RenderObj* r) {
 void Renderer::renderFrame() {
 		updateCameraView();
 
+
+
 		// NOTE: THIS CHARACTER DOESN'T WORK IN WINDOWS
 		/*
 		for (int k = 0; k<20; k++)
@@ -100,13 +102,20 @@ void Renderer::renderFrame() {
 		// This is the least hacky workaround I could find
 		system("cls");
 
+	
 		for (int i = 0; i< 20; i++) {
 			for (int j = 0; j < 20; j++) {
 				std::cout << screenViewArr[i][j] << ' ';
 			}
-
 			std::cout << '\n';
 		}
+	
+		//Framerate testing
+		SYSTEMTIME st;
+		GetSystemTime(&st);
+		int time = st.wMilliseconds;
+		frameCounter++;
+		std::cout << frameCounter << '\n';
 
 	}
 

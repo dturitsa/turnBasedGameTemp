@@ -41,6 +41,8 @@ class Renderer {
 	std::list<RenderObj*> renderObjList; //list of objects to render
 	std::list<RenderObj*>::iterator it;
 	char screenViewArr[20][20]; //array representing what is to appear on the screen
+
+	int frameCounter = 0;
 public:
 
 	//constructor for the Renderer
