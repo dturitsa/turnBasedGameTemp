@@ -11,6 +11,36 @@ GameSystem::~GameSystem() {
 void GameSystem::startSystemLoop() {
 	while (true) {
 		// Main Game Loop
+
+
+		// Load Scene
+
+		// while 1 & game interval is up
+		/*
+
+		for (GameObject obj : currObjects) {
+		for (Component c : obj.components) {
+		p.push(c.earlyUpdate());
+		}
+		}
+
+		// wait for all threads to complete
+
+		for (GameObject obj : currObjects) {
+		for (Component c : obj.components) {
+		p.push(c.update());
+		}
+		}
+
+		// wait for all threads to complete
+
+		for (GameObject obj : currObjects) {
+		for (Component c : obj.components) {
+		p.push(c.lateUpdate());
+		}
+		}
+
+		*/
 	}
 }
 

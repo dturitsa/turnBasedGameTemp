@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include "Msg.h"
+#include "Util.h"
 
 class GameObject {
 public:
@@ -19,6 +21,10 @@ public:
 
 	GameObject();
 	~GameObject();
+
+	void earlyUpdate();
+	void midUpdate();
+	void lateUpdate();
 protected:
 
 private:

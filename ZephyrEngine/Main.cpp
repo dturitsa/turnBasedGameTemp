@@ -57,20 +57,7 @@ int main(int argc, char *argv[]) {
 	// TEMPORARY LOOP FOR TESTING MESSAGE SYSTEM WITH CONSOLE RENDERER
 	// Note: Probably will use main thread for console debug/control type system thing later
 	while (true) {
-
-		// Working on its own thread because we used p.push		
-		//p.push(&postMessage, checkKeyPresses);
-
-		// Working on its own thread because we used p.push
-		//p.push(&postMessage, renderFrames);
-
-		// note that we can also do mbus->postMessage(renderFrames);
-		// postMessage(renderFrames);
-
-		
-
-		
-		
+	
 
 		//framerate locking testing stuff
 		thisTime = clock();
@@ -78,49 +65,17 @@ int main(int argc, char *argv[]) {
 			lastTime = thisTime;		
 			p.push(&postMessage, checkKeyPresses);
 			p.push(&postMessage, renderFrames);
-			//mbus->postMessage(renderFrames);
-			//mbus->postMessage(checkKeyPresses);
 		}
 		
 
 
 	}
-
-
-
-
-
-	// Load Scene
-
-	// while 1 & game interval is up
-	/*
 	
-		for (GameObject obj : currObjects) {
-			for (Component c : obj.components) {
-				p.push(c.earlyUpdate());
-			}
-		}
-
-		// wait for all threads to complete
-	
-		for (GameObject obj : currObjects) {
-			for (Component c : obj.components) {
-				p.push(c.update());		
-			}
-		}
-
-		// wait for all threads to complete
-	
-		for (GameObject obj : currObjects) {
-			for (Component c : obj.components) {
-				p.push(c.lateUpdate());		
-			}
-		}
-
-	*/
-	
-	
-	
+	//////////////////////////////////////////////////////////////////
+	//						Thread Joining							//
+	//////////////////////////////////////////////////////////////////
+	renderThread.join();
+	gameSystemThread.join();
 }
 
 // note: Must have "int id" for functinos that are to be run in worker threads
