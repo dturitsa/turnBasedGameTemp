@@ -8,6 +8,8 @@ RenderSystem::RenderSystem(MessageBus* mbus) : System(mbus) {
 RenderSystem::~RenderSystem() {
 }
 
+
+
 void RenderSystem::handleMessage(Msg *msg) {
 	// call the parent first 
 	System::handleMessage(msg);
