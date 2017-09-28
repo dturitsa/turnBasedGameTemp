@@ -42,6 +42,7 @@ void IOSystem::checkKeyPresses() {
 void IOSystem::handleMessage(Msg *msg) {
 	// call the parent first 
 	System::handleMessage(msg);
+
 	// personal call 
 	switch (msg->type) {
 	case CHECK_KEY_PRESSES:
