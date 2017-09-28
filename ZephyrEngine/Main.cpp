@@ -12,6 +12,7 @@ int main(int argc, char *argv[]) {
 	ctpl::thread_pool p(16); // number of threads in pool
 	// for p.push usage, see the ctpl_stl.h header file
 
+	// create Permanent thread pools
 
 	//////////////////////////////////////////////////////////////////
 	//						SYSTEM CREATION							//
@@ -19,13 +20,23 @@ int main(int argc, char *argv[]) {
 
 	// creates a new renderer object to handle the console display
 	// note that rendering systems have thier own loop thus is a special case
-	ConsoleRenderSystem* rs = new ConsoleRenderSystem(mbus);
-	mbus->addSystem(rs);
+	ConsoleRenderSystem* crs = new ConsoleRenderSystem(mbus);
+	mbus->addSystem(crs);
 	
 	// create IO system
 	IOSystem* ios = new IOSystem(mbus);
 	mbus->addSystem(ios);
-	
+
+	// SPECIAL CASE: NEEDS OWN THREAD
+	RenderSystem* rs = new RenderSystem(mbus);
+	mbus->addSystem(rs);
+	std::thread renderThread(rs->startSystemLoop);
+
+	// SPECIAL CASE: NEEDS OWN THREAD
+	GameSystem* gs = new GameSystem(mbus);
+	mbus->addSystem(gs);
+	std::thread gameSystemThread(gs->startSystemLoop);
+
 	std::cout << "All systems created";
 
 

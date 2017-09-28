@@ -7,4 +7,7 @@ public:
 	~GameSystem();
 
 	void handleMessage(Msg * msg);
+
+	void GameSystem::startSystemLoop();
+private:
 };

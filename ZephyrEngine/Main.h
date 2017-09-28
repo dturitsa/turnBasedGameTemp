@@ -2,6 +2,8 @@
 #include "System.h"
 #include <iostream>
 #include "ConsoleRenderSystem.h"
+#include "RenderSystem.h"
+#include "GameSystem.h"
 #include "IOSystem.h"
 #include "ctpl_stl.h"
 #include <time.h>

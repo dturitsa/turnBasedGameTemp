@@ -10,7 +10,7 @@ RenderSystem::~RenderSystem() {
 
 
 void RenderSystem::renderAllItems() {
-
+	// probably needs a lock
 }
 
 void RenderSystem::startSystemLoop() {
