@@ -5,7 +5,14 @@
 enum MSG_TYPE {
 	// Temporary Render System
 	RENDER_FRAME_TEST, UPDATE_TEST_OBJ, 
-	
+
+	// Render System
+	UPDATE_OBJECT_POSITION, NEW_OBJECT_TO_RENDER, REMOVE_OBJECT_FROM_RENDER,
+
+	// Physics System
+
+	// Game System
+
 	// IO System 
 	CHECK_KEY_PRESSES
 };

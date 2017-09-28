@@ -1,6 +1,6 @@
 #include "RenderSystem.h"
 
-RenderSystem::RenderSystem(MessageBus* mbus) : System(mbus) {
+RenderSystem::RenderSystem(MessageBus* mbus) : System (mbus) {
 	
 }
 
@@ -9,6 +9,16 @@ RenderSystem::~RenderSystem() {
 }
 
 
+void RenderSystem::renderAllItems() {
+
+}
+
+void RenderSystem::startSystemLoop() {
+	while (true) {
+		renderAllItems();
+		// insert framerate lock here
+	}
+}
 
 void RenderSystem::handleMessage(Msg *msg) {
 	// call the parent first 
