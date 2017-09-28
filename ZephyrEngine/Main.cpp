@@ -17,8 +17,9 @@ int main(int argc, char *argv[]) {
 	//						SYSTEM CREATION							//
 	//////////////////////////////////////////////////////////////////
 
-	//creates a new renderer object to handle the console display
-	RenderSystem* rs = new RenderSystem(mbus);
+	// creates a new renderer object to handle the console display
+	// note that rendering systems have thier own loop thus is a special case
+	ConsoleRenderSystem* rs = new ConsoleRenderSystem(mbus);
 	mbus->addSystem(rs);
 	
 	// create IO system
@@ -26,6 +27,13 @@ int main(int argc, char *argv[]) {
 	mbus->addSystem(ios);
 	
 	std::cout << "All systems created";
+
+
+
+
+	//////////////////////////////////////////////////////////////////
+	//						Temporary Game Loop						//
+	//////////////////////////////////////////////////////////////////
 
 	Msg* checkKeyPresses = new Msg(CHECK_KEY_PRESSES, "");
 	Msg* renderFrames = new Msg(RENDER_FRAME_TEST, "");
@@ -36,6 +44,7 @@ int main(int argc, char *argv[]) {
 
 
 	// TEMPORARY LOOP FOR TESTING MESSAGE SYSTEM WITH CONSOLE RENDERER
+	// Note: Probably will use main thread for console debug/control type system thing later
 	while (true) {
 
 		// Working on its own thread because we used p.push		
@@ -101,4 +110,10 @@ int main(int argc, char *argv[]) {
 	
 	
 	
+}
+
+// note: Must have "int id" for functinos that are to be run in worker threads
+// the id is the thread ID - required for the pooling library
+void postMessage(int id, Msg* msg) {
+	mbus->postMessage(msg);
 }

@@ -117,8 +117,10 @@
     <ClInclude Include="Main.h" />
     <ClInclude Include="MessageBus.h" />
     <ClInclude Include="Msg.h" />
+    <ClInclude Include="ConsoleRenderSystem.h" />
     <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="System.h" />
+    <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConsoleRenderer.cpp" />
@@ -126,6 +128,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MessageBus.cpp" />
     <ClCompile Include="Msg.cpp" />
+    <ClCompile Include="ConsoleRenderSystem.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="System.cpp" />
   </ItemGroup>
