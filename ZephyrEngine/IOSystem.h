@@ -9,10 +9,12 @@ public:
 	~IOSystem();
 
 	void checkKeyPresses();
-
+	void startSystemLoop();
 	void handleMessage(Msg * msg);
 
 	Msg* m;
+	
+	
 private:
 
 };

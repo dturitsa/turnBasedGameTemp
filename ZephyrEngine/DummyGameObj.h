@@ -11,5 +11,7 @@ public:
 	void DummyGameObj::earlyUpdate();
 	void DummyGameObj::midUpdate();
 	void DummyGameObj::lateUpdate();
+
+	int counter = 0;
 };
 

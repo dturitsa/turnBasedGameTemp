@@ -13,3 +13,6 @@ MessageBus* mbus;
 int main(int argc, char *argv[]);
 
 void postMessage(int id, Msg* msg);
+void startIOSystem(IOSystem* s);
+void startRenderSystem(RenderSystem* s);
+void startGameSystem(GameSystem* s);

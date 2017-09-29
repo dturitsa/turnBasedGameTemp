@@ -1,7 +1,6 @@
 #pragma once
 #include "System.h"
 #include "GameObject.h"
-#include <vector>
 
 
 class RenderSystem : public System {

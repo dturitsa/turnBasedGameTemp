@@ -1,5 +1,5 @@
 #pragma once
-#include <string>
+#include "Util.h"
 
 // list all enums
 enum MSG_TYPE {
@@ -14,7 +14,7 @@ enum MSG_TYPE {
 	// Game System
 
 	// IO System 
-	CHECK_KEY_PRESSES
+	CHECK_KEY_PRESSES, TEST_KEY_PRESSED
 };
 
 class Msg {

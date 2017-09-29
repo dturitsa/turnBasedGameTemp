@@ -8,39 +8,29 @@ GameSystem::GameSystem(MessageBus* mbus) : System(mbus) {
 GameSystem::~GameSystem() {
 }
 
+void GameSystem::startTestLevel() {
+	DummyGameObj* d = new DummyGameObj();
+	gameObjects.push_back(d);
+}
+
 void GameSystem::startSystemLoop() {
+	// Main Game Loop
 	while (true) {
-		// Main Game Loop
-
-
-		// Load Scene
-
-		// while 1 & game interval is up
-		/*
-
-		for (GameObject obj : currObjects) {
-		for (Component c : obj.components) {
-		p.push(c.earlyUpdate());
-		}
+		for (GameObject* obj : gameObjects ) {
+			obj->earlyUpdate();
 		}
 
 		// wait for all threads to complete
 
-		for (GameObject obj : currObjects) {
-		for (Component c : obj.components) {
-		p.push(c.update());
-		}
+		for (GameObject* obj : gameObjects) {
+			obj->midUpdate();
 		}
 
 		// wait for all threads to complete
 
-		for (GameObject obj : currObjects) {
-		for (Component c : obj.components) {
-		p.push(c.lateUpdate());
+		for (GameObject* obj : gameObjects) {
+			obj->lateUpdate();
 		}
-		}
-
-		*/
 	}
 }
 
@@ -50,6 +40,8 @@ void GameSystem::handleMessage(Msg *msg) {
 
 	// personal call 
 	switch (msg->type) {
+	case OBJ_TEST_MSG:
+	break;
 	default:
 		break;
 	}

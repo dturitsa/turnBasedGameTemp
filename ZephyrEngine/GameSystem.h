@@ -1,5 +1,7 @@
 #pragma once
 #include "System.h"
+#include "GameObject.h"
+#include "DummyGameObj.h"
 
 class GameSystem : public System {
 public:
@@ -8,6 +10,9 @@ public:
 
 	void handleMessage(Msg * msg);
 
-	void GameSystem::startSystemLoop();
+	void startSystemLoop();
+	void startTestLevel();
+
+	std::vector<GameObject*> gameObjects;
 private:
 };

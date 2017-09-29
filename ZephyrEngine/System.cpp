@@ -1,6 +1,4 @@
-#pragma once
 #include "System.h"
-#include "Util.h"
 
 
 System::System(MessageBus* mbus) {

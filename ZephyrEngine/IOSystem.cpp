@@ -2,18 +2,24 @@
 
 
 IOSystem::IOSystem(MessageBus* mbus) : System(mbus) {
-	m = new Msg(UPDATE_TEST_OBJ, "");
+	m = new Msg(OBJ_TEST_MSG, "");
 }
 
 
 IOSystem::~IOSystem() {
 }
 
+void IOSystem::startSystemLoop() {
+	while (true) {
+		checkKeyPresses();
+	}
+}
+
 // checks keypresses
 void IOSystem::checkKeyPresses() {
 	m->data = "";
 
-	if (GetKeyState('W') & 0x8000) {
+	/*if (GetKeyState('W') & 0x8000) {
 		m->data += "W";
 	}
 
@@ -27,13 +33,14 @@ void IOSystem::checkKeyPresses() {
 
 	if (GetKeyState('D') & 0x8000) {
 		m->data += "D";
-	}
+	}*/
 
 	if (GetKeyState('Z') & 0x8000) {
-		m->data += "Z";
+		//m->data += "Z";
+		msgBus->postMessage(m);
 	}
 
-	msgBus->postMessage(m);
+	// msgBus->postMessage(m);
 }
 
 
