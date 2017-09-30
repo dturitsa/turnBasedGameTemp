@@ -30,7 +30,6 @@ void RenderSystem::startSystemLoop() {
 			renderAllItems();
 			mtx.unlock();
 		}
-		// insert framerate lock here
 	}
 }
 
