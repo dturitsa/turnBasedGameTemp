@@ -9,11 +9,16 @@ GameSystem::~GameSystem() {
 }
 
 void GameSystem::startTestLevel() {
-	DummyGameObj* d = new DummyGameObj();
+	DummyGameObj* d = new DummyGameObj(1,"DO",0,0,0);
 	gameObjects.push_back(d);
+	std::ostringstream oss;
+	oss << d->id << ',' << d->renderable << ',' << d->x << ',' << d->y << ',' << d->orientation;
+	msgBus->postMessage(new Msg(NEW_OBJECT_TO_RENDER, oss.str()));
 }
 
 void GameSystem::startSystemLoop() {
+	startTestLevel();
+
 	// Main Game Loop
 	while (true) {
 		for (GameObject* obj : gameObjects ) {
@@ -37,10 +42,17 @@ void GameSystem::startSystemLoop() {
 void GameSystem::handleMessage(Msg *msg) {
 	// call the parent first 
 	System::handleMessage(msg);
-
+	std::ostringstream oss;
+	Msg* mm = new Msg(EMPTY_MESSAGE, "");
+	GameObject* g;
 	// personal call 
 	switch (msg->type) {
-	case OBJ_TEST_MSG:
+	case TEST_KEY_PRESSED:
+		g = gameObjects.front();
+		g->x++;
+		oss << g->id << ',' << g->renderable << ',' << g->x << ',' << g->y << ',' << g->orientation;
+		mm = new Msg(UPDATE_OBJECT_POSITION, oss.str());
+		msgBus->postMessage(mm);
 	break;
 	default:
 		break;

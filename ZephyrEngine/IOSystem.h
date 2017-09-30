@@ -2,6 +2,7 @@
 #include "System.h"
 #include <Windows.h>
 #include <iostream>
+#include <chrono>
 
 class IOSystem : public System {
 public:

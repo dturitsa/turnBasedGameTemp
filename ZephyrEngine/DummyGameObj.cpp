@@ -1,6 +1,11 @@
 #include "DummyGameObj.h"
 
-DummyGameObj::DummyGameObj() {
+DummyGameObj::DummyGameObj(int idNum, std::string renderableName, int xpos, int ypos, int orientation) {
+	id = idNum;
+	renderable = renderableName;
+	x = xpos;
+	y = ypos;
+	GameObject::orientation = orientation;
 }
 
 DummyGameObj::~DummyGameObj() {

@@ -9,7 +9,7 @@ public:
 	~ConsoleRenderSystem();
 
 	void handleMessage(Msg * msg);
-
+	void startSystemLoop();
 private:
 	Renderer* rendererPointer;
 	RenderObj* b;

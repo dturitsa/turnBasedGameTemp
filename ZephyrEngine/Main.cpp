@@ -17,14 +17,8 @@ int main(int argc, char *argv[]) {
 	//////////////////////////////////////////////////////////////////
 	//						SYSTEM CREATION							//
 	//////////////////////////////////////////////////////////////////
-
-	// creates a new renderer object to handle the console display
-	// note that rendering systems have thier own loop thus is a special case
-	ConsoleRenderSystem* crs = new ConsoleRenderSystem(mbus);
-	mbus->addSystem(crs);
 	
 	// SPECIAL CASE: NEEDS OWN THREAD
-
 	IOSystem* ios = new IOSystem(mbus);
 	mbus->addSystem(ios);
 	std::thread ioThread(startIOSystem, ios);
@@ -45,33 +39,14 @@ int main(int argc, char *argv[]) {
 
 
 	//////////////////////////////////////////////////////////////////
-	//						Temporary Game Loop						//
+	//						Console Loop							//
 	//////////////////////////////////////////////////////////////////
-
-	Msg* checkKeyPresses = new Msg(CHECK_KEY_PRESSES, "");
-	Msg* renderFrames = new Msg(RENDER_FRAME_TEST, "");
-
-	//Framerate locking testing
-	clock_t thisTime = clock();
-	clock_t lastTime = thisTime;
 
 
 	// TEMPORARY LOOP FOR TESTING MESSAGE SYSTEM WITH CONSOLE RENDERER
 	// Note: Probably will use main thread for console debug/control type system thing later
 	while (true) {
-	
 		
-		//framerate locking testing stuff
-		/*
-		thisTime = clock();
-		if ((thisTime - lastTime) > 100) {
-			lastTime = thisTime;		
-			p.push(&postMessage, checkKeyPresses);
-			p.push(&postMessage, renderFrames);
-		}*/
-		
-
-
 	}
 	
 	//////////////////////////////////////////////////////////////////

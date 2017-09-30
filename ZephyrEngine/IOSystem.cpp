@@ -2,7 +2,7 @@
 
 
 IOSystem::IOSystem(MessageBus* mbus) : System(mbus) {
-	m = new Msg(OBJ_TEST_MSG, "");
+	m = new Msg(EMPTY_MESSAGE, "");
 }
 
 
@@ -10,8 +10,16 @@ IOSystem::~IOSystem() {
 }
 
 void IOSystem::startSystemLoop() {
+	// used to prevent the io system from posting messages too often
+	clock_t thisTime = clock();
+	clock_t lastTime = thisTime;
+
 	while (true) {
-		checkKeyPresses();
+		thisTime = clock();
+		if ((thisTime - lastTime) > 100) {
+			lastTime = thisTime;
+			checkKeyPresses();
+		}
 	}
 }
 
@@ -37,6 +45,7 @@ void IOSystem::checkKeyPresses() {
 
 	if (GetKeyState('Z') & 0x8000) {
 		//m->data += "Z";
+		m->type = TEST_KEY_PRESSED;
 		msgBus->postMessage(m);
 	}
 

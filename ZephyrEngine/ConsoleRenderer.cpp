@@ -2,53 +2,53 @@
 
 //main constructor adds a position and character to display
 RenderObj::RenderObj(char c, int x, int y) {
-		displayChar = c;
-		xPos = x;
-		yPos = y;
+	displayChar = c;
+	xPos = x;
+	yPos = y;
+}
+
+//getters and setters
+void RenderObj::setX(int x) {
+	xPos = x;
+	/*
+	if (xPos > 19) {
+		xPos = 19;
 	}
 
-	//getters and setters
-	void RenderObj::setX(int x) {
-		xPos = x;
-		/*
-		if (xPos > 19) {
-			xPos = 19;
-		}
+	if (xPos < 0) {
+		xPos = 0;
+	}
+	*/
+}
 
-		if (xPos < 0) {
-			xPos = 0;
-		}
-		*/
+void RenderObj::setY(int y) {
+	yPos = y;
+	/*
+	if (yPos > 19) {
+		yPos = 19;
 	}
 
-	void RenderObj::setY(int y) {
-		yPos = y;
-		/*
-		if (yPos > 19) {
-			yPos = 19;
-		}
-
-		if (yPos < 0) {
-			yPos = 0;
-		}
-		*/
+	if (yPos < 0) {
+		yPos = 0;
 	}
+	*/
+}
 
-	void RenderObj::setDisplayChar(char c) {
-		displayChar = c;
-	}
+void RenderObj::setDisplayChar(char c) {
+	displayChar = c;
+}
 
-	int RenderObj::getX() {
-		return xPos;
-	}
+int RenderObj::getX() {
+	return xPos;
+}
 
-	int RenderObj::getY() {
-		return yPos;
-	}
+int RenderObj::getY() {
+	return yPos;
+}
 
-	char RenderObj::getDisplayChar() {
-		return displayChar;
-	}
+char RenderObj::getDisplayChar() {
+	return displayChar;
+}
 
 
 
@@ -56,49 +56,49 @@ RenderObj::RenderObj(char c, int x, int y) {
 //constructor for the Renderer
 Renderer::Renderer() {
 
-	}
+}
 
-	/*
-	add a renderObj to the list of object to render
-	r - a pointer to the renderObj
-	*/
+/*
+add a renderObj to the list of object to render
+r - a pointer to the renderObj
+*/
 void Renderer::addRenderObj(RenderObj* r) {
-		renderObjList.push_back(r);
-	}
+	renderObjList.push_back(r);
+}
 
-	/*
-	removes a renderObj from list of objects to render
-	do this to avoid null pointers after destroying an object
-	*/
+/*
+removes a renderObj from list of objects to render
+do this to avoid null pointers after destroying an object
+*/
 void Renderer::removeRenderObj(RenderObj* r) {
-		renderObjList.remove(r);
-	}
+	renderObjList.remove(r);
+}
 
-	//renders a frame by outputting the contents of the screenView array
+//renders a frame by outputting the contents of the screenView array
 void Renderer::renderFrame() {
-		updateCameraView();
+	updateCameraView();
 
 
 
-		// NOTE: THIS CHARACTER DOESN'T WORK IN WINDOWS
-		/*
-		for (int k = 0; k<20; k++)
-		std::cout << "\x1b[A";
-		*/
+	// NOTE: THIS CHARACTER DOESN'T WORK IN WINDOWS
+	/*
+	for (int k = 0; k<20; k++)
+	std::cout << "\x1b[A";
+	*/
 
-		// This is the least hacky workaround I could find
-		system("cls");
+	// This is the least hacky workaround I could find
+	system("cls");
 
 	
-		for (int i = 0; i< 20; i++) {
-			for (int j = 0; j < 20; j++) {
-				std::cout << screenViewArr[i][j] << ' ';
-			}
-			std::cout << '\n';
+	for (int i = 0; i< 20; i++) {
+		for (int j = 0; j < 20; j++) {
+			std::cout << screenViewArr[i][j] << ' ';
 		}
-
-
+		std::cout << '\n';
 	}
+
+
+}
 
 	//updates what objects are displayed on the screen and in what position
 void Renderer::updateCameraView() {

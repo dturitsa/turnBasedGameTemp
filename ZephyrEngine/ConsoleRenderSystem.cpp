@@ -20,17 +20,17 @@ ConsoleRenderSystem::~ConsoleRenderSystem() {
 }
 
 // Render system must not be rendering over itself. Therefore, use a mutex to for it to do once at a time.
-
 void ConsoleRenderSystem::handleMessage(Msg *msg) {
-	renderLock.lock();
+	
 	// call the parent first 
 	System::handleMessage(msg);
 
 	// personal call 
 	switch (msg->type) {
 	case RENDER_FRAME_TEST:
+		renderLock.lock();
 		rendererPointer->renderFrame();
-		
+		renderLock.unlock();
 		break;
 	case UPDATE_TEST_OBJ:
 		//std::cout << "this";
@@ -79,6 +79,4 @@ void ConsoleRenderSystem::handleMessage(Msg *msg) {
 	default:
 		break;
 	}
-
-	renderLock.unlock();
 }

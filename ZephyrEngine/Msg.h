@@ -3,6 +3,8 @@
 
 // list all enums
 enum MSG_TYPE {
+	EMPTY_MESSAGE,
+
 	// Temporary Render System
 	RENDER_FRAME_TEST, UPDATE_TEST_OBJ, OBJ_TEST_MSG,
 

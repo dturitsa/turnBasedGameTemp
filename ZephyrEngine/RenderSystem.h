@@ -1,7 +1,7 @@
 #pragma once
 #include "System.h"
 #include "GameObject.h"
-
+#include <mutex>
 
 class RenderSystem : public System {
 public:
@@ -12,8 +12,10 @@ public:
 	void startSystemLoop();
 
 private:
-
+	std::mutex mtx;
 	void renderAllItems();
 
-	std::vector<GameObject> gameObjectsToRender;
+	std::vector<std::string*> gameObjectsToRender;
+	void addObjectToRenderList(Msg* m);
+	void updateObjPosition(Msg* m);
 };
