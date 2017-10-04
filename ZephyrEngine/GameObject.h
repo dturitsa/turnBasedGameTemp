@@ -1,11 +1,12 @@
 #pragma once
 #include "Msg.h"
 #include <map>
+#include <iostream>
 using namespace std;
 
 class GameObject {
 public:
-	int id;
+	std::string id;
 	int x;
 	int y;
 	int width;
@@ -21,7 +22,7 @@ public:
 
 	GameObject();
 	~GameObject();
-
+	GameObject::GameObject(map <string, string> paramsMap);
 	void earlyUpdate();
 	void midUpdate();
 	void lateUpdate();

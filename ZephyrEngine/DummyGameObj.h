@@ -15,6 +15,8 @@ public:
 	void DummyGameObj::midUpdate();
 	void DummyGameObj::lateUpdate();
 
+	int dummyLevel = 0; //For Testing. Dummy property specific to the dummy gameobject
+
 	int counter = 0;
 };
 

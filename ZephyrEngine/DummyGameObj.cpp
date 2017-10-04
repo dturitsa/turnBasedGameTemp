@@ -8,12 +8,14 @@ DummyGameObj::DummyGameObj(int idNum, std::string renderableName, int xpos, int 
 	GameObject::orientation = orientation;
 }
 
-DummyGameObj::DummyGameObj(map <string, string> paramsMap) {
-		id = stoi(paramsMap.find("id")->second);
-		renderable = paramsMap.find("renderable")->second;
-		x = stoi(paramsMap.find("xPos")->second);
-		y = stoi(paramsMap.find("yPos")->second);
-		GameObject::orientation = stoi(paramsMap.find("orientation")->second);
+DummyGameObj::DummyGameObj(map <string, string> paramsMap) : GameObject(paramsMap) {
+
+	try {
+		dummyLevel = stoi(paramsMap.find("dummyLevel")->second);
+	}
+	catch (const exception& e) { 
+		cout << e.what(); // information from length_error printed
+	}
 }
 
 

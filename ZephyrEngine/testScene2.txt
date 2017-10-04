@@ -1,13 +1,13 @@
 gameObjectType: DummyGameObj,
-id: 4,
-renderable: GameObj4,
+id: obj4,
+renderable: 4.png,
 xPos: 2,
 yPos: 3,
 orientation: 10;
 
 gameObjectType: DummyGameObj,
-id: 5,
-renderable: GameObj5,
+id: obj5,
+renderable: 5.png,
 xPos: 0,
 yPos: 5,
 orientation: 0;  
