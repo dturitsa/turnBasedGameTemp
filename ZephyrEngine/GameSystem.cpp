@@ -50,11 +50,11 @@ void GameSystem::addGameObjects(string fileName) {
 		string gameObjectType = gameObjDataMap.find("gameObjectType")->second;
 		g = NULL;
 		//just hard coded else ifs for now... should probably make retreive available classes automatically
-		if(gameObjectType.compare("DummyGameObj"))
+		if (gameObjectType.compare("DummyGameObj") == 0)
 			g = new DummyGameObj(gameObjDataMap);
 
-		else if (gameObjectType.compare("GameObj"))
-			g = new DummyGameObj(gameObjDataMap);
+		else if (gameObjectType.compare("GameObject") == 0)
+			g = new GameObject(gameObjDataMap);
 			
 		if (g != NULL)
 			createGameObject(g);
@@ -71,8 +71,9 @@ void GameSystem::createGameObject(GameObject* g) {
 }
 
 void GameSystem::startSystemLoop() {
-	addGameObjects("testScene.txt");
+	
 	addGameObjects("testScene2.txt");
+	addGameObjects("testScene.txt");
 	//startTestLevel();
 
 	//clocks for limiting gameloop speed

@@ -9,12 +9,12 @@ DummyGameObj::DummyGameObj(int idNum, std::string renderableName, int xpos, int 
 }
 
 DummyGameObj::DummyGameObj(map <string, string> paramsMap) : GameObject(paramsMap) {
-
 	try {
 		dummyLevel = stoi(paramsMap.find("dummyLevel")->second);
 	}
 	catch (const exception& e) { 
-		cout << e.what(); // information from length_error printed
+		cout << "\n" << e.what(); // information from length_error printed
+		cout << paramsMap.find("dummyLevel")->second <<"\n";
 	}
 }
 
