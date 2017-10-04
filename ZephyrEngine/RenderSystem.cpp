@@ -24,7 +24,7 @@ void RenderSystem::startSystemLoop() {
 	
 	while (true) {
 		thisTime = clock();
-		if ((thisTime - lastTime) > 100) {
+		if ((thisTime - lastTime) > 1000) {
 			lastTime = thisTime;
 			mtx.lock();
 			renderAllItems();

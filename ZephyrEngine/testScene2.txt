@@ -1,0 +1,13 @@
+gameObjectType: DummyGameObj,
+id: 4,
+renderable: GameObj4,
+xPos: 2,
+yPos: 3,
+orientation: 10;
+
+gameObjectType: DummyGameObj,
+id: 5,
+renderable: GameObj5,
+xPos: 0,
+yPos: 5,
+orientation: 0;  

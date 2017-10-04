@@ -2,6 +2,12 @@
 #include "System.h"
 #include "GameObject.h"
 #include "DummyGameObj.h"
+#include<iostream>
+#include<fstream>
+#include <chrono>
+#include <map>
+#include <algorithm>
+
 
 class GameSystem : public System {
 public:
@@ -12,6 +18,8 @@ public:
 
 	void startSystemLoop();
 	void startTestLevel();
+	void addGameObjects(string fileName);
+	void createGameObject(GameObject* g);
 
 	std::vector<GameObject*> gameObjects;
 private:

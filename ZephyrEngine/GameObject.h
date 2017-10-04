@@ -1,5 +1,7 @@
 #pragma once
 #include "Msg.h"
+#include <map>
+using namespace std;
 
 class GameObject {
 public:
