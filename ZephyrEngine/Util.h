@@ -41,6 +41,13 @@ inline std::string openFile(std::string fileName) {
 	std::ifstream t(fileName);
 	std::string output((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
 	t.close();
-
 	return output;
+}
+
+inline void writeToFile(std::string fileName, std::string data) {
+	//open file and write string to it 
+	std::ofstream myfile;
+	myfile.open(fileName);
+	myfile << data;
+	myfile.close();
 }

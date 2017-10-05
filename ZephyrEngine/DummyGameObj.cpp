@@ -14,12 +14,20 @@ DummyGameObj::DummyGameObj(map <string, string> paramsMap) : GameObject(paramsMa
 	}
 	catch (const exception& e) { 
 		cout << "\n" << e.what(); // information from length_error printed
-		cout << paramsMap.find("dummyLevel")->second <<"\n";
 	}
 }
 
+string DummyGameObj::toString() {
+	string output = GameObject::toString();
+	output += "\ndummyLevel: " + to_string(dummyLevel) + ",";
+	return output;
+}
 
 DummyGameObj::~DummyGameObj() {
+}
+
+string DummyGameObj::getObjectType() {
+	return "DummyGameObj";
 }
 
 std::string DummyGameObj::someTestFunction(Msg* m) {

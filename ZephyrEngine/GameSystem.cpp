@@ -56,6 +56,18 @@ void GameSystem::addGameObjects(string fileName) {
 	}
 }
 
+void GameSystem::saveToFIle(string fileName) {
+	string output = "";
+	for (GameObject* obj : gameObjects) {
+		output+= obj->toString();
+		output.pop_back();//remove the tailing ','
+		output += ";\n";
+	}	
+	writeToFile(fileName, output);
+
+
+}
+
 // This function adds a created game object to the main list, and posts a message to the render
 // and physics systems so that they can add it to their list as well
 void GameSystem::createGameObject(GameObject* g) {
@@ -70,8 +82,9 @@ void GameSystem::createGameObject(GameObject* g) {
 
 void GameSystem::startSystemLoop() {
 	
-	addGameObjects("testScene2.txt");
+	//addGameObjects("testScene2.txt");
 	addGameObjects("testScene.txt");
+	saveToFIle("testScene2.txt");
 	//startTestLevel();
 
 	//clocks for limiting gameloop speed

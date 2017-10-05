@@ -23,6 +23,8 @@ public:
 	GameObject();
 	~GameObject();
 	GameObject::GameObject(map <string, string> paramsMap);
+	virtual std::string getObjectType();
+	virtual std::string toString();
 	void earlyUpdate();
 	void midUpdate();
 	void lateUpdate();

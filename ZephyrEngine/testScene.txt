@@ -1,10 +1,10 @@
-gameObjectType: DummyGameObj,
+
+gameObjectType: GameObject,
 id: obj1,
 renderable: 1.png,
 xPos: 2,
 yPos: 3,
-orientation: 10,
-dummyLevel: 3;
+orientation: 10,;
 
 gameObjectType: DummyGameObj,
 id: obj2,
@@ -12,12 +12,12 @@ renderable: 2.png,
 xPos: 0,
 yPos: 5,
 orientation: 0,
-dummyLevel: 3;
-  
+dummyLevel: 3,;
+
 gameObjectType: DummyGameObj,
 id: obj3,
 renderable: 3.png,
 xPos: 3,
 yPos: 17,
 orientation: 2,
-dummyLevel: 99;
+dummyLevel: 3,;

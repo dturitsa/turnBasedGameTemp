@@ -1,5 +1,5 @@
 #include "GameObject.h"
-
+using namespace std;
 GameObject::GameObject() {
 }
 
@@ -18,6 +18,20 @@ GameObject::GameObject(map <string, string> paramsMap) {
 		cout << e.what(); // information from length_error printed
 	}
 }
+string GameObject::toString() {
+	string output = "\ngameObjectType: " + getObjectType() + ",";
+	output += "\nid: " + id + ",";
+	output += "\nrenderable: " + renderable + ",";
+	output += "\nxPos: " + to_string(x)+ ",";
+	output += "\nyPos: " + to_string(y) + ",";
+	output += "\norientation: " + to_string(orientation) + ",";
+	return output;
+}
+
+string GameObject::getObjectType() {
+	return "GameObject";
+}
+
 void GameObject::earlyUpdate() {
 
 }

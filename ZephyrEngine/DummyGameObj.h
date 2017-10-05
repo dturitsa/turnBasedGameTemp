@@ -9,7 +9,8 @@ public:
 	//DummyGameObj(std::vector<std::string> params);
 	DummyGameObj(map<string, string> params);
 	~DummyGameObj();
-
+	virtual std::string getObjectType();
+	virtual std::string toString();
 	std::string someTestFunction(Msg* m);
 	void DummyGameObj::earlyUpdate();
 	void DummyGameObj::midUpdate();
