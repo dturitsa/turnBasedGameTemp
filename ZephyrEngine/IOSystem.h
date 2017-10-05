@@ -15,7 +15,7 @@ public:
 
 	Msg* m;
 	
-	
+	int timeFrame = 10;
 private:
 
 };

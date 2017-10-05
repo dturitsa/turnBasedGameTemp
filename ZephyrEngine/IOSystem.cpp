@@ -16,7 +16,7 @@ void IOSystem::startSystemLoop() {
 
 	while (true) {
 		thisTime = clock();
-		if ((thisTime - lastTime) > 100) {
+		if ((thisTime - lastTime) > timeFrame) {
 			lastTime = thisTime;
 			checkKeyPresses();
 		}

@@ -20,7 +20,12 @@ public:
 	void startTestLevel();
 	void addGameObjects(string fileName);
 	void createGameObject(GameObject* g);
+	void GameSystem::gameObjectRemoved(GameObject* g);
 
 	std::vector<GameObject*> gameObjects;
+	
+	int timeFrame = 10;
+
+
 private:
 };

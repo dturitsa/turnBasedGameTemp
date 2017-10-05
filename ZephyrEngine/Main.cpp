@@ -2,43 +2,54 @@
 
 int main(int argc, char *argv[]) { 	
 	//////////////////////////////////////////////////////////////////
-	//						Loading Config							//
-	//////////////////////////////////////////////////////////////////
-	int numberOfWorkerThreads = 16; // Default to 16
-	
-
-
-	//////////////////////////////////////////////////////////////////
 	//						Loading Core							//
 	//////////////////////////////////////////////////////////////////
 	
 	// create ONE message bus that goes to ALL the systems
 	mbus = new MessageBus();
-	
-	// Create worker thread pool
-	ctpl::thread_pool p(numberOfWorkerThreads); // number of threads in pool
-												// for p.push usage, see the ctpl_stl.h header file
 
 	//////////////////////////////////////////////////////////////////
 	//						SYSTEM CREATION							//
-	//////////////////////////////////////////////////////////////////
-	
-	// SPECIAL CASE: NEEDS OWN THREAD
+	// DO NOT START SYSTEM LOOPS IN HERE (if a loop is required)
+	//////////////////////////////////////////////////////////////////	
 	IOSystem* ios = new IOSystem(mbus);
 	mbus->addSystem(ios);
-	std::thread ioThread(startIOSystem, ios);
-
-	// SPECIAL CASE: NEEDS OWN THREAD
+	
 	RenderSystem* rs = new RenderSystem(mbus);
 	mbus->addSystem(rs);
-	std::thread renderThread(startRenderSystem, rs);
 
-	// SPECIAL CASE: NEEDS OWN THREAD
 	GameSystem* gs = new GameSystem(mbus);
 	mbus->addSystem(gs);
-	std::thread gameSystemThread(startGameSystem, gs);
 
 	std::cout << "All systems created";
+
+	//////////////////////////////////////////////////////////////////
+	//						Loading Config							//
+	//////////////////////////////////////////////////////////////////
+	int numberOfWorkerThreads = 16; // Default to 16
+
+	std::string rawConfigData = openFileRemoveSpaces("config.txt");
+	
+	// Temporary config file is structured to only list the time frames for
+	// GameSystem, RenderThread, and ioThread
+	std::vector<std::string> configData = split(rawConfigData, ',');
+	std::string::size_type sz;
+
+	gs->timeFrame = std::stoi(configData.at(0), &sz);
+	rs->timeFrame = std::stoi(configData.at(1), &sz);
+	ios->timeFrame = std::stoi(configData.at(2), &sz);
+
+	// Not using this right now, move it to game system/Render/Physics later maybe
+	//// Create worker thread pool
+	//ctpl::thread_pool p(numberOfWorkerThreads); // number of threads in pool
+	//											// for p.push usage, see the ctpl_stl.h header file
+
+	//////////////////////////////////////////////////////////////////
+	//				Start Core System Threads     					//
+	//////////////////////////////////////////////////////////////////
+	std::thread gameSystemThread(startGameSystem, gs);
+	std::thread renderThread(startRenderSystem, rs);
+	std::thread ioThread(startIOSystem, ios);
 
 
 	//////////////////////////////////////////////////////////////////

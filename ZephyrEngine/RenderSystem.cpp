@@ -24,7 +24,7 @@ void RenderSystem::startSystemLoop() {
 	
 	while (true) {
 		thisTime = clock();
-		if ((thisTime - lastTime) > 1000) {
+		if ((thisTime - lastTime) > timeFrame) {
 			lastTime = thisTime;
 			mtx.lock();
 			renderAllItems();
@@ -44,18 +44,33 @@ void RenderSystem::handleMessage(Msg *msg) {
 		updateObjPosition(msg);
 		mtx.unlock();
 		break;
-	case NEW_OBJECT_TO_RENDER:
+	case GO_ADDED:
 		// parse data from msg to add obj to list
 		mtx.lock();
 		addObjectToRenderList(msg);
 		mtx.unlock();
 		break;
-	case REMOVE_OBJECT_FROM_RENDER:
-
+	case GO_REMOVED:
+		mtx.lock();
+		removeObjectFromRenderList(msg);
+		mtx.unlock();
 		break;
 	default:
 		break;
 	}
+}
+
+void RenderSystem::removeObjectFromRenderList(Msg* m) {
+	for (auto s : gameObjectsToRender) {
+		std::vector<std::string> obj = split(*s, ',');
+		// found the obj
+		if (obj.front() == m->data) {
+			// remove the object
+
+			return;
+		}
+	}
+	gameObjectsToRender.push_back(&m->data);
 }
 
 void RenderSystem::addObjectToRenderList(Msg* m) {

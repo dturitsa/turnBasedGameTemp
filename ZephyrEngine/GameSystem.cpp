@@ -56,13 +56,16 @@ void GameSystem::addGameObjects(string fileName) {
 	}
 }
 
-//
+// This function adds a created game object to the main list, and posts a message to the render
+// and physics systems so that they can add it to their list as well
 void GameSystem::createGameObject(GameObject* g) {
 	gameObjects.push_back(g);
 	std::ostringstream oss;
-	oss << g->id << ',' << g->renderable << ',' << g->x << ',' << g->y << ',' << g->orientation;
-	msgBus->postMessage(new Msg(NEW_OBJECT_TO_RENDER, oss.str()));
-	
+	oss << g->id << ',' << g->renderable << ',' << g->x << ',' << g->y << ',' << g->orientation; 
+	// maybe add the rest of the variables into the oss as well, but can decide later depending on
+	// what physics needs
+
+	msgBus->postMessage(new Msg(GO_ADDED, oss.str()));
 }
 
 void GameSystem::startSystemLoop() {
@@ -79,7 +82,7 @@ void GameSystem::startSystemLoop() {
 	while (true) {
 
 		thisTime = clock();
-		if ((thisTime - lastTime) < 100)
+		if ((thisTime - lastTime) < timeFrame)
 			continue; //if loop duration isn't passed , check again
 
 		lastTime = thisTime;
@@ -100,6 +103,11 @@ void GameSystem::startSystemLoop() {
 			obj->lateUpdate();
 		}
 	}
+}
+
+void GameSystem::gameObjectRemoved(GameObject* g) {
+	Msg* m = new Msg(GO_REMOVED, g->id);
+	msgBus->postMessage(m);
 }
 
 void GameSystem::handleMessage(Msg *msg) {
