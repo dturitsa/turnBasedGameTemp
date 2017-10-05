@@ -24,14 +24,9 @@ void GameSystem::startTestLevel() {
 //reads gameobjects from a file. instantiates them and adds them to the list of active objects
 void GameSystem::addGameObjects(string fileName) {
 
-	//open file and read it into a string
-	std::ifstream t(fileName);
-	std::string output((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
-	t.close();
+	std::string data = openFileRemoveSpaces(fileName);
 
-	output.erase(std::remove_if(output.begin(), output.end(), isspace), output.end());//remove spaces from data
-
-	vector<string> splitDataVector = split(output, ';');//split gameobjects by
+	vector<string> splitDataVector = split(data, ';');//split gameobjects by
 
 	GameObject* g; //new gameobject to be created
 	//loop through objects read in from file

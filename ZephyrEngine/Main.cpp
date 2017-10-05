@@ -1,18 +1,23 @@
 #include "Main.h"
 
+int main(int argc, char *argv[]) { 	
+	//////////////////////////////////////////////////////////////////
+	//						Loading Config							//
+	//////////////////////////////////////////////////////////////////
+	int numberOfWorkerThreads = 16; // Default to 16
+	
 
-// insert game object list here
-// List<GameObject> currObjects;
 
-int main(int argc, char *argv[]) { 
+	//////////////////////////////////////////////////////////////////
+	//						Loading Core							//
+	//////////////////////////////////////////////////////////////////
+	
 	// create ONE message bus that goes to ALL the systems
 	mbus = new MessageBus();
 	
 	// Create worker thread pool
-	ctpl::thread_pool p(16); // number of threads in pool
-	// for p.push usage, see the ctpl_stl.h header file
-
-	// create Permanent thread pools
+	ctpl::thread_pool p(numberOfWorkerThreads); // number of threads in pool
+												// for p.push usage, see the ctpl_stl.h header file
 
 	//////////////////////////////////////////////////////////////////
 	//						SYSTEM CREATION							//
@@ -36,15 +41,11 @@ int main(int argc, char *argv[]) {
 	std::cout << "All systems created";
 
 
-
-
 	//////////////////////////////////////////////////////////////////
 	//						Console Loop							//
 	//////////////////////////////////////////////////////////////////
 
-
-	// TEMPORARY LOOP FOR TESTING MESSAGE SYSTEM WITH CONSOLE RENDERER
-	// Note: Probably will use main thread for console debug/control type system thing later
+	// TO DO: Implement 
 	while (true) {
 		
 	}
