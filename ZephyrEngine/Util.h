@@ -3,6 +3,11 @@
 #include <sstream>
 #include <vector>
 #include <iterator>
+#include<iostream>
+#include<fstream>
+#include <chrono>
+#include <map>
+#include <algorithm>
 
 template<typename Out>
 inline void split(const std::string &s, char delim, Out result) {
