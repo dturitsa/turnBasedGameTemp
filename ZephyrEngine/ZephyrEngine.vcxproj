@@ -122,6 +122,7 @@
     <ClInclude Include="Msg.h" />
     <ClInclude Include="ConsoleRenderSystem.h" />
     <ClInclude Include="RenderSystem.h" />
+    <ClInclude Include="ShipObj.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Util.h" />
   </ItemGroup>
@@ -136,6 +137,7 @@
     <ClCompile Include="Msg.cpp" />
     <ClCompile Include="ConsoleRenderSystem.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
+    <ClCompile Include="ShipObj.cpp" />
     <ClCompile Include="System.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

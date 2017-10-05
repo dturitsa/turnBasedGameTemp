@@ -8,6 +8,7 @@ GameSystem::GameSystem(MessageBus* mbus) : System(mbus) {
 GameSystem::~GameSystem() {
 }
 
+/*
 //hardcoded version of loadScene(fileName) used for testing.
 void GameSystem::startTestLevel() {
 	
@@ -20,7 +21,7 @@ void GameSystem::startTestLevel() {
 
 	oss.str(std::string());
 }
-
+*/
 //reads gameobjects from a file. instantiates them and adds them to the list of active objects
 void GameSystem::addGameObjects(string fileName) {
 
@@ -47,6 +48,9 @@ void GameSystem::addGameObjects(string fileName) {
 		//just hard coded else ifs for now... should probably make retreive available classes automatically
 		if (gameObjectType.compare("DummyGameObj") == 0)
 			g = new DummyGameObj(gameObjDataMap);
+
+		else if (gameObjectType.compare("ShipObj") == 0) 
+			g = new ShipObj(gameObjDataMap);
 
 		else if (gameObjectType.compare("GameObject") == 0)
 			g = new GameObject(gameObjDataMap);
@@ -80,12 +84,9 @@ void GameSystem::createGameObject(GameObject* g) {
 	msgBus->postMessage(new Msg(GO_ADDED, oss.str()));
 }
 
-void GameSystem::startSystemLoop() {
-	
-	//addGameObjects("testScene2.txt");
+void GameSystem::startSystemLoop() {	
 	addGameObjects("testScene.txt");
 	saveToFIle("testScene2.txt");
-	//startTestLevel();
 
 	//clocks for limiting gameloop speed
 	clock_t thisTime = clock();
