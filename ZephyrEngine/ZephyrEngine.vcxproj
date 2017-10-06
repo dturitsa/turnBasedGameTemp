@@ -85,6 +85,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>freeglut.lib;glew32.lib;glew32s.lib;SDL2.lib;SDL2_image.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
