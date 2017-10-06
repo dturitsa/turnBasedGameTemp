@@ -1,7 +1,8 @@
 #include "RenderSystem.h"
+#include <SDL.h>
 
 RenderSystem::RenderSystem(MessageBus* mbus) : System (mbus) {
-	
+	SDL_Init(SDL_INIT_EVERYTHING);
 }
 
 
