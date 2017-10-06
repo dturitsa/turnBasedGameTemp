@@ -16,7 +16,7 @@ public:
 	void handleMessage(Msg * msg);
 	void startSystemLoop();
 
-	const GLint XSTART = 200, YSTART = 150, WIDTH = 800, HEIGHT = 600;
+	const GLint XSTART = 200, YSTART = 150, WIDTH = 800, HEIGHT = 600; //Constants for drawing the window
 	int timeFrame = 10;
 private:
 	std::mutex mtx;
