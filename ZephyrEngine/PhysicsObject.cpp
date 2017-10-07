@@ -4,10 +4,11 @@ PhysicsObject::PhysicsObject()
 {
 }
 
-PhysicsObject::PhysicsObject(std::string tagIn, Vector2 posIn, float wIn, float hIn, float rotIn, float scale, float rotSpeedIn)
+PhysicsObject::PhysicsObject(std::string tagIn, float xIn, float yIn, float wIn, float hIn, float rotIn, float scale, float rotSpeedIn)
 {
 	this->tag = tagIn;
-	this->position = posIn;
+	this->position.x = xIn;
+	this->position.y = yIn;
 	this->width = wIn;
 	this->height = hIn;
 	this->rotation = rotIn;

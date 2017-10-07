@@ -11,6 +11,6 @@ public:
 	void normalize();
 	void translate(float xOffset, float yOffset);
 	void rotate(float angle);
-	void rotateFromOrigin(Vector2 origin, float angle);
+	void rotateFromOrigin(float originX, float originY, float angle);
 };
 

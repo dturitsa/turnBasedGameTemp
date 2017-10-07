@@ -10,9 +10,9 @@ PhysicsEngine::~PhysicsEngine()
 
 }
 
-void PhysicsEngine::addObject(std::string ID, std::string tag, Vector2 coord, float width, float height, float rotation, float windscale, float rotationspeed)
+void PhysicsEngine::addObject(std::string ID, std::string tag, float xPosition, float yPosition, float width, float height, float rotation, float windscale, float rotationspeed)
 {
-	PhysicsObject NewObject(tag, coord, width, height, rotation, windscale, rotationspeed);
+	PhysicsObject NewObject(tag, xPosition, yPosition, width, height, rotation, windscale, rotationspeed);
 	GameObjects[ID] = NewObject;
 }
 
@@ -88,20 +88,20 @@ void PhysicsEngine::getBox(PhysicsObject o, Vector2(&box)[4]) {
 	// [0] = Upper Left
 	box[0].x = o.position.x - halfWidth;
 	box[0].y = o.position.y + halfHeight;
-	box[0].rotateFromOrigin(o.position, checkAngle(o.rotation));
+	box[0].rotateFromOrigin(o.position.x, o.position.y, checkAngle(o.rotation));
 
 	// [1] = Upper Right
 	box[1].x = o.position.x + halfWidth;
 	box[1].y = o.position.y + halfHeight;
-	box[1].rotateFromOrigin(o.position, checkAngle(o.rotation));
+	box[1].rotateFromOrigin(o.position.x, o.position.y, checkAngle(o.rotation));
 
 	// [2] = Bottom Right
 	box[2].x = o.position.x + halfWidth;
 	box[2].y = o.position.y - halfHeight;
-	box[2].rotateFromOrigin(o.position, checkAngle(o.rotation));
+	box[2].rotateFromOrigin(o.position.x, o.position.y, checkAngle(o.rotation));
 
 	// [3] = Bottom Left
 	box[3].x = o.position.x - halfWidth;
 	box[3].y = o.position.y - halfHeight;
-	box[3].rotateFromOrigin(o.position, checkAngle(o.rotation));
+	box[3].rotateFromOrigin(o.position.x, o.position.y, checkAngle(o.rotation));
 }

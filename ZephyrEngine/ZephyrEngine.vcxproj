@@ -121,10 +121,15 @@
     <ClInclude Include="MessageBus.h" />
     <ClInclude Include="Msg.h" />
     <ClInclude Include="ConsoleRenderSystem.h" />
+    <ClInclude Include="PhysicsEngine.h" />
+    <ClInclude Include="PhysicsHeader.h" />
+    <ClInclude Include="PhysicsObject.h" />
+    <ClInclude Include="PhysicsSystem.h" />
     <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="ShipObj.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Util.h" />
+    <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConsoleRenderer.cpp" />
@@ -136,9 +141,13 @@
     <ClCompile Include="MessageBus.cpp" />
     <ClCompile Include="Msg.cpp" />
     <ClCompile Include="ConsoleRenderSystem.cpp" />
+    <ClCompile Include="PhysicsEngine.cpp" />
+    <ClCompile Include="PhysicsObject.cpp" />
+    <ClCompile Include="PhysicsSystem.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="ShipObj.cpp" />
     <ClCompile Include="System.cpp" />
+    <ClCompile Include="Vector2.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,8 +1,9 @@
 #include "PhysicsSystem.h"
 
-PhysicsSystem::PhysicsSystem()
+PhysicsSystem::PhysicsSystem(MessageBus* mbus) : System (mbus)
 {
-	
+	//create wind object(move to message handle?)
+	Physics.addObject("Wind", "Wind", 0, 0, 0, 0, 0, 1, 0);
 }
 
 PhysicsSystem::~PhysicsSystem()
@@ -42,8 +43,8 @@ void PhysicsSystem::handleMessage(Msg *msg)
 
 void PhysicsSystem::setWind(float angle, float speed)
 {
-	Wind.rotation = checkAngle(angle);
-	Wind.windScale = speed;
+	Physics.GameObjects["Wind"].rotation = Physics.checkAngle(angle);
+	Physics.GameObjects["Wind"].windScale = speed;
 }
 
 void PhysicsSystem::changeMast(std::string ID, int mast)
@@ -51,13 +52,13 @@ void PhysicsSystem::changeMast(std::string ID, int mast)
 	switch (mast)
 	{
 	case 0:
-		GameObjects[ID].mast = NONE;
+		Physics.GameObjects[ID].mast = NONE;
 		break;
 	case 1:
-		GameObjects[ID].mast = HALFMAST;
+		Physics.GameObjects[ID].mast = HALFMAST;
 		break;
 	case 2:
-		GameObjects[ID].mast = FULLMAST;
+		Physics.GameObjects[ID].mast = FULLMAST;
 		break;
 	}
 }
@@ -67,23 +68,24 @@ void PhysicsSystem::changeRudder(std::string ID, int rudder)
 	switch (rudder)
 	{
 	case 0:
-		GameObjects[ID].rudder = STRAIGHT;
+		Physics.GameObjects[ID].rudder = STRAIGHT;
 		break;
 	case 1:
-		GameObjects[ID].rudder = HALFSTARBOARD;
+		Physics.GameObjects[ID].rudder = HALFSTARBOARD;
 		break;
 	case 2:
-		GameObjects[ID].rudder = FULLSTARBOARD;
+		Physics.GameObjects[ID].rudder = FULLSTARBOARD;
 		break;
 	case 3:
-		GameObjects[ID].rudder = HALFPORT;
+		Physics.GameObjects[ID].rudder = HALFPORT;
 		break;
 	case 4:
-		GameObjects[ID].rudder = FULLPORT;
+		Physics.GameObjects[ID].rudder = FULLPORT;
 		break;
 	}
 }
 
+//Updates game object movement. Determines movement by tag(ship, projectile, etc...).
 void PhysicsSystem::updateMovement(PhysicsObject &object)
 {
 	if (object.tag == "Ship")
@@ -109,7 +111,7 @@ void PhysicsSystem::updateMovement(PhysicsObject &object)
 			object.rotation += object.rotationSpeed;
 			break;
 		}
-		object.rotation = checkAngle(object.rotation);
+		object.rotation = Physics.checkAngle(object.rotation);
 
 		switch (object.mast)
 		{
@@ -117,19 +119,19 @@ void PhysicsSystem::updateMovement(PhysicsObject &object)
 			movementScale = 0;
 			break;
 		case HALFMAST:
-			movementScale = (object.windScale * Wind.windScale) / 2;
+			movementScale = (object.windScale * Physics.GameObjects["Wind"].windScale) / 2;
 			break;
 		case FULLMAST:
-			movementScale = object.windScale * Wind.windScale;
+			movementScale = object.windScale * Physics.GameObjects["Wind"].windScale;
 			break;
 		}
 
-		windPercentage = Wind.rotation - object.rotation;
-		absolute(windPercentage);
+		windPercentage = Physics.GameObjects["Wind"].rotation - object.rotation;
+		Physics.absolute(windPercentage);
 		windPercentage = 1 - (windPercentage / 180);
-		absolute(windPercentage);
+		Physics.absolute(windPercentage);
 		movementScale *= windPercentage;
-		objectDirection = convertAngleToVector(object.rotation);
+		objectDirection = Physics.convertAngleToVector(object.rotation);
 		object.position.translate(objectDirection.x * movementScale, objectDirection.y * movementScale);
 	}
 

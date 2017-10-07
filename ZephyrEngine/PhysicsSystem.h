@@ -1,12 +1,12 @@
 #pragma once
 #include "PhysicsEngine.h"
+#include "System.h"
 
-class PhysicsSystem : public PhysicsEngine
+class PhysicsSystem : public System
 {
 public:
-	PhysicsObject Wind;
-
-	PhysicsSystem();
+	PhysicsEngine Physics;
+	PhysicsSystem(MessageBus* mbus);
 	~PhysicsSystem();
 	void StartPhysicsLoop();
 	//void PhysicsSystem::handleMessage(Msg *msg);

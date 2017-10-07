@@ -39,13 +39,13 @@ void Vector2::rotate(float angle)
 	this->y = xTemp * sin(radians) + yTemp * cos(radians);
 }
 
-void Vector2::rotateFromOrigin(Vector2 origin, float angle)
+void Vector2::rotateFromOrigin(float originX, float originY, float angle)
 {
 	float xOffset;
 	float yOffset;
-	xOffset = origin.x * -1;
-	yOffset = origin.y * -1;
+	xOffset = originX * -1;
+	yOffset = originY * -1;
 	this->translate(xOffset, yOffset);
 	this->rotate(angle);
-	this->translate(origin.x, origin.y);
+	this->translate(originX, originY);
 }

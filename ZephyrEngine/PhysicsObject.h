@@ -16,7 +16,7 @@ public:
 	float rotationSpeed;
 
 	PhysicsObject();
-	PhysicsObject(std::string tagIn, Vector2 posIn, float wIn, float hIn, float rotIn, float scale, float rotSpeedIn);
+	PhysicsObject(std::string tagIn, float xIn, float yIn, float wIn, float hIn, float rotIn, float scale, float rotSpeedIn);
 	~PhysicsObject();
 };
 
