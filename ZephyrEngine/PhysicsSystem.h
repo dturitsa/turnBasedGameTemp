@@ -1,16 +1,17 @@
 #pragma once
-#include "System.h"
+#include "PhysicsEngine.h"
 
-class PhysicsSystem
+class PhysicsSystem : public PhysicsEngine
 {
 public:
-	PhysicsSystem(MessageBus* mbus);
-	~PhysicsSystem();
-	void addGameObject();
-	void removeGameObject();
-	void handleMessage(Msg *msg);
-	void calculatePosition();
-	void updateGameObject();
-	void checkCollision();
-};
+	PhysicsObject Wind;
 
+	PhysicsSystem();
+	~PhysicsSystem();
+	void StartPhysicsLoop();
+	//void PhysicsSystem::handleMessage(Msg *msg);
+	void setWind(float angle, float speed);
+	void changeMast(std::string ID, int mast);
+	void changeRudder(std::string ID, int rudder);
+	void updateMovement(PhysicsObject &object);
+};
