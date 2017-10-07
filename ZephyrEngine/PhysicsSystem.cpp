@@ -21,6 +21,13 @@ void PhysicsSystem::StartPhysicsLoop()
 		if ((thisTime - lastTime) > 100)
 		{
 			lastTime = thisTime;
+
+			//FOR FUTURE REFERENCE: Loop through Physics objects to update their movements and check collision
+			for (std::map<std::string, PhysicsObject>::iterator it = GameObjects.begin(); it != GameObjects.end(); ++it)
+			{
+				updateMovement(it->second);
+				//checkCollision
+			}
 		}
 	}
 	*/
