@@ -4,7 +4,7 @@ PhysicsObject::PhysicsObject()
 {
 }
 
-PhysicsObject::PhysicsObject(std::string tagIn, float xIn, float yIn, float wIn, float hIn, float rotIn, float scale, float rotSpeedIn)
+PhysicsObject::PhysicsObject(std::string tagIn, float xIn, float yIn, float wIn, float hIn, float rotIn, float scale, float rotSpeedIn, float inertiaIn)
 {
 	this->tag = tagIn;
 	this->position.x = xIn;
@@ -16,6 +16,7 @@ PhysicsObject::PhysicsObject(std::string tagIn, float xIn, float yIn, float wIn,
 	this->rudder = STRAIGHT;
 	this->windScale = scale;
 	this->rotationSpeed = rotSpeedIn;
+	this->inertia = inertiaIn;
 }
 
 PhysicsObject::~PhysicsObject()
