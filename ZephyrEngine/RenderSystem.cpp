@@ -26,6 +26,7 @@ RenderSystem::RenderSystem(MessageBus* mbus) : System (mbus) {
 
 	//Setup window and context
 	SDL_Window *window = SDL_CreateWindow("SDL OpenGL", XSTART, YSTART, WIDTH, HEIGHT, SDL_WINDOW_OPENGL);
+
 	SDL_GLContext context = SDL_GL_CreateContext(window);
 
 	glewExperimental = GL_TRUE;
