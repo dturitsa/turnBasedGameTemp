@@ -8,20 +8,6 @@ GameSystem::GameSystem(MessageBus* mbus) : System(mbus) {
 GameSystem::~GameSystem() {
 }
 
-/*
-//hardcoded version of loadScene(fileName) used for testing.
-void GameSystem::startTestLevel() {
-	
-	DummyGameObj* d = new DummyGameObj(1,"DO",0,0,0);
-	gameObjects.push_back(d);
-	
-	std::ostringstream oss;
-	oss << d->id << ',' << d->renderable << ',' << d->x << ',' << d->y << ',' << d->orientation;
-	//msgBus->postMessage(new Msg(NEW_OBJECT_TO_RENDER, oss.str()));
-
-	oss.str(std::string());
-}
-*/
 //reads gameobjects from a file. instantiates them and adds them to the list of active objects
 void GameSystem::addGameObjects(string fileName) {
 
@@ -45,18 +31,20 @@ void GameSystem::addGameObjects(string fileName) {
 		//gets the gameObject type
 		string gameObjectType = gameObjDataMap.find("gameObjectType")->second;
 		g = NULL;
-		//just hard coded else ifs for now... should probably make retreive available classes automatically
-		if (gameObjectType.compare("DummyGameObj") == 0)
+		//just hard coded else ifs for now... should probably make retreive available classes automatically <- Did some research, cpp doesn't support reflection (Hank)
+		if (gameObjectType.compare("DummyGameObj") == 0) {
 			g = new DummyGameObj(gameObjDataMap);
-
-		else if (gameObjectType.compare("ShipObj") == 0) 
+		} else if (gameObjectType.compare("ShipObj") == 0) {
 			g = new ShipObj(gameObjDataMap);
-
-		else if (gameObjectType.compare("GameObject") == 0)
+		} else if (gameObjectType.compare("GameObject") == 0) {
 			g = new GameObject(gameObjDataMap);
-			
-		if (g != NULL)
+		} else if (gameObjectType.compare("FullscreenObj") == 0) {
+			g = new FullscreenObj(gameObjDataMap);
+		}
+
+		if (g != NULL) {
 			createGameObject(g);
+		}
 	}
 }
 
@@ -82,10 +70,10 @@ void GameSystem::createGameObject(GameObject* g) {
 	msgBus->postMessage(new Msg(GO_ADDED, oss.str()));
 }
 
-void GameSystem::startSystemLoop() {	
-	// addGameObjects("testScene.txt");
-	// saveToFIle("testScene2.txt");
 
+// saveToFIle("testScene2.txt");
+
+void GameSystem::startSystemLoop() {	
 	//clocks for limiting gameloop speed
 	clock_t thisTime = clock();
 	clock_t lastTime = thisTime;
@@ -108,9 +96,8 @@ void GameSystem::startSystemLoop() {
 		case -1: // First launch
 			// this means we've just started up the system. We should load the main menu
 			levelLoaded = 0;
-			// send load menu message(s)? decide to either send one big load menu msg or
-			// to send just the renderables required
-			
+			// Load Main Menu Scene
+			addGameObjects("main_menu.txt"); 
 			break;
 		case 0: // Menu page
 			// does nothing as user changes are handled inside handleMessage. In this state,
@@ -144,6 +131,15 @@ void GameSystem::startSystemLoop() {
 	}
 }
 
+// wrapper that removes all game objects by sending a message for each object.
+// the other possible way to do this is by using a functiona nd then posting a specific
+// message to the render system, but i don't wanna touch the render system right now
+void GameSystem::removeAllGameObjects() {
+	for (GameObject* go : gameObjects) {
+		gameObjectRemoved(go);
+	}
+}
+
 void GameSystem::gameObjectRemoved(GameObject* g) {
 	Msg* m = new Msg(GO_REMOVED, g->id);
 	msgBus->postMessage(m);
@@ -160,17 +156,32 @@ void GameSystem::handleMessage(Msg *msg) {
 		// main menu switch case
 		switch (msg->type) {
 		case UP_ARROW_PRESSED:
-			// move the marker location and let rendering know
+			// move the marker location and let rendering know?
 			markerPosition++;
 			markerPosition = markerPosition % 3;
 			break;
 		case DOWN_ARROW_PRESSED:
-			// move the marker location and let rendering know
+			// move the marker location and let rendering know?
 			markerPosition--;
 			markerPosition = markerPosition % 3;
 			break;
 		case SPACEBAR_PRESSED:
-			// post message of current marker location activation?
+			if (markerPosition == 2) {
+				// Exit was selected
+				mm->type = EXIT_GAME;
+				msgBus->postMessage(mm);
+			}
+
+			if (markerPosition == 1) {
+				// Go to settings
+			} else if (markerPosition == 0) {
+				// start the game (or go to level select?)
+				// first, clear all objects
+				removeAllGameObjects();
+
+				// then, load new objects
+				addGameObjects("testScene.txt"); // TEMPORARY 
+			}
 			break;
 		default:
 			break;
