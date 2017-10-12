@@ -17,11 +17,11 @@ public:
 	void handleMessage(Msg * msg);
 	void startSystemLoop();
 	void stopSystemLoop();
+	void init();
 
 	const GLint XSTART = 200, YSTART = 150, WIDTH = 800, HEIGHT = 600; //Constants for drawing the window
 	int timeFrame = 10;
 private:
-	//const GLchar *fragmentShaderSource;
 	bool running;
 	GLuint vertexShader;
 	GLuint fragmentShader;
@@ -51,7 +51,9 @@ private:
 		1,2,3 }; // second triangle (bottom right - top left - top right)
 	
 	void renderAllItems();
+	void draw();
 	GLuint getTexture(string path);
+	void renderObject(string object);
 
 	std::vector<std::string*> gameObjectsToRender;
 	void addObjectToRenderList(Msg* m);

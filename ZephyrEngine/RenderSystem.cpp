@@ -22,29 +22,50 @@ const GLchar *fragmentShaderSource = "#version 330 core\n"
 "}";
 
 RenderSystem::RenderSystem(MessageBus* mbus) : System (mbus) {
+	OutputDebugString("Render System Constructing");
 	//Initialize SDL
 	SDL_Init(SDL_INIT_EVERYTHING);
 
+	window = SDL_CreateWindow("Okeanos - Made with Zephyr", XSTART, YSTART, WIDTH, HEIGHT, SDL_WINDOW_OPENGL);
+	
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	SDL_GL_SwapWindow(window);
+
+	/*
+	error = glGetError();
+	if (error != 0) {
+		const GLubyte* error2 = gluErrorString(error);
+		int hit = 0;
+	}
+	*/
+}
+
+
+RenderSystem::~RenderSystem() {
+}
+
+void RenderSystem::init() {
+	//Setup window and context
+	context = SDL_GL_CreateContext(window);
 	//Setup SDL and GL
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
-	//Setup window and context
-	window = SDL_CreateWindow("Okeanos - Made with Zephyr", XSTART, YSTART, WIDTH, HEIGHT, SDL_WINDOW_OPENGL);
-	context = SDL_GL_CreateContext(window);
-
-	glewExperimental = GL_TRUE;
-	glewInit();
-
 	if (GLEW_OK != glewInit()) {
-	std::cout << "Failed to init GLEW" << std::endl;
+		std::cout << "Failed to init GLEW" << std::endl;
 		return;
 	}
 
 	glViewport(0, 0, WIDTH, HEIGHT);
 
+	//Make transparent background
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glewExperimental = GL_TRUE;
+	glewInit();
 	//Set up vertex shader
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
@@ -107,30 +128,28 @@ RenderSystem::RenderSystem(MessageBus* mbus) : System (mbus) {
 	glEnableVertexAttribArray(1);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
-	
+
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	//Make transparent background
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	OutputDebugString("FINISH INIT");
+}
 
-	
+void RenderSystem::draw() {
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, getTexture("boatTest.png"));
 	GLint ourTextureLocation = glGetUniformLocation(shaderProgram, "ourTexture1");
 	glUniform1i(ourTextureLocation, 0);//Put GL_TEXTURE0 into ourTexture
 	glUseProgram(shaderProgram);
 	glBindVertexArray(VAO);
+
 	OutputDebugString("DRAWING");
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);
 	glBindVertexArray(0);
-	
 	SDL_GL_SwapWindow(window);
-}
-
-
-RenderSystem::~RenderSystem() {
 }
 
 void RenderSystem::renderAllItems() {
@@ -139,18 +158,27 @@ void RenderSystem::renderAllItems() {
 		std::vector<std::string> data = split(*s, ',');
 		std::cout << *s << "\n"; 
 	}
+	draw();
+}
 
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, getTexture("boatTest.png"));
-	GLint ourTextureLocation = glGetUniformLocation(shaderProgram, "ourTexture1");
-	glUniform1i(ourTextureLocation, 0);
-	glUseProgram(shaderProgram);
-	glBindVertexArray(VAO);
-	OutputDebugString("DRAWING");
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-	glBindVertexArray(0);
-	SDL_GL_SwapWindow(window);
+void RenderSystem::renderObject(std::string object) {
+	//ID, png, x, y, z, orientation
+	std::string objectData[6];
+	size_t pos = 0;
+	std::string splitter = ", ";
+	for (int i = 0; i < 6; i++) {
+		pos = object.find(splitter);
+		objectData[i] = object.substr(0, pos);
+		object.erase(0, pos + splitter.length());
+	}
+	std::string ID, sprite;
+	double x, y, z, orientation;
+	ID = objectData[0];
+	sprite = objectData[1];
+	x = ::atof(objectData[2].c_str());
+	y = ::atof(objectData[3].c_str());
+	z = ::atof(objectData[4].c_str());
+	orientation = ::atof(objectData[5].c_str());
 }
 
 GLuint RenderSystem::getTexture(string path) {
@@ -181,6 +209,7 @@ GLuint RenderSystem::getTexture(string path) {
 }
 
 void RenderSystem::startSystemLoop() {
+	init();
 	running = true;
 	clock_t thisTime = clock();
 	clock_t lastTime = thisTime;
