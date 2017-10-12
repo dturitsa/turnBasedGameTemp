@@ -108,13 +108,18 @@ void GameSystem::startSystemLoop() {
 		case -1: // First launch
 			// this means we've just started up the system. We should load the main menu
 			levelLoaded = 0;
-			// send load menu message
+			// send load menu message(s)? decide to either send one big load menu msg or
+			// to send just the renderables required
 			
 			break;
 		case 0: // Menu page
-
+			// does nothing as user changes are handled inside handleMessage. In this state,
+			// the only thing we could possibly do is... idk yet.
 			break;
-		case 1: // Setings page
+		case 1: // Settings page
+			// does nothing as user changes are handled inside handleMessage. In this state,
+			// the only thing we could possibly do is... idk yet. Basically same shit as
+			// the Menu page tho
 			break;
 		case 2: // Game loaded
 			for (GameObject* obj : gameObjects) {
@@ -151,8 +156,8 @@ void GameSystem::handleMessage(Msg *msg) {
 	Msg* mm = new Msg(EMPTY_MESSAGE, "");
 	GameObject* g;
 
-	if ((levelLoaded == 0) || (levelLoaded == 1)) {
-		// menu & settings switch case
+	if (levelLoaded == 0) {
+		// main menu switch case
 		switch (msg->type) {
 		case UP_ARROW_PRESSED:
 			// move the marker location and let rendering know
@@ -170,7 +175,26 @@ void GameSystem::handleMessage(Msg *msg) {
 		default:
 			break;
 		}
-	} else if (levelLoaded == 2) {
+	} else if (levelLoaded == 1) {
+		// settings menu
+		switch (msg->type) {
+		case UP_ARROW_PRESSED:
+			// move the marker location and let rendering know
+			markerPosition++;
+			markerPosition = markerPosition % 3;
+			break;
+		case DOWN_ARROW_PRESSED:
+			// move the marker location and let rendering know
+			markerPosition--;
+			markerPosition = markerPosition % 3;
+			break;
+		case SPACEBAR_PRESSED:
+			// post message of current marker location activation?
+			break;
+		default:
+			break;
+		}
+	}  else if (levelLoaded == 2) {
 		// game running switch case
 		switch (msg->type) {
 		case TEST_KEY_PRESSED:
