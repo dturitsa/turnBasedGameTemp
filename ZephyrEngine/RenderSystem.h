@@ -29,7 +29,7 @@ private:
 	GLuint fragmentShader;
 	GLuint shaderProgram;
 	SDL_Window *window;
-	GLuint VBO, VAO;
+	GLuint VBO, VAO, TBO;
 	std::mutex mtx;
 	void renderAllItems();
 	void Draw(int x, int y, GLuint texture);

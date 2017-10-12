@@ -2,16 +2,21 @@
 
 const GLchar *vertexShaderSource = "#version 330 core\n"
 "layout ( location = 0 ) in vec3 position;\n"
+"layout ( location = 1 ) in vec2 texCoord;\n"
+"out vec2 TexCoord;\n"
 "void main()\n"
 "{\n"
 "gl_Position = vec4( position.x, position.y, position.z, 1.0 );\n"
+"TexCoord = vec2( texCoord.x, 1.0f - texCoord.y);\n"
 "}";
 
 const GLchar *fragmentShaderSource = "#version 330 core\n"
 "out vec4 color;\n"
+"in vec2 TexCoord;\n"
+"uniform sampler2D ourTexture1;\n"
 "void main()\n"
 "{\n"
-"color = vec4(0.0f, 0.5f, 0.2f, 1.0f);\n"
+"color = texture(ourTexture1, TexCoord);\n"
 "}";
 
 RenderSystem::RenderSystem(MessageBus* mbus) : System (mbus) {
@@ -90,8 +95,8 @@ RenderSystem::RenderSystem(MessageBus* mbus) : System (mbus) {
 	GLfloat TexCoord[] = {
 		0, 0,
 		1, 0,
-		1, 1,
 		0, 1,
+		1, 1
 	};
 	//Indices to reuse vertecies
 	GLubyte indices[] = { 0,1,2, // first triangle (bottom left - bottom right - top left)
@@ -99,6 +104,7 @@ RenderSystem::RenderSystem(MessageBus* mbus) : System (mbus) {
 
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &TBO);
 
 	glBindVertexArray(VAO);
 
@@ -109,6 +115,12 @@ RenderSystem::RenderSystem(MessageBus* mbus) : System (mbus) {
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+	glBindBuffer(GL_ARRAY_BUFFER, TBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(TexCoord), TexCoord, GL_STATIC_DRAW);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(1);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 	
 	SDL_Event windowEvent;
 	while (true) {
@@ -121,15 +133,19 @@ RenderSystem::RenderSystem(MessageBus* mbus) : System (mbus) {
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		//Draw stuff
-		glBindVertexArray(0);
+		//Make transparent background
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, getTexture("boatTest.png"));
+		GLint ourTextureLocation = glGetUniformLocation(shaderProgram, "ourTexture1");
+		glUniform1i(ourTextureLocation, 0);
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO);
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);
 		glBindVertexArray(0);
-
 
 		SDL_GL_SwapWindow(window);
 	}
