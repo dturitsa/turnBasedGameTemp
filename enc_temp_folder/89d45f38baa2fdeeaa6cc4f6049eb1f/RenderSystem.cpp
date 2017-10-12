@@ -2,6 +2,7 @@
 
 const GLchar *vertexShaderSource = "#version 330 core\n"
 "layout ( location = 0 ) in vec3 position;\n"
+"layout ( location = 1 ) in vec3 texCoord;\n"
 "void main()\n"
 "{\n"
 "gl_Position = vec4( position.x, position.y, position.z, 1.0 );\n"
@@ -109,6 +110,11 @@ RenderSystem::RenderSystem(MessageBus* mbus) : System (mbus) {
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(TexCoord), TexCoord, GL_STATIC_DRAW);
+	//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*)0);
+	//glEnableVertexAttribArray(1);
+	//glBindBuffer(GL_ARRAY_BUFFER, 0);
 	
 	SDL_Event windowEvent;
 	while (true) {
