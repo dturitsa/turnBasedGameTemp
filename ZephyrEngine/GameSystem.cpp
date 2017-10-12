@@ -159,11 +159,19 @@ void GameSystem::handleMessage(Msg *msg) {
 			// move the marker location and let rendering know?
 			markerPosition++;
 			markerPosition = markerPosition % 3;
+			oss << "obj3, Z6_Marker_P" << markerPosition << ".png," << "0,0,0";
+			mm->type = UPDATE_OBJECT_POSITION;
+			mm->data = oss.str();
+			msgBus->postMessage(mm);
 			break;
 		case DOWN_ARROW_PRESSED:
 			// move the marker location and let rendering know?
 			markerPosition--;
 			markerPosition = markerPosition % 3;
+			oss << "obj3, Z6_Marker_P" << markerPosition << ".png," << "0,0,0";
+			mm->type = UPDATE_OBJECT_POSITION;
+			mm->data = oss.str();
+			msgBus->postMessage(mm);
 			break;
 		case SPACEBAR_PRESSED:
 			if (markerPosition == 2) {
