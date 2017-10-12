@@ -58,7 +58,12 @@ int main(int argc, char *argv[]) {
 
 	// TO DO: Implement 
 	while (true) {
-		
+		SDL_Event windowEvent;
+		if (SDL_PollEvent(&windowEvent)) {
+			if (SDL_QUIT == windowEvent.type) {
+				rs->stopSystemLoop();
+			}
+		}
 	}
 	
 	//////////////////////////////////////////////////////////////////

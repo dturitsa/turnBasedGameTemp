@@ -16,15 +16,13 @@ public:
 
 	void handleMessage(Msg * msg);
 	void startSystemLoop();
+	void stopSystemLoop();
 
 	const GLint XSTART = 200, YSTART = 150, WIDTH = 800, HEIGHT = 600; //Constants for drawing the window
 	int timeFrame = 10;
 private:
-	struct Image {
-		GLuint texture;
-		int width;
-		int height;
-	};
+	//const GLchar *fragmentShaderSource;
+	bool running;
 	GLuint vertexShader;
 	GLuint fragmentShader;
 	GLuint shaderProgram;
@@ -51,10 +49,8 @@ private:
 	//Indices to reuse vertecies
 	GLubyte indices[10] = { 0,1,2, // first triangle (bottom left - bottom right - top left)
 		1,2,3 }; // second triangle (bottom right - top left - top right)
-
+	
 	void renderAllItems();
-	GLchar* getShader(string fileName);
-	void Draw(int x, int y, GLuint texture);
 	GLuint getTexture(string path);
 
 	std::vector<std::string*> gameObjectsToRender;
