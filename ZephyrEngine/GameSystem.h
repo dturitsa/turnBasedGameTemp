@@ -2,6 +2,7 @@
 #include "System.h"
 #include "GameObject.h"
 #include "DummyGameObj.h"
+#include "FullscreenObj.h"
 #include "ShipObj.h"
 #include<iostream>
 #include<fstream>
@@ -25,8 +26,19 @@ public:
 	void GameSystem::gameObjectRemoved(GameObject* g);
 	std::vector<GameObject*> gameObjects;
 	
+	void removeAllGameObjects();
+
 	int timeFrame = 10;
 
+	// -1	= no level loaded
+	// 0	= Main Menu
+	// 1	= Settings
+	// 2	= In Game
+	// 3	= Level select (if required)
+	int levelLoaded = -1;
 
 private:
+
+	// The position of the marker, goes from 0 to 2, 0 being the top
+	int markerPosition = 0;
 };

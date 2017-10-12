@@ -27,29 +27,32 @@ void IOSystem::startSystemLoop() {
 void IOSystem::checkKeyPresses() {
 	m->data = "";
 
-	/*if (GetKeyState('W') & 0x8000) {
-		m->data += "W";
+	// Need to decide how we want to do this section - might be some issues here
+	// with regard to pressing multiple keys at the same time
+	// A possible way to do it is to send data instead of posting messages for 
+	// specific keys, and then having another function somewhere that
+	// parses the data to get the proper code to the Gamesystem but that's
+	// a bit convoluted
+	if (GetKeyState(VK_UP)) {
+		m->type = UP_ARROW_PRESSED;
 	}
 
-	if (GetKeyState('S') & 0x8000) {
-		m->data += "S";
+	if (GetKeyState(VK_DOWN)) {
+		m->type = DOWN_ARROW_PRESSED;
 	}
 
-	if (GetKeyState('A') & 0x8000) {
-		m->data += "A";
+	if (GetKeyState(VK_SPACE)) {
+		m->type = SPACEBAR_PRESSED;
 	}
-
-	if (GetKeyState('D') & 0x8000) {
-		m->data += "D";
-	}*/
 
 	if (GetKeyState('Z') & 0x8000) {
-		//m->data += "Z";
 		m->type = TEST_KEY_PRESSED;
+	}
+
+	if (m->type != EMPTY_MESSAGE) {
 		msgBus->postMessage(m);
 	}
 
-	// msgBus->postMessage(m);
 }
 
 

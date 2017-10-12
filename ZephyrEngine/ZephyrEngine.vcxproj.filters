@@ -73,6 +73,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Axis.h">
+    	 <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FullscreenObj.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -128,5 +131,14 @@
     <ClCompile Include="Axis.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FullscreenObj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <Text Include="vertexShader.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="fragmentShader.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
