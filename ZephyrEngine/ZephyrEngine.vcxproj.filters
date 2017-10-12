@@ -123,4 +123,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="vertexShader.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="fragmentShader.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

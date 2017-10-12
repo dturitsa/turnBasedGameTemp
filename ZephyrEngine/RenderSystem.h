@@ -31,7 +31,9 @@ private:
 	SDL_Window *window;
 	GLuint VBO, VAO, TBO;
 	std::mutex mtx;
+
 	void renderAllItems();
+	GLchar* getShader(string fileName);
 	void Draw(int x, int y, GLuint texture);
 	GLuint getTexture(string path);
 

@@ -1,6 +1,6 @@
 #include "RenderSystem.h"
 
-const GLchar *vertexShaderSource = "#version 330 core\n"
+const GLchar *vertexShaderSource;/* = "#version 330 core\n"
 "layout ( location = 0 ) in vec3 position;\n"
 "layout ( location = 1 ) in vec2 texCoord;\n"
 "out vec2 TexCoord;\n"
@@ -9,8 +9,8 @@ const GLchar *vertexShaderSource = "#version 330 core\n"
 "gl_Position = vec4( position.x, position.y, position.z, 1.0 );\n"
 "TexCoord = vec2( texCoord.x, 1.0f - texCoord.y);\n"
 "}";
-
-const GLchar *fragmentShaderSource = "#version 330 core\n"
+*/
+const GLchar *fragmentShaderSource;/* = "#version 330 core\n"
 "out vec4 color;\n"
 "in vec2 TexCoord;\n"
 "uniform sampler2D ourTexture1;\n"
@@ -18,7 +18,7 @@ const GLchar *fragmentShaderSource = "#version 330 core\n"
 "{\n"
 "color = texture(ourTexture1, TexCoord);\n"
 "}";
-
+*/
 RenderSystem::RenderSystem(MessageBus* mbus) : System (mbus) {
 	//Initialize SDL
 	SDL_Init(SDL_INIT_EVERYTHING);
@@ -44,6 +44,9 @@ RenderSystem::RenderSystem(MessageBus* mbus) : System (mbus) {
 	glViewport(0, 0, WIDTH, HEIGHT);
 
 	//Set up vertex shader
+	&vertexShaderSource = getShader("vertexShader.txt");
+	//OutputDebugString(getShader("vertexShader.txt"));
+	//OutputDebugString(vertexShaderSource);
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
 	glCompileShader(vertexShader);
@@ -58,6 +61,7 @@ RenderSystem::RenderSystem(MessageBus* mbus) : System (mbus) {
 	}
 
 	//Set up fragment shader
+	fragmentShaderSource = getShader("fragmentShader.txt");
 	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
 	glCompileShader(fragmentShader);
@@ -157,6 +161,68 @@ RenderSystem::RenderSystem(MessageBus* mbus) : System (mbus) {
 
 
 RenderSystem::~RenderSystem() {
+}
+
+GLchar* RenderSystem::getShader(string path) {
+	string line, allLines;
+	ifstream myReadFile;
+	myReadFile.open(path.c_str());
+
+	if (myReadFile.is_open()) {
+		OutputDebugStringW(L"ABLE TO OPEN FILE!\n");
+		while (getline(myReadFile, line)) {
+			allLines = allLines + line + "\n";
+		}
+		myReadFile.close();
+		return (GLchar*)allLines.c_str();
+	}
+	else {
+		OutputDebugStringW(L"UNABLE TO OPEN FILE!");
+		return 0;
+	}
+}
+unsigned long getFileLength(ifstream& file)
+{
+	if (!file.good()) return 0;
+
+	unsigned long pos = file.tellg();
+	file.seekg(0, ios::end);
+	unsigned long len = file.tellg();
+	file.seekg(ios::beg);
+
+	return len;
+}
+
+int loadshader(char* filename, GLchar** ShaderSource, unsigned long* len)
+{
+	ifstream file;
+	file.open(filename, ios::in); // opens as ASCII!
+	if (!file) return -1;
+
+	len = getFileLength(file);
+
+	if (len == 0) return -2;   // Error: Empty File 
+
+	*ShaderSource = (GLubyte*) new char[len + 1];
+	if (*ShaderSource == 0) return -3;   // can't reserve memory
+
+										 // len isn't always strlen cause some characters are stripped in ascii read...
+										 // it is important to 0-terminate the real length later, len is just max possible value... 
+	*ShaderSource[len] = 0;
+
+	unsigned int i = 0;
+	while (file.good())
+	{
+		*ShaderSource[i] = file.get();       // get character from file.
+		if (!file.eof())
+			i++;
+	}
+
+	*ShaderSource[i] = 0;  // 0-terminate it at the correct position
+
+	file.close();
+
+	return 0; // No Error
 }
 
 
