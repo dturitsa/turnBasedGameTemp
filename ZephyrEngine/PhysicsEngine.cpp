@@ -72,14 +72,7 @@ float PhysicsEngine::checkAngle(float angle)
 }
 
 //collision
-bool PhysicsEngine::collisionCheck(PhysicsObject o1, PhysicsObject o2)
-{
-	Vector2 box1[4], box2[4];
-	return true;
-}
-
-//collision
-void PhysicsEngine::getBox(PhysicsObject o, Vector2(&box)[4]) {
+void PhysicsEngine::getCorners(PhysicsObject o, Vector2(&box)[4]) {
 
 	float sinAngle = sin(o.rotation * PI / 180);
 	float cosAngle = cos(o.rotation * PI / 180);
@@ -104,4 +97,55 @@ void PhysicsEngine::getBox(PhysicsObject o, Vector2(&box)[4]) {
 	box[3].x = o.position.x - halfWidth;
 	box[3].y = o.position.y - halfHeight;
 	box[3].rotateFromOrigin(o.position.x, o.position.y, checkAngle(o.rotation));
+}
+
+float PhysicsEngine::dotProduct(Vector2 a, Vector2 b) {
+	return (a.x * b.x) + (a.y * b.y);
+}
+
+bool PhysicsEngine::checkCollision(PhysicsObject A, PhysicsObject B) {
+	// Step 1: Get the corners for each bouding box
+	getCorners(A, A.corners);
+	getCorners(B, B.corners);
+
+	// Step 2: Get the 2 axis for each bounding box (4 axis total)
+	Axis axis[4];
+	axis[0].axis = convertAngleToVector(A.rotation);
+	axis[1].axis = convertAngleToVector(A.rotation + 90);
+	axis[2].axis = convertAngleToVector(B.rotation);
+	axis[3].axis = convertAngleToVector(B.rotation + 90);
+
+	// Step 3: Project all 4 corners of A and B onto each of the 4 axis
+	float scalar;
+	for (int i = 0; i < 4; i++) { // For each of the 4 axis
+		for (int j = 0; j < 4; j++) { // Calculate A's corners projected onto the axis
+			scalar = dotProduct(A.corners[j], axis[i].axis) / pow(axis[i].axis.magnitude(), 2);
+			axis[i].Acorners[j] = axis[i].axis.scalarMultiply(scalar);
+		}
+		for (int k = 0; k < 4; k++) { // Calculate B's corners projected on the axis
+			scalar = dotProduct(B.corners[k], axis[i].axis) / pow(axis[i].axis.magnitude(), 2);
+			axis[i].Bcorners[k] = axis[i].axis.scalarMultiply(scalar);
+		}
+
+		// Step 4: Find the Amin, Amax, Bmin, Bmax for each of the 4 axis
+		axis[i].Amin = axis[i].Acorners[0]; axis[i].Amax = axis[i].Acorners[0]; axis[i].Bmin = axis[i].Bcorners[0]; axis[i].Bmax = axis[i].Bcorners[0];
+		for (int j = 0; j < 4; j++) {
+			if (axis[i].Acorners[j].magnitude() < axis[i].Amin.magnitude()) // Find A min
+				axis[i].Amin = axis[i].Acorners[j];
+			if (axis[i].Acorners[j].magnitude() > axis[i].Amax.magnitude()) // Find A max
+				axis[i].Amax = axis[i].Acorners[j];
+			if (axis[i].Bcorners[j].magnitude() < axis[i].Bmin.magnitude()) // Find B min
+				axis[i].Bmin = axis[i].Bcorners[j];
+			if (axis[i].Bcorners[j].magnitude() > axis[i].Bmax.magnitude()) // Find B max
+				axis[i].Bmax = axis[i].Bcorners[j];
+		}
+
+		// Step 5: Check if Amax < Bmin && Bmax < Amin
+
+		if (axis[i].Amax.magnitude() < axis[i].Bmin.magnitude() || axis[i].Bmax.magnitude() < axis[i].Amin.magnitude())
+			return false;
+
+	} // End for each axis
+
+	return true;
 }

@@ -111,6 +111,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Axis.h" />
     <ClInclude Include="ConsoleRenderer.h" />
     <ClInclude Include="ctpl_stl.h" />
     <ClInclude Include="DummyGameObj.h" />
@@ -132,6 +133,7 @@
     <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Axis.cpp" />
     <ClCompile Include="ConsoleRenderer.cpp" />
     <ClCompile Include="DummyGameObj.cpp" />
     <ClCompile Include="GameObject.cpp" />

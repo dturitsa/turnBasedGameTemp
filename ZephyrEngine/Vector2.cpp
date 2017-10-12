@@ -22,6 +22,17 @@ void Vector2::normalize()
 	this->y = yFinal;
 }
 
+float Vector2::magnitude() {
+	return sqrt(pow(this->x, 2) + pow(this->y, 2));
+}
+
+Vector2 Vector2::scalarMultiply(float scalar) {
+	Vector2 vector;
+	vector.x = this->x * scalar;
+	vector.y = this->y * scalar;
+	return vector;
+}
+
 void Vector2::translate(float xOffset, float yOffset)
 {
 	this->x += xOffset;

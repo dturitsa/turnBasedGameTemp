@@ -15,6 +15,7 @@ public:
 	float windScale;
 	float rotationSpeed;
 	float inertia;
+	Vector2 corners[4]; //UL, UR, BR, BL
 
 	PhysicsObject();
 	PhysicsObject(std::string tagIn, float xIn, float yIn, float wIn, float hIn, float rotIn, float scale, float rotSpeedIn, float inertiaIn);
