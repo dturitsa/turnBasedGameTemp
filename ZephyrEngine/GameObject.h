@@ -9,6 +9,7 @@ public:
 	std::string id;
 	int x;
 	int y;
+	int z;
 	int width;
 	int length;
 	int orientation; // in degrees, 0 pointing up on the screen, clockwise rotation = positive

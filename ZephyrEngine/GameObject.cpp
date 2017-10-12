@@ -12,6 +12,7 @@ GameObject::GameObject(map <string, string> paramsMap) {
 		renderable = paramsMap.find("renderable")->second;
 		x = stoi(paramsMap.find("xPos")->second);
 		y = stoi(paramsMap.find("yPos")->second);
+		z = stoi(paramsMap.find("zPos")->second);
 		orientation = stoi(paramsMap.find("orientation")->second);
 		width = stoi(paramsMap.find("width")->second);
 		length = stoi(paramsMap.find("length")->second);

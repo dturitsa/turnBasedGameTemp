@@ -63,7 +63,7 @@ void GameSystem::saveToFIle(string fileName) {
 void GameSystem::createGameObject(GameObject* g) {
 	gameObjects.push_back(g);
 	std::ostringstream oss;
-	oss << g->id << ',' << g->renderable << ',' << g->x << ',' << g->y << ',' << g->orientation; 
+	oss << g->id << ',' << g->renderable << ',' << g->x << ',' << g->y << ',' << g->z << ',' << g->orientation;
 	// maybe add the rest of the variables into the oss as well, but can decide later depending on
 	// what physics needs
 
@@ -159,7 +159,7 @@ void GameSystem::handleMessage(Msg *msg) {
 			// move the marker location and let rendering know?
 			markerPosition++;
 			markerPosition = markerPosition % 3;
-			oss << "obj3, Z6_Marker_P" << markerPosition << ".png," << "0,0,0";
+			oss << "obj3, Z6_Marker_P" << markerPosition << ".png," << "0,0,0,0";
 			mm->type = UPDATE_OBJECT_POSITION;
 			mm->data = oss.str();
 			msgBus->postMessage(mm);
@@ -168,7 +168,7 @@ void GameSystem::handleMessage(Msg *msg) {
 			// move the marker location and let rendering know?
 			markerPosition--;
 			markerPosition = markerPosition % 3;
-			oss << "obj3, Z6_Marker_P" << markerPosition << ".png," << "0,0,0";
+			oss << "obj3, Z6_Marker_P" << markerPosition << ".png," << "0,0,0,0";
 			mm->type = UPDATE_OBJECT_POSITION;
 			mm->data = oss.str();
 			msgBus->postMessage(mm);
@@ -219,7 +219,7 @@ void GameSystem::handleMessage(Msg *msg) {
 		case TEST_KEY_PRESSED:
 			g = gameObjects.front();
 			g->x++;
-			oss << g->id << ',' << g->renderable << ',' << g->x << ',' << g->y << ',' << g->orientation;
+			oss << g->id << ',' << g->renderable << ',' << g->x << ',' << g->y << ',' << g->z << ',' << g->orientation;
 			mm = new Msg(UPDATE_OBJECT_POSITION, oss.str());
 			msgBus->postMessage(mm);
 			break;
