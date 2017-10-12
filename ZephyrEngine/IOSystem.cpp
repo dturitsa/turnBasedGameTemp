@@ -27,7 +27,12 @@ void IOSystem::startSystemLoop() {
 void IOSystem::checkKeyPresses() {
 	m->data = "";
 
-	// Need to decide how we want to do this section - 
+	// Need to decide how we want to do this section - might be some issues here
+	// with regard to pressing multiple keys at the same time
+	// A possible way to do it is to send data instead of posting messages for 
+	// specific keys, and then having another function somewhere that
+	// parses the data to get the proper code to the Gamesystem but that's
+	// a bit convoluted
 	if (GetKeyState(VK_UP)) {
 		m->type = UP_ARROW_PRESSED;
 	}
