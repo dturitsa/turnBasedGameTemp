@@ -27,29 +27,27 @@ void IOSystem::startSystemLoop() {
 void IOSystem::checkKeyPresses() {
 	m->data = "";
 
-	/*if (GetKeyState('W') & 0x8000) {
-		m->data += "W";
+	// Need to decide how we want to do this section - 
+	if (GetKeyState(VK_UP)) {
+		m->type = UP_ARROW_PRESSED;
 	}
 
-	if (GetKeyState('S') & 0x8000) {
-		m->data += "S";
+	if (GetKeyState(VK_DOWN)) {
+		m->type = DOWN_ARROW_PRESSED;
 	}
 
-	if (GetKeyState('A') & 0x8000) {
-		m->data += "A";
+	if (GetKeyState(VK_SPACE)) {
+		m->type = SPACEBAR_PRESSED;
 	}
-
-	if (GetKeyState('D') & 0x8000) {
-		m->data += "D";
-	}*/
 
 	if (GetKeyState('Z') & 0x8000) {
-		//m->data += "Z";
 		m->type = TEST_KEY_PRESSED;
+	}
+
+	if (m->type != EMPTY_MESSAGE) {
 		msgBus->postMessage(m);
 	}
 
-	// msgBus->postMessage(m);
 }
 
 
