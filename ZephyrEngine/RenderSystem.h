@@ -29,8 +29,28 @@ private:
 	GLuint fragmentShader;
 	GLuint shaderProgram;
 	SDL_Window *window;
+	SDL_GLContext context;
 	GLuint VBO, VAO, TBO;
 	std::mutex mtx;
+	//Vertecies for a quad
+	GLfloat vertices[12] = {
+		-0.5f, -0.5f, 0.0f, // bottom left
+		0.5f, -0.5f, 0.0f,  // bottom right
+		-0.5f, 0.5f, 0.0f,  // top left
+		0.5f, 0.5f, 0.0f,  // top right
+	};
+
+	//Texture coordinates for quad
+	GLfloat TexCoord[10] = {
+		0, 0,
+		1, 0,
+		0, 1,
+		1, 1
+	};
+
+	//Indices to reuse vertecies
+	GLubyte indices[10] = { 0,1,2, // first triangle (bottom left - bottom right - top left)
+		1,2,3 }; // second triangle (bottom right - top left - top right)
 
 	void renderAllItems();
 	GLchar* getShader(string fileName);

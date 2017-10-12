@@ -27,6 +27,14 @@ public:
 	
 	int timeFrame = 10;
 
+	// -1	= no level loaded
+	// 0	= Main Menu
+	// 1	= Settings
+	// 2	= In Game
+	int levelLoaded = -1;
 
 private:
+
+	// The position of the marker, goes from 0 to 2, 0 being the top
+	int markerPosition = 0;
 };

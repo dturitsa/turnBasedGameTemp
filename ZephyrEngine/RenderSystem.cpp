@@ -32,7 +32,7 @@ RenderSystem::RenderSystem(MessageBus* mbus) : System (mbus) {
 	//Setup window and context
 	window = SDL_CreateWindow("Okeanos - Made with Zephyr", XSTART, YSTART, WIDTH, HEIGHT, SDL_WINDOW_OPENGL);
 
-	SDL_GLContext context = SDL_GL_CreateContext(window);
+	context = SDL_GL_CreateContext(window);
 
 	glewExperimental = GL_TRUE;
 
@@ -44,7 +44,7 @@ RenderSystem::RenderSystem(MessageBus* mbus) : System (mbus) {
 	glViewport(0, 0, WIDTH, HEIGHT);
 
 	//Set up vertex shader
-	&vertexShaderSource = getShader("vertexShader.txt");
+	vertexShaderSource = getShader("vertexShader.txt");
 	//OutputDebugString(getShader("vertexShader.txt"));
 	//OutputDebugString(vertexShaderSource);
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -88,24 +88,6 @@ RenderSystem::RenderSystem(MessageBus* mbus) : System (mbus) {
 	glDeleteShader(fragmentShader);
 
 	//Set up VBOs, VAOs
-	//Vertecies for a quad
-	GLfloat vertices[] = {
-		-0.5f, -0.5f, 0.0f, // bottom left
-		0.5f, -0.5f, 0.0f,  // bottom right
-		-0.5f, 0.5f, 0.0f,  // top left
-		0.5f, 0.5f, 0.0f,  // top right
-	};
-	//Texture coordinates for quad
-	GLfloat TexCoord[] = {
-		0, 0,
-		1, 0,
-		0, 1,
-		1, 1
-	};
-	//Indices to reuse vertecies
-	GLubyte indices[] = { 0,1,2, // first triangle (bottom left - bottom right - top left)
-		1,2,3 }; // second triangle (bottom right - top left - top right)
-
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &TBO);
@@ -193,38 +175,6 @@ unsigned long getFileLength(ifstream& file)
 	return len;
 }
 
-int loadshader(char* filename, GLchar** ShaderSource, unsigned long* len)
-{
-	ifstream file;
-	file.open(filename, ios::in); // opens as ASCII!
-	if (!file) return -1;
-
-	len = getFileLength(file);
-
-	if (len == 0) return -2;   // Error: Empty File 
-
-	*ShaderSource = (GLubyte*) new char[len + 1];
-	if (*ShaderSource == 0) return -3;   // can't reserve memory
-
-										 // len isn't always strlen cause some characters are stripped in ascii read...
-										 // it is important to 0-terminate the real length later, len is just max possible value... 
-	*ShaderSource[len] = 0;
-
-	unsigned int i = 0;
-	while (file.good())
-	{
-		*ShaderSource[i] = file.get();       // get character from file.
-		if (!file.eof())
-			i++;
-	}
-
-	*ShaderSource[i] = 0;  // 0-terminate it at the correct position
-
-	file.close();
-
-	return 0; // No Error
-}
-
 
 void RenderSystem::renderAllItems() {
 	// temporary system: just prints out the data for each item
@@ -233,57 +183,30 @@ void RenderSystem::renderAllItems() {
 		std::cout << *s << "\n"; 
 	}
 	/*
-	GLfloat vertices[] = {
-		-0.5f, -0.5f, 0.0f, // bottom left
-		0.5f, -0.5f, 0.0f,
-		-0.5f, 0.5f, 0.0f,
-		0.5f, 0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		-0.5f, 0.5f, 0.0f
-	};
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
 
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
+	//Draw stuff
+	//Make transparent background
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	glBindVertexArray(VAO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	glBindVertexArray(0);
-
-
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, getTexture("boatTest.png"));
+	GLint ourTextureLocation = glGetUniformLocation(shaderProgram, "ourTexture1");
+	glUniform1i(ourTextureLocation, 0);
 	glUseProgram(shaderProgram);
 	glBindVertexArray(VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 10);
+
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);
 	glBindVertexArray(0);
 
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
+	SDL_GL_SwapWindow(window);
 	*/
 }
 
 void RenderSystem::Draw(int x, int y, GLuint texture) {
-	//Bind Texture
-	/*
-	glBindTexture(GL_TEXTURE_2D, texture->texture);
 
-	if (blendFlag)
-	{
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	}
-
-	GLfloat Vertices[] = { (float)x, (float)y, 0,
-		(float)x + texture->width, (float)y, 0,
-		(float)x + (float)texture->width, (float)y + (float)texture->height, 0,
-		(float)x, (float)y + (float)texture->height, 0 };
-	*/
 }
 
 GLuint RenderSystem::getTexture(string path) {
@@ -316,8 +239,15 @@ GLuint RenderSystem::getTexture(string path) {
 void RenderSystem::startSystemLoop() {
 	clock_t thisTime = clock();
 	clock_t lastTime = thisTime;
-	
+	//SDL_Event windowEvent;
 	while (true) {
+		/*
+		if (SDL_PollEvent(&windowEvent)) {
+			if (SDL_QUIT == windowEvent.type) {
+				break;
+			}
+		}
+		*/
 		thisTime = clock();
 		if ((thisTime - lastTime) > timeFrame) {
 			lastTime = thisTime;
@@ -326,6 +256,12 @@ void RenderSystem::startSystemLoop() {
 			mtx.unlock();
 		}
 	}
+	/*
+	//Window was closed
+	SDL_GL_DeleteContext(context);
+	SDL_DestroyWindow(window);
+	SDL_Quit();
+	*/
 }
 
 void RenderSystem::handleMessage(Msg *msg) {
