@@ -5,9 +5,12 @@ const GLchar *vertexShaderSource = "#version 330 core\n"
 "layout ( location = 0 ) in vec3 position;\n"
 "layout ( location = 1 ) in vec2 texCoord;\n"
 "out vec2 TexCoord;\n"
+"uniform vec3 translate;\n"
+"uniform mat4 transform;\n"
 "void main()\n"
 "{\n"
-"gl_Position = vec4( position.x, position.y, position.z, 1.0 );\n"
+//"gl_Position = transform * vec4( position.x + translate.x, position.y + translate.y, position.z, 1.0 );\n"
+"gl_Position = vec4( position.x + translate.x, position.y + translate.y, position.z, 1.0 );\n"
 "TexCoord = vec2( texCoord.x, 1.0f - texCoord.y);\n"
 "}";
 
@@ -21,15 +24,15 @@ const GLchar *fragmentShaderSource = "#version 330 core\n"
 "color = texture(ourTexture1, TexCoord);\n"
 "}";
 
+vector<string> gameObjectsToTest;
+
+
 RenderSystem::RenderSystem(MessageBus* mbus) : System (mbus) {
-	OutputDebugString("Render System Constructing");
 	//Initialize SDL
 	SDL_Init(SDL_INIT_EVERYTHING);
 
 	window = SDL_CreateWindow("Okeanos - Made with Zephyr", XSTART, YSTART, WIDTH, HEIGHT, SDL_WINDOW_OPENGL);
 	
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
 	SDL_GL_SwapWindow(window);
 
 	/*
@@ -46,6 +49,15 @@ RenderSystem::~RenderSystem() {
 }
 
 void RenderSystem::init() {
+
+	//TEMPORARY TEST OBJECTS
+	gameObjectsToTest.push_back("obj1,boatTest.png,1,1,0,0");
+	gameObjectsToTest.push_back("obj2,boatTest.png,-1,-1,0,0");
+	gameObjectsToTest.push_back("obj3,boatTest.png,0,0,0,0");
+	gameObjectsToTest.push_back("obj3,boatTest.png,-1,0,0,0");
+	gameObjectsToTest.push_back("obj3,boatTest.png,0,1,0,0");
+
+
 	//Setup window and context
 	context = SDL_GL_CreateContext(window);
 	//Setup SDL and GL
@@ -131,54 +143,62 @@ void RenderSystem::init() {
 
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
-
-	OutputDebugString("FINISH INIT");
 }
 
-void RenderSystem::draw() {
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
+void RenderSystem::draw(string ID, string sprite, float x, float y, float z, float rotation) {
 
+	//Bind translate to vertex shader
+	GLint ourTranslate = glGetUniformLocation(shaderProgram, "translate");
+	glUniform3f(ourTranslate, 0.5f * x, 0.5f * y, z);
+
+
+	//Bind transform to vertex shader
+	//Create a transform matrix and bind it to shader
+	//GLint ourTransform = glGetUniformLocation(shaderProgram, "transform");
+	//glUniformMatrix4fv(ourTransform, 1, GL_FALSE, transformMatrix);
+
+
+	//Bind texture to fragment shader
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, getTexture("boatTest.png"));
+	glBindTexture(GL_TEXTURE_2D, getTexture(sprite));
 	GLint ourTextureLocation = glGetUniformLocation(shaderProgram, "ourTexture1");
 	glUniform1i(ourTextureLocation, 0);//Put GL_TEXTURE0 into ourTexture
-	glUseProgram(shaderProgram);
-	glBindVertexArray(VAO);
 
-	OutputDebugString("DRAWING");
+	//Use shader
+	glUseProgram(shaderProgram);
+
+	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);
 	glBindVertexArray(0);
-	SDL_GL_SwapWindow(window);
+
 }
 
 void RenderSystem::renderAllItems() {
 	// temporary system: just prints out the data for each item
-	for (std::string* s : gameObjectsToRender) {
-		std::vector<std::string> data = split(*s, ',');
-		std::cout << *s << "\n"; 
+	for (std::string s : gameObjectsToTest) {
+		std::vector<std::string> data = split(s, ',');
+		std::cout << s << "\n"; 
+		renderObject(s);
 	}
-	draw();
 }
 
-void RenderSystem::renderObject(std::string object) {
-	//ID, png, x, y, z, orientation
-	std::string objectData[6];
-	size_t pos = 0;
-	std::string splitter = ", ";
-	for (int i = 0; i < 6; i++) {
-		pos = object.find(splitter);
-		objectData[i] = object.substr(0, pos);
-		object.erase(0, pos + splitter.length());
-	}
-	std::string ID, sprite;
-	double x, y, z, orientation;
+void RenderSystem::renderObject(string object) {
+	//object format: ID,png,x,y,z,orientation
+	string ID, sprite;
+	float x, y, z, orientation;
+
+	//Split object
+	std::vector<string> objectData = split(object, ',');
+
 	ID = objectData[0];
 	sprite = objectData[1];
-	x = ::atof(objectData[2].c_str());
-	y = ::atof(objectData[3].c_str());
-	z = ::atof(objectData[4].c_str());
-	orientation = ::atof(objectData[5].c_str());
+	x = atof(objectData[2].c_str());
+	y = atof(objectData[3].c_str());
+	z = atof(objectData[4].c_str());
+	orientation = atof(objectData[5].c_str());
+
+	//Draw object
+	draw(ID, sprite, x, y, z, orientation);
 }
 
 GLuint RenderSystem::getTexture(string path) {
@@ -216,12 +236,18 @@ void RenderSystem::startSystemLoop() {
 	SDL_Event windowEvent;
 	while (running) {
 		thisTime = clock();
-		if ((thisTime - lastTime) > timeFrame) {
+		//if ((thisTime - lastTime) > timeFrame) {
 			lastTime = thisTime;
 			mtx.lock();
+			//Clear the screen
+			glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT);
+			//Render all objects
 			renderAllItems();
+			//Update openGL window
+			SDL_GL_SwapWindow(window);
 			mtx.unlock();
-		}
+		//}
 	}
 }
 
