@@ -75,20 +75,16 @@ void PhysicsSystem::handleMessage(Msg *msg)
 
 	// This entire section really irks me, from here
 
-	while ((pos = messageData.find(splitter)) != std::string::npos)
+	// I have a split funciton remember?
+	/*while ((pos = messageData.find(splitter)) != std::string::npos)
 	{
 		token = messageData.substr(0, pos);
 		data.push_back(token);
-	}
+	}*/
 
-	ID = data[0];
-	tag = data[1];
-	x = atof(data[2].c_str());
-	y = atof(data[3].c_str());
-	//skip z
-	rotation = atof(data[5].c_str());
-	width = 6;//data[6]?
-	height = 7;//data[7]?
+	data = split(msg->data, ',');
+
+	
 
 	// to here
 	// because whats the point of sorting the datra into variables here? The data
@@ -101,6 +97,15 @@ void PhysicsSystem::handleMessage(Msg *msg)
 	case GO_ADDED:
 		//Subject to change! Need to finalize message data system to identify the object type.
 		//For now, only projectiles care about inertia, and you can hardcode windScale and rotationSpeed to 1 for testing purposes
+		ID = data[0];
+		tag = data[1];
+		x = atof(data[2].c_str());
+		y = atof(data[3].c_str());
+		//skip z
+		rotation = atof(data[5].c_str());
+		width = atof(data[6].c_str());//data[6]?
+		height = atof(data[7].c_str());//data[7]?
+
 		Physics.addObject(ID, tag, x, y, width, height, rotation, 1, 1, PROJECTILE_INERTIA);
 		break;
 	case GO_REMOVED:
