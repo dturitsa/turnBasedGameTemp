@@ -25,7 +25,7 @@ PhysicsSystem::~PhysicsSystem()
 }
 
 //Subject to change! This was used for testing.
-void PhysicsSystem::StartPhysicsLoop()
+void PhysicsSystem::startSystemLoop()
 {
 	clock_t	thisTime = clock();
 	clock_t lastTime = thisTime;
@@ -71,6 +71,8 @@ void PhysicsSystem::handleMessage(Msg *msg)
 	std::string ID, tag;
 	float x, y, rotation, width, height;
 
+	// This entire section really irks me, from here
+
 	while ((pos = messageData.find(splitter)) != std::string::npos)
 	{
 		token = messageData.substr(0, pos);
@@ -79,12 +81,18 @@ void PhysicsSystem::handleMessage(Msg *msg)
 
 	ID = data[0];
 	tag = data[1];
-	x = data[2];
-	y = data[3];
+	x = atof(data[2].c_str());
+	y = atof(data[3].c_str());
 	//skip z
-	rotation = data[5];
+	rotation = atof(data[5].c_str());
 	width = 6;//data[6]?
 	height = 7;//data[7]?
+
+	// to here
+	// because whats the point of sorting the datra into variables here? The data
+	// in each message is different and cannot be expected to be of the same format
+	// that's why it's passed in as a string, so that the case blocks can decide how to
+	// read the data themself
 
 	switch (msg->type)
 	{
@@ -100,16 +108,13 @@ void PhysicsSystem::handleMessage(Msg *msg)
 		//Otherwise use this to remove directly
 		Physics.removeObject(ID);
 		break;
-
-		/*
-		//These are examples
 	case CHANGE_MAST:
-		changeMast(ID, mast); //need to add in the string parser above
+		changeMast(ID, atoi(data[1].c_str())); //  just cast the data 
 		break;
 	case CHANGE_RUDDER:
-		changeRudder(ID, rudder); //need to add in the string parser above
+		changeRudder(ID, atoi(data[1].c_str())); 
 		break;
-		
+		/*
 		FOR SHOOTING
 		Just do add object
 		Physics.addObject(ID, tag, x, y, width, height, rotation, 1, 1, PROJECTILE_INERTIA);

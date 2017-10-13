@@ -21,6 +21,9 @@ int main(int argc, char *argv[]) {
 	GameSystem* gs = new GameSystem(mbus);
 	mbus->addSystem(gs);
 
+	PhysicsSystem* ps = new PhysicsSystem(mbus);
+	mbus->addSystem(ps);
+
 	std::cout << "All systems created";
 
 	//////////////////////////////////////////////////////////////////
@@ -38,6 +41,7 @@ int main(int argc, char *argv[]) {
 	gs->timeFrame = std::stoi(configData.at(0), &sz);
 	rs->timeFrame = std::stoi(configData.at(1), &sz);
 	ios->timeFrame = std::stoi(configData.at(2), &sz);
+	ps->timeFrame = std::stoi(configData.at(3), &sz);
 
 	// Not using this right now, move it to game system/Render/Physics later maybe
 	//// Create worker thread pool
@@ -50,6 +54,7 @@ int main(int argc, char *argv[]) {
 	std::thread gameSystemThread(startGameSystem, gs);
 	std::thread renderThread(startRenderSystem, rs);
 	std::thread ioThread(startIOSystem, ios);
+	std::thread physicsThread(startPhysicsSystem, ps);
 
 
 	//////////////////////////////////////////////////////////////////
@@ -72,6 +77,7 @@ int main(int argc, char *argv[]) {
 	ioThread.join();
 	renderThread.join();
 	gameSystemThread.join();
+	physicsThread.join();
 }
 
 // note: Must have "int id" for functinos that are to be run in worker threads
@@ -90,5 +96,9 @@ void startRenderSystem(RenderSystem* s) {
 }
 
 void startGameSystem(GameSystem* s) {
+	s->startSystemLoop();
+}
+
+void startPhysicsSystem(GameSystem* s) {
 	s->startSystemLoop();
 }

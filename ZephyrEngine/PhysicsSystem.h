@@ -11,7 +11,7 @@ public:
 	PhysicsEngine Physics;
 	PhysicsSystem(MessageBus* mbus);
 	~PhysicsSystem();
-	void StartPhysicsLoop();
+	void startSystemLoop();
 	void PhysicsSystem::handleMessage(Msg *msg);
 	void setWind(float angle, float speed);
 	void changeMast(std::string ID, int mast);
@@ -19,4 +19,8 @@ public:
 	void updateShip(PhysicsObject &ship);
 	void updateProjectile(PhysicsObject &projectile);
 	void Destroy(PhysicsObject &object);
+
+	int timeFrame = 10;
+
+
 };

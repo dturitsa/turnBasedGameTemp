@@ -4,6 +4,7 @@
 #include "RenderSystem.h"
 #include "GameSystem.h"
 #include "IOSystem.h"
+#include "PhysicsSystem.h"
 #include "ctpl_stl.h"
 #include <time.h>
 
