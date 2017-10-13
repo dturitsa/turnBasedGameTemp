@@ -63,6 +63,8 @@ void PhysicsSystem::startSystemLoop()
 //Parses the msg string, then switch case msg type.
 void PhysicsSystem::handleMessage(Msg *msg)
 {
+	System::handleMessage(msg);
+
 	std::vector<std::string> data;
 	std::string token;
 	std::string messageData = msg->data;

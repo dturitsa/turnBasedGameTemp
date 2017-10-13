@@ -99,6 +99,6 @@ void startGameSystem(GameSystem* s) {
 	s->startSystemLoop();
 }
 
-void startPhysicsSystem(GameSystem* s) {
+void startPhysicsSystem(PhysicsSystem* s) {
 	s->startSystemLoop();
 }
