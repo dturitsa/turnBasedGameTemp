@@ -63,7 +63,7 @@ void GameSystem::saveToFIle(string fileName) {
 void GameSystem::createGameObject(GameObject* g) {
 	gameObjects.push_back(g);
 	std::ostringstream oss;
-	oss << g->id << ',' << g->renderable << ',' << g->x << ',' << g->y << ',' << g->z << ',' << g->orientation;
+	oss << g->id << ',' << g->renderable << ',' << g->x << ',' << g->y << ',' << g->z << ',' << g->direction << ',' << g->width << ',' << g->length << ',' << g->orientation;
 	// maybe add the rest of the variables into the oss as well, but can decide later depending on
 	// what physics needs
 
