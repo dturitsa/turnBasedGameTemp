@@ -138,6 +138,8 @@ void GameSystem::removeAllGameObjects() {
 	for (GameObject* go : gameObjects) {
 		gameObjectRemoved(go);
 	}
+
+	gameObjects.clear();
 }
 
 void GameSystem::gameObjectRemoved(GameObject* g) {
