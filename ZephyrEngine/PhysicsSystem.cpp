@@ -44,6 +44,7 @@ void PhysicsSystem::StartPhysicsLoop()
 				if (it->second.tag == "Ship")
 				{
 					updateShip(it->second);
+					//checkCollision
 				}
 				else if (it->second.tag == "Projectile")
 				{
@@ -53,7 +54,6 @@ void PhysicsSystem::StartPhysicsLoop()
 				{
 					it = Physics.GameObjects.erase(it);
 				}
-				//checkCollision
 			}
 		}
 	}
@@ -90,6 +90,7 @@ void PhysicsSystem::handleMessage(Msg *msg)
 	{
 	case GO_ADDED:
 		//Subject to change! Need to finalize message data system to identify the object type.
+		//For now, only projectiles care about inertia, and you can hardcode windScale and rotationSpeed to 1 for testing purposes
 		Physics.addObject(ID, tag, x, y, width, height, rotation, 1, 1, PROJECTILE_INERTIA);
 		break;
 	case GO_REMOVED:
@@ -99,17 +100,31 @@ void PhysicsSystem::handleMessage(Msg *msg)
 		//Otherwise use this to remove directly
 		Physics.removeObject(ID);
 		break;
+
 		/*
 		//These are examples
-		case CHANGE_MAST:
+	case CHANGE_MAST:
 		changeMast(ID, mast); //need to add in the string parser above
 		break;
-		case CHANGE_RUDDER:
+	case CHANGE_RUDDER:
 		changeRudder(ID, rudder); //need to add in the string parser above
 		break;
+		
+		FOR SHOOTING
+		Just do add object
+		Physics.addObject(ID, tag, x, y, width, height, rotation, 1, 1, PROJECTILE_INERTIA);
+		The orientation is the direction it will shoot at. PROJECTILE_FORCE is defined in PhysicsSystem.h, it's the speed of the projectile. -Used it for testing, can be changed.
+		Upon creation the projectile will automatically move forward according to orientation. It gets destroyed after moving for a bit.
+		Look at updateProjectile function.
 		*/
 	}
 }
+
+/*
+void sendMessage
+	update position
+	collision
+*/
 
 void PhysicsSystem::setWind(float angle, float speed)
 {
@@ -214,7 +229,8 @@ void PhysicsSystem::updateShip(PhysicsObject &ship)
 	ship.position.translate(objectDirection.x * movementScale, objectDirection.y * movementScale);
 }
 
-//Simple shooting for alpha. Projectile slows a bit overtime.
+//Subject to change!
+//Simple shooting for alpha. Projectile slows a bit overtime and gets destroyed.
 void PhysicsSystem::updateProjectile(PhysicsObject &projectile)
 {
 	if (projectile.inertia > (PROJECTILE_INERTIA - 30))
