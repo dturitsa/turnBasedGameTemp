@@ -17,3 +17,4 @@ void postMessage(int id, Msg* msg);
 void startIOSystem(IOSystem* s);
 void startRenderSystem(RenderSystem* s);
 void startGameSystem(GameSystem* s);
+void startPhysicsSystem(GameSystem* s);
