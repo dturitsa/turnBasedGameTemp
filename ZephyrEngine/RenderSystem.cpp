@@ -36,7 +36,7 @@ RenderSystem::RenderSystem(MessageBus* mbus) : System (mbus) {
 	//Initialize SDL
 	SDL_Init(SDL_INIT_EVERYTHING);
 
-	aspectRatio = 0.3f* (GLfloat)(WIDTH) / (GLfloat)(HEIGHT);
+	aspectRatio = (GLfloat)(WIDTH) / (GLfloat)(HEIGHT);
 	//aspectRatio = 1.0f;
 	window = SDL_CreateWindow("Okeanos - Made with Zephyr", RenderSystem::XSTART, RenderSystem::YSTART, RenderSystem::WIDTH, RenderSystem::HEIGHT, SDL_WINDOW_OPENGL);
 	
@@ -180,9 +180,9 @@ void RenderSystem::draw(string ID, string sprite, float x, float y, float z, flo
 	for (int i = 0; i < 16; i++) {
 		transformMatrix[i] = 0.0f;
 	}
-	transformMatrix[0] = 1.0f;
-	transformMatrix[5] = 1.0f;
-	transformMatrix[10] = 1.0f;
+	transformMatrix[0] = aspectRatio;
+	transformMatrix[5] = aspectRatio;
+	transformMatrix[10] = aspectRatio;
 
 	/*
 	//col major order
@@ -237,17 +237,17 @@ void RenderSystem::draw(string ID, string sprite, float x, float y, float z, flo
 }
 
 void RenderSystem::renderAllItems() {
-	/*for (string* s : gameObjectsToRender) {
+	for (string* s : gameObjectsToRender) {
 		//std::vector<std::string> data = split(s, ',');
 		OutputDebugString(s->c_str());
 		OutputDebugString("\n");
 		renderObject(*s);
-	}*/
-	for (std::string s : gameObjectsToTest) {
+	}
+	/*for (std::string s : gameObjectsToTest) {
 		//std::vector<std::string> data = split(s, ',');
 		//std::cout << s << "\n"; 
 		renderObject(s);
-	}
+	}*/
 }
 
 void RenderSystem::renderObject(string object) {
