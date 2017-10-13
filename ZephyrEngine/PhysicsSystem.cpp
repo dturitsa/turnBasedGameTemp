@@ -93,6 +93,10 @@ void PhysicsSystem::handleMessage(Msg *msg)
 		Physics.addObject(ID, tag, x, y, width, height, rotation, 1, 1, PROJECTILE_INERTIA);
 		break;
 	case GO_REMOVED:
+		//Use this if you are using the iterator in StartPhysicsLoop
+		//Destroy(Physics.GameObjects[ID]);
+
+		//Otherwise use this to remove directly
 		Physics.removeObject(ID);
 		break;
 		/*
