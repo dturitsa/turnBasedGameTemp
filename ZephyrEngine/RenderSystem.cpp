@@ -9,8 +9,13 @@ const GLchar *vertexShaderSource = "#version 330 core\n"
 "uniform mat4 transform;\n"
 "void main()\n"
 "{\n"
+//"gl_Position = vec4(position.x, position.y, position.z, 1.0f) * transform * vec4(translate.x, translate.y, 1.0, 1.0);\n"
+//"gl_Position = transform * vec4(position.x, position.y, position.z, 1.0f);\n"
+//"gl_Position = transform * vec4(position.x, position.y, position.z, 1.0) + vec4(translate.x, translate.y, 0.0, 0.0);\n"
+//"gl_Position = (transform * vec4(translate.x, translate.y, translate.z, 1.0f)) * vec4( position.x, position.y, position.z, 1.0 );\n"
 //"gl_Position = transform * vec4( position.x + translate.x, position.y + translate.y, position.z, 1.0 );\n"
-"gl_Position = vec4( position.x + translate.x, position.y + translate.y, position.z, 1.0 );\n"
+"gl_Position = vec4( position.x + translate.x, position.y + translate.y, position.z, 1.0 ) * transform;\n"
+//"gl_Position = vec4( position.x + translate.x, position.y + translate.y, position.z, 1.0 );\n" //Render without scaling
 "TexCoord = vec2( texCoord.x, 1.0f - texCoord.y);\n"
 "}";
 
@@ -31,7 +36,9 @@ RenderSystem::RenderSystem(MessageBus* mbus) : System (mbus) {
 	//Initialize SDL
 	SDL_Init(SDL_INIT_EVERYTHING);
 
-	window = SDL_CreateWindow("Okeanos - Made with Zephyr", XSTART, YSTART, WIDTH, HEIGHT, SDL_WINDOW_OPENGL);
+	aspectRatio = 0.3f* (GLfloat)(WIDTH) / (GLfloat)(HEIGHT);
+	//aspectRatio = 1.0f;
+	window = SDL_CreateWindow("Okeanos - Made with Zephyr", RenderSystem::XSTART, RenderSystem::YSTART, RenderSystem::WIDTH, RenderSystem::HEIGHT, SDL_WINDOW_OPENGL);
 	
 	SDL_GL_SwapWindow(window);
 
@@ -51,11 +58,11 @@ RenderSystem::~RenderSystem() {
 void RenderSystem::init() {
 
 	//TEMPORARY TEST OBJECTS
-	gameObjectsToTest.push_back("obj1,boatTest.png,1,1,0,0");
+	//gameObjectsToTest.push_back("obj1,boatTest.png,1,1,0,0");
 	gameObjectsToTest.push_back("obj2,boatTest.png,-1,-1,0,0");
-	gameObjectsToTest.push_back("obj3,boatTest.png,0,0,0,0");
-	gameObjectsToTest.push_back("obj3,boatTest.png,-1,0,0,0");
-	gameObjectsToTest.push_back("obj3,boatTest.png,0,1,0,0");
+	//gameObjectsToTest.push_back("obj3,boatTest.png,0,0,0,0");
+	//gameObjectsToTest.push_back("obj3,boatTest.png,-1,0,0,0");
+	//gameObjectsToTest.push_back("obj3,boatTest.png,0,1,0,0");
 
 
 	//Setup window and context
@@ -72,6 +79,9 @@ void RenderSystem::init() {
 	}
 
 	glViewport(0, 0, WIDTH, HEIGHT);
+	//glMatrixMode(GL_PROJECTION);
+	//glLoadIdentity();
+	//gluPerspective(60 * aspectRatio, aspectRatio, 0.1, 100.0);
 
 	//Make transparent background
 	glEnable(GL_BLEND);
@@ -150,12 +160,65 @@ void RenderSystem::draw(string ID, string sprite, float x, float y, float z, flo
 	//Bind translate to vertex shader
 	GLint ourTranslate = glGetUniformLocation(shaderProgram, "translate");
 	glUniform3f(ourTranslate, 0.5f * x, 0.5f * y, z);
-
+	
 
 	//Bind transform to vertex shader
 	//Create a transform matrix and bind it to shader
-	//GLint ourTransform = glGetUniformLocation(shaderProgram, "transform");
-	//glUniformMatrix4fv(ourTransform, 1, GL_FALSE, transformMatrix);
+	
+	//Row major order
+	// [0  1  2  3]
+	// [4  5  6  7]
+	// [8  9  10 11]
+	// [12 13 14 15]
+
+	//Column major order
+	// [0  4  8  12]
+	// [1  5  9  13]
+	// [2  6  10 14]
+	// [3  7  11 15]
+	GLfloat transformMatrix[16];
+	for (int i = 0; i < 16; i++) {
+		transformMatrix[i] = 0.0f;
+	}
+	transformMatrix[0] = 1.0f;
+	transformMatrix[5] = 1.0f;
+	transformMatrix[10] = 1.0f;
+
+	/*
+	//col major order
+	transformMatrix[3] = 0.5f * x;
+	transformMatrix[7] = 0.5f * y;
+	transformMatrix[11] = z;
+	*/
+	/*
+	//row major order
+	transformMatrix[12] = 0.5f * x;
+	transformMatrix[13] = 0.5f * y;
+	transformMatrix[14] = z;
+	*/
+
+	transformMatrix[15] = 1.0f;
+	/*OutputDebugString("\n");
+	OutputDebugString(to_string(transformMatrix[0]).c_str());
+	OutputDebugString(to_string(transformMatrix[1]).c_str());
+	OutputDebugString(to_string(transformMatrix[2]).c_str());
+	OutputDebugString(to_string(transformMatrix[3]).c_str());
+	OutputDebugString(to_string(transformMatrix[4]).c_str());
+	OutputDebugString(to_string(transformMatrix[5]).c_str());
+	OutputDebugString(to_string(transformMatrix[6]).c_str());
+	OutputDebugString(to_string(transformMatrix[7]).c_str());
+	OutputDebugString(to_string(transformMatrix[8]).c_str());
+	OutputDebugString(to_string(transformMatrix[9]).c_str());
+	OutputDebugString(to_string(transformMatrix[10]).c_str());
+	OutputDebugString(to_string(transformMatrix[11]).c_str());
+	OutputDebugString(to_string(transformMatrix[12]).c_str());
+	OutputDebugString(to_string(transformMatrix[13]).c_str());
+	OutputDebugString(to_string(transformMatrix[14]).c_str());
+	OutputDebugString(to_string(transformMatrix[15]).c_str());
+	OutputDebugString("\n");*/
+	
+	GLint ourTransform = glGetUniformLocation(shaderProgram, "transform");
+	glUniformMatrix4fv(ourTransform, 1, GL_TRUE, transformMatrix);
 
 
 	//Bind texture to fragment shader
@@ -174,10 +237,15 @@ void RenderSystem::draw(string ID, string sprite, float x, float y, float z, flo
 }
 
 void RenderSystem::renderAllItems() {
-	// temporary system: just prints out the data for each item
+	/*for (string* s : gameObjectsToRender) {
+		//std::vector<std::string> data = split(s, ',');
+		OutputDebugString(s->c_str());
+		OutputDebugString("\n");
+		renderObject(*s);
+	}*/
 	for (std::string s : gameObjectsToTest) {
-		std::vector<std::string> data = split(s, ',');
-		std::cout << s << "\n"; 
+		//std::vector<std::string> data = split(s, ',');
+		//std::cout << s << "\n"; 
 		renderObject(s);
 	}
 }
@@ -190,6 +258,7 @@ void RenderSystem::renderObject(string object) {
 	//Split object
 	std::vector<string> objectData = split(object, ',');
 
+	//Parse object data
 	ID = objectData[0];
 	sprite = objectData[1];
 	x = atof(objectData[2].c_str());

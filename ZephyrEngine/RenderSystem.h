@@ -19,7 +19,8 @@ public:
 	void stopSystemLoop();
 	void init();
 
-	const GLint XSTART = 200, YSTART = 150, WIDTH = 800, HEIGHT = 600; //Constants for drawing the window
+	GLint XSTART = 100, YSTART = 100, WIDTH = 800, HEIGHT = 700; //Constants for drawing the window
+	GLfloat aspectRatio;
 	int timeFrame = 10;
 private:
 	bool running;
