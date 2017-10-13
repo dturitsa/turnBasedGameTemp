@@ -45,6 +45,14 @@ void IOSystem::checkKeyPresses() {
 		m->type = SPACEBAR_PRESSED;
 	}
 
+	if (GetKeyState(VK_RIGHT)) {
+		m->type = RIGHT_ARROW_PRESSED;
+	}
+
+	if (GetKeyState(VK_LEFT)) {
+		m->type = LEFT_ARROW_PRESSED;
+	}
+
 	if (GetKeyState('Z') & 0x8000) {
 		m->type = TEST_KEY_PRESSED;
 	}

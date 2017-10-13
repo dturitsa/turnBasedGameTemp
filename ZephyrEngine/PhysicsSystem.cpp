@@ -1,5 +1,19 @@
 #include "PhysicsSystem.h"
 
+/*
+HANK
+
+There are issues with the messages not having enough information. Discussed this with Denis and he has a solution we can implement after alpha.
+Have a look at handleMessage function. There are a lot of uncertainties with the messages, so I figured you should handle it for testing purposes.
+Check the functions changeMast and changeRudder as well, and change it however you want for your tests.
+
+You can use the StartPhysicsLoop for your tests. It just iterates through the PhysicsObject map, and updates ships and projectiles.
+The tags for now seems to be the renderable string as discussed with Denis. So maybe name the image files Ship.png and Projectile.png, then change the loop to look for tag == "Ship.png" and stuff.
+
+This class is basically the bridge between PhysicsEngine and the actual Game stuff, so we really should've worked on it together.
+I have all the functions to do everything set up, so just use them with your messages for testing.
+*/
+
 PhysicsSystem::PhysicsSystem(MessageBus* mbus) : System (mbus)
 {
 	//create wind object(move to message handle?)
@@ -11,7 +25,7 @@ PhysicsSystem::~PhysicsSystem()
 }
 
 //Subject to change! This was used for testing.
-void PhysicsSystem::StartPhysicsLoop()
+void PhysicsSystem::startSystemLoop()
 {
 	clock_t	thisTime = clock();
 	clock_t lastTime = thisTime;
@@ -30,6 +44,7 @@ void PhysicsSystem::StartPhysicsLoop()
 				if (it->second.tag == "Ship")
 				{
 					updateShip(it->second);
+					//checkCollision
 				}
 				else if (it->second.tag == "Projectile")
 				{
@@ -39,29 +54,88 @@ void PhysicsSystem::StartPhysicsLoop()
 				{
 					it = Physics.GameObjects.erase(it);
 				}
-				//checkCollision
 			}
 		}
 	}
 }
 
-/*
-Need to know message stuff to implement these
-
+//Subject to change! Temporary solution for testing and alpha build.
+//Parses the msg string, then switch case msg type.
 void PhysicsSystem::handleMessage(Msg *msg)
 {
+	System::handleMessage(msg);
 
+	std::vector<std::string> data;
+	std::string token;
+	std::string messageData = msg->data;
+	std::string splitter = ", ";
+	std::size_t pos = 0;
+	std::string ID, tag;
+	float x, y, rotation, width, height;
+
+	// This entire section really irks me, from here
+
+	// I have a split funciton remember?
+	/*while ((pos = messageData.find(splitter)) != std::string::npos)
+	{
+		token = messageData.substr(0, pos);
+		data.push_back(token);
+	}*/
+
+	data = split(msg->data, ',');
+
+	
+
+	// to here
+	// because whats the point of sorting the datra into variables here? The data
+	// in each message is different and cannot be expected to be of the same format
+	// that's why it's passed in as a string, so that the case blocks can decide how to
+	// read the data themself
+
+	switch (msg->type)
+	{
+	case GO_ADDED:
+		//Subject to change! Need to finalize message data system to identify the object type.
+		//For now, only projectiles care about inertia, and you can hardcode windScale and rotationSpeed to 1 for testing purposes
+		ID = data[0];
+		tag = data[1];
+		x = atof(data[2].c_str());
+		y = atof(data[3].c_str());
+		//skip z
+		rotation = atof(data[5].c_str());
+		width = atof(data[6].c_str());//data[6]?
+		height = atof(data[7].c_str());//data[7]?
+
+		Physics.addObject(ID, tag, x, y, width, height, rotation, 1, 1, PROJECTILE_INERTIA);
+		break;
+	case GO_REMOVED:
+		//Use this if you are using the iterator in StartPhysicsLoop
+		//Destroy(Physics.GameObjects[ID]);
+
+		//Otherwise use this to remove directly
+		Physics.removeObject(ID);
+		break;
+	case CHANGE_MAST:
+		changeMast(ID, atoi(data[1].c_str())); //  just cast the data 
+		break;
+	case CHANGE_RUDDER:
+		changeRudder(ID, atoi(data[1].c_str())); 
+		break;
+		/*
+		FOR SHOOTING
+		Just do add object
+		Physics.addObject(ID, tag, x, y, width, height, rotation, 1, 1, PROJECTILE_INERTIA);
+		The orientation is the direction it will shoot at. PROJECTILE_FORCE is defined in PhysicsSystem.h, it's the speed of the projectile. -Used it for testing, can be changed.
+		Upon creation the projectile will automatically move forward according to orientation. It gets destroyed after moving for a bit.
+		Look at updateProjectile function.
+		*/
+	}
 }
 
-void PhysicsSystem::createShip()
-{
-
-}
-
-void PhysicsSystem::createProjectile()
-{
-
-}
+/*
+void sendMessage
+	update position
+	collision
 */
 
 void PhysicsSystem::setWind(float angle, float speed)
@@ -72,6 +146,10 @@ void PhysicsSystem::setWind(float angle, float speed)
 
 void PhysicsSystem::changeMast(std::string ID, int mast)
 {
+	//Use this if you implement enum mast to the message. Change int mast to Mast mast in the parameters above.
+	//Physics.GameObjects[ID].mast = mast;
+
+	//Otherwise you can test using an int
 	switch (mast)
 	{
 	case 0:
@@ -88,6 +166,10 @@ void PhysicsSystem::changeMast(std::string ID, int mast)
 
 void PhysicsSystem::changeRudder(std::string ID, int rudder)
 {
+	//Use this if you implement enum mast to the message. Change int rudder to Rudder rudder in the parameters above.
+	//Physics.GameObjects[ID].rudder = rudder;
+
+	//Otherwise you can test using an int
 	switch (rudder)
 	{
 	case 0:
@@ -159,7 +241,8 @@ void PhysicsSystem::updateShip(PhysicsObject &ship)
 	ship.position.translate(objectDirection.x * movementScale, objectDirection.y * movementScale);
 }
 
-//Simple shooting for alpha. Projectile slows a bit overtime.
+//Subject to change!
+//Simple shooting for alpha. Projectile slows a bit overtime and gets destroyed.
 void PhysicsSystem::updateProjectile(PhysicsObject &projectile)
 {
 	if (projectile.inertia > (PROJECTILE_INERTIA - 30))

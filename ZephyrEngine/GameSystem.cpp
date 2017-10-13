@@ -63,7 +63,7 @@ void GameSystem::saveToFIle(string fileName) {
 void GameSystem::createGameObject(GameObject* g) {
 	gameObjects.push_back(g);
 	std::ostringstream oss;
-	oss << g->id << ',' << g->renderable << ',' << g->x << ',' << g->y << ',' << g->z << ',' << g->orientation;
+	oss << g->id << ',' << g->renderable << ',' << g->x << ',' << g->y << ',' << g->z << ',' << g->direction << ',' << g->width << ',' << g->length << ',' << g->orientation;
 	// maybe add the rest of the variables into the oss as well, but can decide later depending on
 	// what physics needs
 
@@ -138,6 +138,8 @@ void GameSystem::removeAllGameObjects() {
 	for (GameObject* go : gameObjects) {
 		gameObjectRemoved(go);
 	}
+
+	gameObjects.clear();
 }
 
 void GameSystem::gameObjectRemoved(GameObject* g) {
@@ -188,7 +190,8 @@ void GameSystem::handleMessage(Msg *msg) {
 				removeAllGameObjects();
 
 				// then, load new objects
-				addGameObjects("testScene.txt"); // TEMPORARY 
+				addGameObjects("Alpha_Level_1.txt"); // TEMPORARY 
+				levelLoaded = 2;
 			}
 			break;
 		default:
@@ -224,6 +227,81 @@ void GameSystem::handleMessage(Msg *msg) {
 			msgBus->postMessage(mm);
 			break;
 		case UP_ARROW_PRESSED:
+			// increase mast
+			// find the ship obj, and when you find it, increase mast
+			for (GameObject* g : gameObjects) {
+				if (g->getObjectType() == "ShipObj") {
+					ShipObj* so = dynamic_cast<ShipObj*>(g);
+					so->sail++;
+					if (so->sail > 2) {
+						so->sail = 2;
+					}
+					mm->type = CHANGE_MAST;
+					oss << so->id << "," << so->sail;
+					mm->data = oss.str();
+					msgBus->postMessage(mm);
+					break;
+				}
+			}
+			break;
+		case DOWN_ARROW_PRESSED:
+			// decrease mast
+			for (GameObject* g : gameObjects) {
+				if (g->getObjectType() == "ShipObj") {
+					ShipObj* so = dynamic_cast<ShipObj*>(g);
+					so->sail--;
+					if (so->sail < 0) {
+						so->sail = 0;
+					}
+
+					mm->type = CHANGE_MAST;
+					oss << so->id << "," << so->sail;
+					mm->data = oss.str();
+					msgBus->postMessage(mm);
+					break;
+				}
+			}
+			break;
+		case RIGHT_ARROW_PRESSED:
+			// change rudder to right
+			for (GameObject* g : gameObjects) {
+				if (g->getObjectType() == "ShipObj") {
+					ShipObj* so = dynamic_cast<ShipObj*>(g);
+					so->rudder++;
+					if (so->sail > 4) {
+						so->sail = 4;
+					}
+
+					mm->type = CHANGE_RUDDER;
+					oss << so->id << "," << so->rudder;
+					mm->data = oss.str();
+					msgBus->postMessage(mm);
+					break;
+				}
+			}
+			break;
+		case LEFT_ARROW_PRESSED:
+			// change rudder left
+			for (GameObject* g : gameObjects) {
+				if (g->getObjectType() == "ShipObj") {
+					ShipObj* so = dynamic_cast<ShipObj*>(g);
+					so->rudder--;
+					if (so->rudder < 0) {
+						so->rudder = 0;
+					}
+
+					mm->type = CHANGE_RUDDER;
+					oss << so->id << "," << so->rudder;
+					mm->data = oss.str();
+					msgBus->postMessage(mm);
+					break;
+				}
+			}
+			break;
+		case SPACEBAR_PRESSED:
+			// fire all cannons for now, both left and right. need to change later to fire specific sides
+			// create cannon ball obj
+			// post cannon ball obj to systems
 			break;
 		default:
 			break;
