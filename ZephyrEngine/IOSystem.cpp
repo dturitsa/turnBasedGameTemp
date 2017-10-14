@@ -34,26 +34,32 @@ void IOSystem::checkKeyPresses() {
 	// parses the data to get the proper code to the Gamesystem but that's
 	// a bit convoluted
 	if (GetKeyState(VK_UP)) {
+		OutputDebugString("Up Pressed\n");
 		m->type = UP_ARROW_PRESSED;
 	}
 
 	if (GetKeyState(VK_DOWN)) {
+		OutputDebugString("Down Pressed\n");
 		m->type = DOWN_ARROW_PRESSED;
 	}
 
 	if (GetKeyState(VK_SPACE)) {
+		OutputDebugString("Space Pressed\n");
 		m->type = SPACEBAR_PRESSED;
 	}
 
 	if (GetKeyState(VK_RIGHT)) {
+		OutputDebugString("Right Pressed\n");
 		m->type = RIGHT_ARROW_PRESSED;
 	}
 
 	if (GetKeyState(VK_LEFT)) {
+		OutputDebugString("Left Pressed\n");
 		m->type = LEFT_ARROW_PRESSED;
 	}
 
 	if (GetKeyState('Z') & 0x8000) {
+		OutputDebugString("Z Pressed\n");
 		m->type = TEST_KEY_PRESSED;
 	}
 
