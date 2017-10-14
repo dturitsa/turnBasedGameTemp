@@ -2,7 +2,6 @@
 #include "System.h"
 #include "GameObject.h"
 #include <mutex>
-
 #include <SDL.h>
 #include <SDL_image.h>
 #include <glew.h>
@@ -20,6 +19,8 @@ public:
 	void init();
 
 	GLint XSTART = 100, YSTART = 100, WIDTH = 800, HEIGHT = 700; //Constants for drawing the window
+	GLfloat GAMEWIDTH = 10.0f, GAMEHEIGHT = 10.0f, //Amount of sprites that can fit in X and Y respectively
+				MAX_X = 100.0f, MAX_Y = 100.0f; //Amount of "x" and "y" coordinates in our world (x2 for - values)
 	GLfloat aspectRatio;
 	int timeFrame = 10;
 private:
@@ -27,6 +28,7 @@ private:
 	GLuint vertexShader;
 	GLuint fragmentShader;
 	GLuint shaderProgram;
+	map<string, GLuint> textures;
 	SDL_Window *window;
 	SDL_GLContext context;
 	GLuint VBO, VAO, TBO;
@@ -55,8 +57,11 @@ private:
 	void draw(string ID, string path, float x, float y, float z, float rotation);
 	GLuint getTexture(string path);
 	void renderObject(string object);
-
-	std::vector<std::string*> gameObjectsToRender;
+	float transX(float x);
+	float transY(float y);
+	float getScaleX(float x);
+	float getScaleY(float y);
+	vector<string*> gameObjectsToRender;
 	void addObjectToRenderList(Msg* m);
 	void removeObjectFromRenderList(Msg* m);
 	void updateObjPosition(Msg* m);
