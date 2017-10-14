@@ -60,13 +60,14 @@ int main(int argc, char *argv[]) {
 	//////////////////////////////////////////////////////////////////
 	//						Console Loop							//
 	//////////////////////////////////////////////////////////////////
-
+	bool alive = true; //Move this
 	// TO DO: Implement 
-	while (true) {
+	while (alive) {
 		SDL_Event windowEvent;
 		while (SDL_PollEvent(&windowEvent)) {
 			if (SDL_QUIT == windowEvent.type) {
 				rs->stopSystemLoop();
+				alive = false;
 			}
 		}
 	}
@@ -78,6 +79,8 @@ int main(int argc, char *argv[]) {
 	renderThread.join();
 	gameSystemThread.join();
 	physicsThread.join();
+
+	return 1;
 }
 
 // note: Must have "int id" for functinos that are to be run in worker threads

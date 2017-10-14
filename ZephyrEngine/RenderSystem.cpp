@@ -5,17 +5,10 @@ const GLchar *vertexShaderSource = "#version 330 core\n"
 "layout ( location = 0 ) in vec3 position;\n"
 "layout ( location = 1 ) in vec2 texCoord;\n"
 "out vec2 TexCoord;\n"
-"uniform vec3 translate;\n"
-"uniform mat4 transform;\n"
+"uniform mat4 transform[3];\n" //transform[0] = scale, transform[1] = translate, transform[2] = rotation
 "void main()\n"
 "{\n"
-//"gl_Position = vec4(position.x, position.y, position.z, 1.0f) * transform * vec4(translate.x, translate.y, 1.0, 1.0);\n"
-//"gl_Position = transform * vec4(position.x, position.y, position.z, 1.0f);\n"
-//"gl_Position = transform * vec4(position.x, position.y, position.z, 1.0) + vec4(translate.x, translate.y, 0.0, 0.0);\n"
-//"gl_Position = (transform * vec4(translate.x, translate.y, translate.z, 1.0f)) * vec4( position.x, position.y, position.z, 1.0 );\n"
-//"gl_Position = transform * vec4( position.x + translate.x, position.y + translate.y, position.z, 1.0 );\n"
-"gl_Position = vec4( position.x + translate.x, position.y + translate.y, position.z, 1.0 ) * transform;\n"
-//"gl_Position = vec4( position.x + translate.x, position.y + translate.y, position.z, 1.0 );\n" //Render without scaling
+"gl_Position = transform[2] * transform[1] * transform[0] * vec4( position.x, position.y, position.z, 1.0 );\n"
 "TexCoord = vec2( texCoord.x, 1.0f - texCoord.y);\n"
 "}";
 
@@ -32,23 +25,14 @@ const GLchar *fragmentShaderSource = "#version 330 core\n"
 vector<string> gameObjectsToTest;
 
 
-RenderSystem::RenderSystem(MessageBus* mbus) : System (mbus) {
+RenderSystem::RenderSystem(MessageBus* mbus) : System(mbus) {
 	//Initialize SDL
 	SDL_Init(SDL_INIT_EVERYTHING);
 
 	aspectRatio = (GLfloat)(WIDTH) / (GLfloat)(HEIGHT);
-	//aspectRatio = 1.0f;
 	window = SDL_CreateWindow("Okeanos - Made with Zephyr", RenderSystem::XSTART, RenderSystem::YSTART, RenderSystem::WIDTH, RenderSystem::HEIGHT, SDL_WINDOW_OPENGL);
-	
-	SDL_GL_SwapWindow(window);
 
-	/*
-	error = glGetError();
-	if (error != 0) {
-		const GLubyte* error2 = gluErrorString(error);
-		int hit = 0;
-	}
-	*/
+	SDL_GL_SwapWindow(window);
 }
 
 
@@ -57,12 +41,11 @@ RenderSystem::~RenderSystem() {
 
 void RenderSystem::init() {
 
-	//TEMPORARY TEST OBJECTS
-	//gameObjectsToTest.push_back("obj1,boatTest.png,1,1,0,0");
-	gameObjectsToTest.push_back("obj2,boatTest.png,-1,-1,0,0");
-	//gameObjectsToTest.push_back("obj3,boatTest.png,0,0,0,0");
-	//gameObjectsToTest.push_back("obj3,boatTest.png,-1,0,0,0");
-	//gameObjectsToTest.push_back("obj3,boatTest.png,0,1,0,0");
+	//TEMPORARY TEST OBJECTS	params:ID(useless), translateX, translateY, scale(=1), rotation
+	gameObjectsToTest.push_back("obj1,boatTest1.png,40,-60,1,0");
+	gameObjectsToTest.push_back("obj2,boatTest1.png,-40,-48,1,0");
+	gameObjectsToTest.push_back("obj3,boatTest.png,20,30,1,0");
+	gameObjectsToTest.push_back("obj3,boatTest.png,-20,40,0,0");
 
 
 	//Setup window and context
@@ -79,9 +62,6 @@ void RenderSystem::init() {
 	}
 
 	glViewport(0, 0, WIDTH, HEIGHT);
-	//glMatrixMode(GL_PROJECTION);
-	//glLoadIdentity();
-	//gluPerspective(60 * aspectRatio, aspectRatio, 0.1, 100.0);
 
 	//Make transparent background
 	glEnable(GL_BLEND);
@@ -150,104 +130,87 @@ void RenderSystem::init() {
 	glEnableVertexAttribArray(1);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
-
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClearColor(0.0f, 0.467f, 0.745f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void RenderSystem::draw(string ID, string sprite, float x, float y, float z, float rotation) {
-
-	//Bind translate to vertex shader
-	GLint ourTranslate = glGetUniformLocation(shaderProgram, "translate");
-	glUniform3f(ourTranslate, 0.5f * x, 0.5f * y, z);
-	
-
 	//Bind transform to vertex shader
 	//Create a transform matrix and bind it to shader
-	
-	//Row major order
-	// [0  1  2  3]
-	// [4  5  6  7]
-	// [8  9  10 11]
-	// [12 13 14 15]
+	GLfloat* temp = new GLfloat[48]{
+		getScaleX(z), 0, 0, 0, //Scale
+		0, getScaleY(z), 0, 0,
+		0, 0, 1, 0,
+		0, 0, 0, 1,
 
-	//Column major order
-	// [0  4  8  12]
-	// [1  5  9  13]
-	// [2  6  10 14]
-	// [3  7  11 15]
-	GLfloat transformMatrix[16];
-	for (int i = 0; i < 16; i++) {
-		transformMatrix[i] = 0.0f;
-	}
-	transformMatrix[0] = aspectRatio;
-	transformMatrix[5] = aspectRatio;
-	transformMatrix[10] = aspectRatio;
+		1, 0, 0, 0, //Translate
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		transX(x), transY(y), 0, 1,
 
-	/*
-	//col major order
-	transformMatrix[3] = 0.5f * x;
-	transformMatrix[7] = 0.5f * y;
-	transformMatrix[11] = z;
-	*/
-	/*
-	//row major order
-	transformMatrix[12] = 0.5f * x;
-	transformMatrix[13] = 0.5f * y;
-	transformMatrix[14] = z;
-	*/
-
-	transformMatrix[15] = 1.0f;
-	/*OutputDebugString("\n");
-	OutputDebugString(to_string(transformMatrix[0]).c_str());
-	OutputDebugString(to_string(transformMatrix[1]).c_str());
-	OutputDebugString(to_string(transformMatrix[2]).c_str());
-	OutputDebugString(to_string(transformMatrix[3]).c_str());
-	OutputDebugString(to_string(transformMatrix[4]).c_str());
-	OutputDebugString(to_string(transformMatrix[5]).c_str());
-	OutputDebugString(to_string(transformMatrix[6]).c_str());
-	OutputDebugString(to_string(transformMatrix[7]).c_str());
-	OutputDebugString(to_string(transformMatrix[8]).c_str());
-	OutputDebugString(to_string(transformMatrix[9]).c_str());
-	OutputDebugString(to_string(transformMatrix[10]).c_str());
-	OutputDebugString(to_string(transformMatrix[11]).c_str());
-	OutputDebugString(to_string(transformMatrix[12]).c_str());
-	OutputDebugString(to_string(transformMatrix[13]).c_str());
-	OutputDebugString(to_string(transformMatrix[14]).c_str());
-	OutputDebugString(to_string(transformMatrix[15]).c_str());
-	OutputDebugString("\n");*/
-	
+		1, 0, 0, 0, //Rotate NOT DONE
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		0, 0, 0, 1
+	};
 	GLint ourTransform = glGetUniformLocation(shaderProgram, "transform");
-	glUniformMatrix4fv(ourTransform, 1, GL_TRUE, transformMatrix);
-
+	glUniformMatrix4fv(ourTransform, 3, GL_FALSE, temp);
 
 	//Bind texture to fragment shader
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, getTexture(sprite));
+	glBindTexture(GL_TEXTURE_2D, textures.find(sprite)->second);
 	GLint ourTextureLocation = glGetUniformLocation(shaderProgram, "ourTexture1");
-	glUniform1i(ourTextureLocation, 0);//Put GL_TEXTURE0 into ourTexture
+	glUniform1i(ourTextureLocation, 0);
 
 	//Use shader
 	glUseProgram(shaderProgram);
 
+	//Draw
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);
 	glBindVertexArray(0);
 
+	delete(temp);
 }
 
+float RenderSystem::transX(float x) {
+	x *= 1 / MAX_X;
+	return x;
+}
+
+float RenderSystem::transY(float y) {
+	y *= 1 / MAX_Y;
+	return y;
+}
+//Scale X based on world scale
+float RenderSystem::getScaleX(float x) {
+	//Scale sprite down to 1/GAMEWIDTH and apply scale x Default to 1
+	float scale = (1 / (GAMEWIDTH / 2.0f)) * ((x == 0) ? 1.0f : x);
+	return scale;
+}
+
+//Scale Y based on world scale
+float RenderSystem::getScaleY(float y) {
+	//Scale sprite down to 1/GAMEHEIGHT and apply scale y Default 1
+	float scale = (1 / (GAMEHEIGHT / 2.0f)) * ((y == 0) ? 1.0f : y);
+	return scale;
+}
 void RenderSystem::renderAllItems() {
+	//RENDER MENU SCREEN
 	for (string* s : gameObjectsToRender) {
 		//std::vector<std::string> data = split(s, ',');
-		//OutputDebugString(s->c_str());
-		//OutputDebugString("\n");
+		OutputDebugString(s->c_str());
+		OutputDebugString("\n");
 		renderObject(*s);
 	}
+
+	//RENDER BOAT SCREEN
 	/*for (std::string s : gameObjectsToTest) {
-		//std::vector<std::string> data = split(s, ',');
-		//std::cout << s << "\n"; 
-		renderObject(s);
-	}*/
+	//std::vector<std::string> data = split(s, ',');
+	//std::cout << s << "\n";
+	renderObject(s);
+	}
+	*/
 }
 
 void RenderSystem::renderObject(string object) {
@@ -256,7 +219,7 @@ void RenderSystem::renderObject(string object) {
 	float x, y, z, orientation;
 
 	//Split object
-	std::vector<string> objectData = split(object, ',');
+	vector<string> objectData = split(object, ',');
 
 	//Parse object data
 	ID = objectData[0];
@@ -265,14 +228,16 @@ void RenderSystem::renderObject(string object) {
 	y = atof(objectData[3].c_str());
 	z = atof(objectData[4].c_str());
 	orientation = atof(objectData[5].c_str());
-
+	//Load texture into memory if it is not already 
+	//(probably not the right way to do it)
+	map<string, GLuint>::iterator it = textures.find(sprite);
+	if (it == textures.end()) {
+		textures.insert(pair<string, GLuint>(sprite, getTexture(sprite)));
+	}
 	//Draw object
 	draw(ID, sprite, x, y, z, orientation);
 }
-
 GLuint RenderSystem::getTexture(string path) {
-	OutputDebugString("trying to get texture: ");
-	OutputDebugString(path.c_str());
 	GLuint texture;
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
@@ -296,7 +261,6 @@ GLuint RenderSystem::getTexture(string path) {
 
 	SDL_FreeSurface(temp);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	OutputDebugString("PASSED\n");
 	return texture;
 }
 
@@ -308,18 +272,18 @@ void RenderSystem::startSystemLoop() {
 	SDL_Event windowEvent;
 	while (running) {
 		thisTime = clock();
-		if ((thisTime - lastTime) > timeFrame) {
-			lastTime = thisTime;
-			mtx.lock();
-			//Clear the screen
-			glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT);
-			//Render all objects
-			renderAllItems();
-			//Update openGL window
-			SDL_GL_SwapWindow(window);
-			mtx.unlock();
-		}
+		//if ((thisTime - lastTime) > timeFrame) {
+		lastTime = thisTime;
+		mtx.lock();
+		//Clear the screen
+		glClearColor(0.0f, 0.467f, 0.745f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+		//Render all objects
+		renderAllItems();
+		//Update openGL window
+		SDL_GL_SwapWindow(window);
+		mtx.unlock();
+		//}
 	}
 }
 
@@ -377,18 +341,13 @@ void RenderSystem::addObjectToRenderList(Msg* m) {
 
 void RenderSystem::updateObjPosition(Msg* m) {
 	std::vector<std::string> data = split(m->data, ',');
-	
+
 	for (std::string* s : gameObjectsToRender) {
 		std::vector<std::string> obj = split(*s, ',');
-		
+
 		// found the obj
 		if (obj.front() == data.front()) {
 			// replace this string's information with new information
-			OutputDebugString("updateObjPosition: ");
-			OutputDebugString(s->c_str());
-			OutputDebugString("  to  ");
-			OutputDebugString(m->data.c_str());
-			OutputDebugString("\n");
 			*s = m->data;
 			return;
 		}

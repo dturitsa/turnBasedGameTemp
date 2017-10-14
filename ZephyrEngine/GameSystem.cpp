@@ -305,13 +305,13 @@ void GameSystem::handleMessage(Msg *msg) {
 				}
 			}
 			break;
-		case SPACEBAR_PRESSED:
+		case SPACEBAR_PRESSED:{
 			// fire a cannon ball. update later for more functionality
 			// use random id for now
 			std::srand(std::time(0));
 
 			int randomNum = std::rand();
-			
+
 			int cx = 0;
 			int cy = 0;
 			int corient = 0;
@@ -327,10 +327,11 @@ void GameSystem::handleMessage(Msg *msg) {
 			}
 
 			Cannonball* c = new Cannonball(randomNum, "Cannonball.png", cx, cy, corient);
-			
+
 			// post cannon ball obj to systems
 			createGameObject(c);
 			break;
+		}
 		default:
 			break;
 		}
