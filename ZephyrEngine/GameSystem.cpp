@@ -169,6 +169,9 @@ void GameSystem::handleMessage(Msg *msg) {
 		case DOWN_ARROW_PRESSED:
 			// move the marker location and let rendering know?
 			markerPosition--;
+			if (markerPosition < 0) {
+				markerPosition = 0;
+			}
 			markerPosition = markerPosition % 3;
 			oss << "obj3, Z6_Marker_P" << markerPosition << ".png," << "0,0,0,0";
 			mm->type = UPDATE_OBJECT_POSITION;
@@ -197,6 +200,7 @@ void GameSystem::handleMessage(Msg *msg) {
 		default:
 			break;
 		}
+		// OutputDebugString("Ls:" + markerPosition + '\n'); // tilt < can't use this
 	} else if (levelLoaded == 1) {
 		// settings menu
 		switch (msg->type) {
@@ -208,6 +212,9 @@ void GameSystem::handleMessage(Msg *msg) {
 		case DOWN_ARROW_PRESSED:
 			// move the marker location and let rendering know
 			markerPosition--;
+			if (markerPosition < 0) {
+				markerPosition = 0;
+			}
 			markerPosition = markerPosition % 3;
 			break;
 		case SPACEBAR_PRESSED:
@@ -299,7 +306,8 @@ void GameSystem::handleMessage(Msg *msg) {
 			}
 			break;
 		case SPACEBAR_PRESSED:
-			// fire all cannons for now, both left and right. need to change later to fire specific sides
+			// fire a cannon ball. update later for more functionality
+			// Cannonball c = new Cannonball();
 			// create cannon ball obj
 			// post cannon ball obj to systems
 			break;
