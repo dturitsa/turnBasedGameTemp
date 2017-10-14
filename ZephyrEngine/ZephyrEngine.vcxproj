@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Axis.h" />
+    <ClInclude Include="Cannonball.h" />
     <ClInclude Include="ConsoleRenderer.h" />
     <ClInclude Include="ctpl_stl.h" />
     <ClInclude Include="DummyGameObj.h" />
@@ -151,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Axis.cpp" />
+    <ClCompile Include="Cannonball.cpp" />
     <ClCompile Include="ConsoleRenderer.cpp" />
     <ClCompile Include="DummyGameObj.cpp" />
     <ClCompile Include="FullscreenObj.cpp" />

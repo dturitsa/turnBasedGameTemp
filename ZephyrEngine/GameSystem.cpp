@@ -307,9 +307,29 @@ void GameSystem::handleMessage(Msg *msg) {
 			break;
 		case SPACEBAR_PRESSED:
 			// fire a cannon ball. update later for more functionality
-			// Cannonball c = new Cannonball();
-			// create cannon ball obj
+			// use random id for now
+			std::srand(std::time(0));
+
+			int randomNum = std::rand();
+			
+			int cx = 0;
+			int cy = 0;
+			int corient = 0;
+
+			// find the ship so that we know where to create the cball
+			for (GameObject* g : gameObjects) {
+				if (g->getObjectType() == "ShipObj") {
+					cx = g->x;
+					cy = g->y;
+					corient = g->orientation;
+					break;
+				}
+			}
+
+			Cannonball* c = new Cannonball(randomNum, "Cannonball.png", cx, cy, corient);
+			
 			// post cannon ball obj to systems
+			createGameObject(c);
 			break;
 		default:
 			break;
