@@ -157,7 +157,7 @@ void GameSystem::handleMessage(Msg *msg) {
 	if (levelLoaded == 0) {
 		// main menu switch case
 		switch (msg->type) {
-		case UP_ARROW_PRESSED:
+		case DOWN_ARROW_PRESSED:
 			// move the marker location and let rendering know?
 			markerPosition++;
 			markerPosition = markerPosition % 3;
@@ -166,7 +166,7 @@ void GameSystem::handleMessage(Msg *msg) {
 			mm->data = oss.str();
 			msgBus->postMessage(mm);
 			break;
-		case DOWN_ARROW_PRESSED:
+		case UP_ARROW_PRESSED:
 			// move the marker location and let rendering know?
 			markerPosition--;
 			if (markerPosition < 0) {
