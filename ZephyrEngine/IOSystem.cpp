@@ -16,10 +16,10 @@ void IOSystem::startSystemLoop() {
 
 	while (true) {
 		thisTime = clock();
-		if ((thisTime - lastTime) > timeFrame) {
+		//if ((thisTime - lastTime) > timeFrame) {
 			lastTime = thisTime;
 			checkKeyPresses();
-		}
+		//}
 	}
 }
 

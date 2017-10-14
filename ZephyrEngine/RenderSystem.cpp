@@ -199,8 +199,8 @@ void RenderSystem::renderAllItems() {
 	//RENDER MENU SCREEN
 	for (string* s : gameObjectsToRender) {
 		//std::vector<std::string> data = split(s, ',');
-		OutputDebugString(s->c_str());
-		OutputDebugString("\n");
+		//OutputDebugString(s->c_str());
+		//OutputDebugString("\n");
 		renderObject(*s);
 	}
 
