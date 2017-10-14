@@ -199,8 +199,8 @@ void RenderSystem::renderAllItems() {
 	//RENDER MENU SCREEN
 	for (string* s : gameObjectsToRender) {
 		//std::vector<std::string> data = split(s, ',');
-		//OutputDebugString(s->c_str());
-		//OutputDebugString("\n");
+		OutputDebugString(s->c_str());
+		OutputDebugString("\n");
 		renderObject(*s);
 	}
 
@@ -326,16 +326,28 @@ void RenderSystem::handleMessage(Msg *msg) {
 }
 
 void RenderSystem::removeObjectFromRenderList(Msg* m) {
+	for (vector<string*>::iterator it = gameObjectsToRender.begin(); it != gameObjectsToRender.end(); it++){
+		std::vector<std::string> obj = split(**it, ',');
+		// found the obj
+		if (obj.front() == m->data) {
+			gameObjectsToRender.erase(it);
+			return;
+		}
+	}
+	/*
 	for (auto s : gameObjectsToRender) {
 		std::vector<std::string> obj = split(*s, ',');
 		// found the obj
 		if (obj.front() == m->data) {
 			// remove the object
-
+			gameObjectsToRender.erase(s);
 			return;
 		}
 	}
+	
 	gameObjectsToRender.push_back(&m->data);
+	*/
+	
 }
 
 void RenderSystem::addObjectToRenderList(Msg* m) {

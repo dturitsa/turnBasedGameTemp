@@ -328,7 +328,7 @@ void GameSystem::handleMessage(Msg *msg) {
 				}
 			}
 
-			Cannonball* c = new Cannonball(randomNum, "cannonBall.png", cx, cy, corient);
+			Cannonball* c = new Cannonball(randomNum, "boatTest.png", cx, cy, corient);
 
 			// post cannon ball obj to systems
 			createGameObject(c);
