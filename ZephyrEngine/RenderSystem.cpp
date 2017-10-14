@@ -239,8 +239,8 @@ void RenderSystem::draw(string ID, string sprite, float x, float y, float z, flo
 void RenderSystem::renderAllItems() {
 	for (string* s : gameObjectsToRender) {
 		//std::vector<std::string> data = split(s, ',');
-		OutputDebugString(s->c_str());
-		OutputDebugString("\n");
+		//OutputDebugString(s->c_str());
+		//OutputDebugString("\n");
 		renderObject(*s);
 	}
 	/*for (std::string s : gameObjectsToTest) {
@@ -271,6 +271,8 @@ void RenderSystem::renderObject(string object) {
 }
 
 GLuint RenderSystem::getTexture(string path) {
+	OutputDebugString("trying to get texture: ");
+	OutputDebugString(path.c_str());
 	GLuint texture;
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
@@ -294,6 +296,7 @@ GLuint RenderSystem::getTexture(string path) {
 
 	SDL_FreeSurface(temp);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	OutputDebugString("PASSED\n");
 	return texture;
 }
 
@@ -305,7 +308,7 @@ void RenderSystem::startSystemLoop() {
 	SDL_Event windowEvent;
 	while (running) {
 		thisTime = clock();
-		//if ((thisTime - lastTime) > timeFrame) {
+		if ((thisTime - lastTime) > timeFrame) {
 			lastTime = thisTime;
 			mtx.lock();
 			//Clear the screen
@@ -316,7 +319,7 @@ void RenderSystem::startSystemLoop() {
 			//Update openGL window
 			SDL_GL_SwapWindow(window);
 			mtx.unlock();
-		//}
+		}
 	}
 }
 
@@ -381,6 +384,11 @@ void RenderSystem::updateObjPosition(Msg* m) {
 		// found the obj
 		if (obj.front() == data.front()) {
 			// replace this string's information with new information
+			OutputDebugString("updateObjPosition: ");
+			OutputDebugString(s->c_str());
+			OutputDebugString("  to  ");
+			OutputDebugString(m->data.c_str());
+			OutputDebugString("\n");
 			*s = m->data;
 			return;
 		}
