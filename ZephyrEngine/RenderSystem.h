@@ -54,7 +54,7 @@ private:
 		1,2,3 }; // second triangle (bottom right - top left - top right)
 	
 	void renderAllItems();
-	void draw(string ID, string path, float x, float y, float z, float rotation);
+	void draw(string ID, string path, float x, float y, float z, float rotation, float width, float height);
 	GLuint getTexture(string path);
 	void renderObject(string object);
 	float transX(float x);

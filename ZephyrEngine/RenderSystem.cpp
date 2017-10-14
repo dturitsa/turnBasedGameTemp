@@ -134,12 +134,12 @@ void RenderSystem::init() {
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void RenderSystem::draw(string ID, string sprite, float x, float y, float z, float rotation) {
+void RenderSystem::draw(string ID, string sprite, float x, float y, float z, float rotation, float width, float height) {
 	//Bind transform to vertex shader
 	//Create a transform matrix and bind it to shader
 	GLfloat* temp = new GLfloat[48]{
-		getScaleX(z), 0, 0, 0, //Scale
-		0, getScaleY(z), 0, 0,
+		getScaleX(width), 0, 0, 0, //Scale
+		0, getScaleY(height), 0, 0,
 		0, 0, 1, 0,
 		0, 0, 0, 1,
 
@@ -227,6 +227,8 @@ void RenderSystem::renderObject(string object) {
 	x = atof(objectData[2].c_str());
 	y = atof(objectData[3].c_str());
 	z = atof(objectData[4].c_str());
+	float w = atof(objectData[6].c_str());
+	float h = atof(objectData[7].c_str());
 	orientation = atof(objectData[5].c_str());
 	//Load texture into memory if it is not already 
 	//(probably not the right way to do it)
@@ -235,7 +237,7 @@ void RenderSystem::renderObject(string object) {
 		textures.insert(pair<string, GLuint>(sprite, getTexture(sprite)));
 	}
 	//Draw object
-	draw(ID, sprite, x, y, z, orientation);
+	draw(ID, sprite, x, y, z, orientation,w,h);
 }
 GLuint RenderSystem::getTexture(string path) {
 	GLuint texture;
