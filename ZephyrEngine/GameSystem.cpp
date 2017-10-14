@@ -83,7 +83,7 @@ void GameSystem::startSystemLoop() {
 		// Gameloop speed
 		thisTime = clock();
 		if ((thisTime - lastTime) < timeFrame) {
-			continue; //if loop duration isn't passed , check again
+			Sleep(timeFrame - (thisTime - lastTime));
 		}
 
 		lastTime = thisTime;
@@ -161,6 +161,7 @@ void GameSystem::handleMessage(Msg *msg) {
 			// move the marker location and let rendering know?
 			markerPosition++;
 			markerPosition = markerPosition % 3;
+			//OutputDebugString("MarkerPos: " + markerPosition + '\n');
 			oss << "obj3,Z6_Marker_P" << markerPosition << ".png," << "0,0,10,0,0,1920,1080,0";
 			mm->type = UPDATE_OBJECT_POSITION;
 			mm->data = oss.str();
@@ -173,6 +174,7 @@ void GameSystem::handleMessage(Msg *msg) {
 				markerPosition = 0;
 			}
 			markerPosition = markerPosition % 3;
+			
 			oss << "obj3,Z6_Marker_P" << markerPosition << ".png," << "0,0,10,0,0,1920,1080,0";
 			mm->type = UPDATE_OBJECT_POSITION;
 			mm->data = oss.str();
@@ -200,7 +202,7 @@ void GameSystem::handleMessage(Msg *msg) {
 		default:
 			break;
 		}
-		// OutputDebugString("Ls:" + markerPosition + '\n'); // tilt < can't use this
+		 
 	} else if (levelLoaded == 1) {
 		// settings menu
 		switch (msg->type) {
@@ -326,7 +328,7 @@ void GameSystem::handleMessage(Msg *msg) {
 				}
 			}
 
-			Cannonball* c = new Cannonball(randomNum, "Cannonball.png", cx, cy, corient);
+			Cannonball* c = new Cannonball(randomNum, "cannonBall.png", cx, cy, corient);
 
 			// post cannon ball obj to systems
 			createGameObject(c);

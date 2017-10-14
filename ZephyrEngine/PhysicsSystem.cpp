@@ -33,8 +33,9 @@ void PhysicsSystem::startSystemLoop()
 	while (true)
 	{
 		thisTime = clock();
-		if ((thisTime - lastTime) > timeFrame)
-		{
+		if ((thisTime - lastTime) < timeFrame) {
+			Sleep(timeFrame - (thisTime - lastTime));
+		}
 			lastTime = thisTime;
 
 			//Subject to change! Will discuss how the loop will actually work.
@@ -55,7 +56,7 @@ void PhysicsSystem::startSystemLoop()
 					it = Physics.GameObjects.erase(it);
 				}
 			}
-		}
+		
 	}
 }
 

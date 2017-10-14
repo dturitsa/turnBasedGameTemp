@@ -272,8 +272,11 @@ void RenderSystem::startSystemLoop() {
 	SDL_Event windowEvent;
 	while (running) {
 		thisTime = clock();
-		//if ((thisTime - lastTime) > timeFrame) {
+		if ((thisTime - lastTime) < timeFrame) {
+			Sleep(timeFrame - (thisTime - lastTime));
+		}
 		lastTime = thisTime;
+
 		mtx.lock();
 		//Clear the screen
 		glClearColor(0.0f, 0.467f, 0.745f, 1.0f);
@@ -283,7 +286,7 @@ void RenderSystem::startSystemLoop() {
 		//Update openGL window
 		SDL_GL_SwapWindow(window);
 		mtx.unlock();
-		//}
+		
 	}
 }
 

@@ -13,6 +13,7 @@
 #include <typeinfo>
 #include <cstdlib>
 #include <ctime>
+#include <windows.h>
 
 class GameSystem : public System {
 public:

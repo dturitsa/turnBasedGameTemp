@@ -16,16 +16,20 @@ void IOSystem::startSystemLoop() {
 
 	while (true) {
 		thisTime = clock();
-		//if ((thisTime - lastTime) > timeFrame) {
+
+		if ((thisTime - lastTime) < timeFrame) {
+			Sleep(timeFrame - (thisTime - lastTime));
+		}
 			lastTime = thisTime;
 			checkKeyPresses();
-		//}
+
 	}
 }
 
 // checks keypresses
 void IOSystem::checkKeyPresses() {
 	m->data = "";
+	
 
 	// Need to decide how we want to do this section - might be some issues here
 	// with regard to pressing multiple keys at the same time
@@ -33,27 +37,27 @@ void IOSystem::checkKeyPresses() {
 	// specific keys, and then having another function somewhere that
 	// parses the data to get the proper code to the Gamesystem but that's
 	// a bit convoluted
-	if (GetKeyState(VK_UP)) {
+	if (GetKeyState(VK_UP) & 0x8000) {
 		OutputDebugString("Up Pressed\n");
 		m->type = UP_ARROW_PRESSED;
 	}
 
-	if (GetKeyState(VK_DOWN)) {
+	if (GetKeyState(VK_DOWN) & 0x8000) {
 		OutputDebugString("Down Pressed\n");
 		m->type = DOWN_ARROW_PRESSED;
 	}
 
-	if (GetKeyState(VK_SPACE)) {
+	if (GetKeyState(VK_SPACE) & 0x8000) {
 		OutputDebugString("Space Pressed\n");
 		m->type = SPACEBAR_PRESSED;
 	}
 
-	if (GetKeyState(VK_RIGHT)) {
+	if (GetKeyState(VK_RIGHT) & 0x8000) {
 		OutputDebugString("Right Pressed\n");
 		m->type = RIGHT_ARROW_PRESSED;
 	}
 
-	if (GetKeyState(VK_LEFT)) {
+	if (GetKeyState(VK_LEFT) & 0x8000) {
 		OutputDebugString("Left Pressed\n");
 		m->type = LEFT_ARROW_PRESSED;
 	}
@@ -65,6 +69,8 @@ void IOSystem::checkKeyPresses() {
 
 	if (m->type != EMPTY_MESSAGE) {
 		msgBus->postMessage(m);
+		m->type = EMPTY_MESSAGE;
+		
 	}
 
 }
