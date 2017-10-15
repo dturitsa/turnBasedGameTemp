@@ -76,17 +76,13 @@ void GameSystem::createGameObject(GameObject* g) {
 void GameSystem::startSystemLoop() {	
 	//clocks for limiting gameloop speed
 	clock_t thisTime = clock();
-	clock_t lastTime = thisTime;
 
-	// Main Game Loop
 	while (true) {
-		// Gameloop speed
 		thisTime = clock();
-		if ((thisTime - lastTime) < timeFrame) {
-			Sleep(timeFrame - (thisTime - lastTime));
+		if (thisTime  < timeFrame) {
+			Sleep(timeFrame - thisTime);
 		}
-
-		lastTime = thisTime;
+		timeFrame += 20;
 
 		/////////////////////////////////////////////////////////////////////
 		//							OK to Run							   //
@@ -336,10 +332,12 @@ void GameSystem::handleMessage(Msg *msg) {
 				}
 			}
 
-			Cannonball* c = new Cannonball(randomNum, "boatTest.png", cx, cy, corient);
+			Cannonball* c = new Cannonball(randomNum, "boatTest1.png", cx, cy, corient);
 
 			// post cannon ball obj to systems
-			createGameObject(c);
+
+			//commented out because spawning currently bugged
+			//createGameObject(c);  
 			break;
 		}
 		default:

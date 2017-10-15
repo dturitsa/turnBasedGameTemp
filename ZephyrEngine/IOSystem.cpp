@@ -12,15 +12,13 @@ IOSystem::~IOSystem() {
 void IOSystem::startSystemLoop() {
 	// used to prevent the io system from posting messages too often
 	clock_t thisTime = clock();
-	clock_t lastTime = thisTime;
 
 	while (true) {
 		thisTime = clock();
-
-		if ((thisTime - lastTime) < timeFrame) {
-			Sleep(timeFrame - (thisTime - lastTime));
+		if (thisTime  < timeFrame) {
+			Sleep(timeFrame - thisTime);
 		}
-			lastTime = thisTime;
+		timeFrame += 50;
 			checkKeyPresses();
 
 	}

@@ -27,16 +27,14 @@ PhysicsSystem::~PhysicsSystem()
 //Subject to change! This was used for testing.
 void PhysicsSystem::startSystemLoop()
 {
-	clock_t	thisTime = clock();
-	clock_t lastTime = thisTime;
+	clock_t thisTime = clock();
 
-	while (true)
-	{
+	while (true) {
 		thisTime = clock();
-		if ((thisTime - lastTime) < timeFrame) {
-			Sleep(timeFrame - (thisTime - lastTime));
+		if (thisTime  < timeFrame) {
+			Sleep(timeFrame - thisTime);
 		}
-			lastTime = thisTime;
+		timeFrame += 20;
 
 			//Subject to change! Will discuss how the loop will actually work.
 			//Loop through Physics objects to update their movements and check collision.

@@ -212,8 +212,8 @@ void RenderSystem::renderAllItems() {
 	//RENDER MENU SCREEN
 	for (string* s : gameObjectsToRender) {
 		//std::vector<std::string> data = split(s, ',');
-		OutputDebugString(s->c_str());
-		OutputDebugString("\n");
+		//OutputDebugString(s->c_str());
+		//OutputDebugString("\n");
 		renderObject(*s);
 	}
 
@@ -284,24 +284,37 @@ void RenderSystem::startSystemLoop() {
 	init();
 	running = true;
 	clock_t thisTime = clock();
-	clock_t lastTime = thisTime;
+	//clock_t lastTime = thisTime;
 	SDL_Event windowEvent;
+
+	int renderCount = 0;
 	while (running) {
 		thisTime = clock();
-		if ((thisTime - lastTime) < timeFrame) {
-			Sleep(timeFrame - (thisTime - lastTime));
+		if (thisTime  < timeFrame) {		
+			Sleep(timeFrame - thisTime);				
 		}
-		lastTime = thisTime;
+		timeFrame += 20;
 
-		mtx.lock();
+		//string str = to_string(renderCount);
+		//OutputDebugString(str.c_str());
+	//OutputDebugString("\n");
+	//	renderCount++;
+
+		//lastTime = thisTime;
+
+		//mtx.lock();
 		//Clear the screen
 		glClearColor(0.0f, 0.467f, 0.745f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		//Render all objects
+		renderCount++;
+		string st = to_string(renderCount);
+	//	OutputDebugString(st.c_str());
+		//OutputDebugString("\n");
 		renderAllItems();
 		//Update openGL window
 		SDL_GL_SwapWindow(window);
-		mtx.unlock();
+		//mtx.unlock();
 		
 	}
 }
