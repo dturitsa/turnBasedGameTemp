@@ -205,6 +205,8 @@ void GameSystem::handleMessage(Msg *msg) {
 		 
 	} else if (levelLoaded == 1) {
 		// settings menu
+	
+
 		switch (msg->type) {
 		case UP_ARROW_PRESSED:
 			// move the marker location and let rendering know
