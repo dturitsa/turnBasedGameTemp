@@ -134,10 +134,19 @@ void RenderSystem::init() {
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void RenderSystem::draw(string ID, string sprite, float x, float y, float z, float rotation, float width, float height) {
+void RenderSystem::draw(string ID, string sprite, float x, float y, float z, float orientation, float width, float height) {
 	//Bind transform to vertex shader
 	//Create a transform matrix and bind it to shader
-	GLfloat* temp = new GLfloat[48]{
+	float radRot = orientation * 3.1415927 / 180.0;
+
+	GLfloat* temp = new GLfloat[80]{
+		
+
+		cosf(radRot), -sinf(radRot), 0, 0, //Rotate 
+		sinf(radRot), cosf(radRot), 0, 0,
+		0, 0, 1, 0,
+		0, 0, 0, 1,
+
 		getScaleX(width), 0, 0, 0, //Scale
 		0, getScaleY(height), 0, 0,
 		0, 0, 1, 0,
@@ -146,15 +155,19 @@ void RenderSystem::draw(string ID, string sprite, float x, float y, float z, flo
 		1, 0, 0, 0, //Translate
 		0, 1, 0, 0,
 		0, 0, 1, 0,
-		transX(x), transY(y), 0, 1,
+		transX(x), transY(y), 0, 1 //should add z posiiton at tome point
 
-		1, 0, 0, 0, //Rotate NOT DONE
-		0, 1, 0, 0,
-		0, 0, 1, 0,
-		0, 0, 0, 1
 	};
 	GLint ourTransform = glGetUniformLocation(shaderProgram, "transform");
 	glUniformMatrix4fv(ourTransform, 3, GL_FALSE, temp);
+	
+	glMatrixMode(ourTransform);
+	glPushMatrix();
+	//glTranslatef(xcenter, ycenter, zcenter); // move back to focus of gluLookAt
+	glRotatef(45,0,0,0); //  rotate around center
+	//glTranslatef(-xcenter, -ycenter, -zcenter); //move object to center
+	//DrawObject();
+	//glPopMatrix();
 
 	//Bind texture to fragment shader
 	glActiveTexture(GL_TEXTURE0);
@@ -227,9 +240,10 @@ void RenderSystem::renderObject(string object) {
 	x = atof(objectData[2].c_str());
 	y = atof(objectData[3].c_str());
 	z = atof(objectData[4].c_str());
+	orientation = atof(objectData[5].c_str());
 	float w = atof(objectData[6].c_str());
 	float h = atof(objectData[7].c_str());
-	orientation = atof(objectData[5].c_str());
+	
 	//Load texture into memory if it is not already 
 	//(probably not the right way to do it)
 	map<string, GLuint>::iterator it = textures.find(sprite);

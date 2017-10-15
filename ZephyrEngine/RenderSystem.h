@@ -7,6 +7,7 @@
 #include <glew.h>
 #include <SDL_opengl.h>
 #include <freeglut.h>
+#include <math.h>  
 
 class RenderSystem : public System {
 public:

@@ -63,7 +63,7 @@ void GameSystem::saveToFIle(string fileName) {
 void GameSystem::createGameObject(GameObject* g) {
 	gameObjects.push_back(g);
 	std::ostringstream oss;
-	oss << g->id << ',' << g->renderable << ',' << g->x << ',' << g->y << ',' << g->z << ',' << g->direction << ',' << g->width << ',' << g->length << ',' << g->orientation;
+	oss << g->id << ',' << g->renderable << ',' << g->x << ',' << g->y << ',' << g->z << ',' << g->orientation << ',' << g->width << ',' << g->length << ',' << g->orientation;
 	// maybe add the rest of the variables into the oss as well, but can decide later depending on
 	// what physics needs
 
@@ -229,11 +229,16 @@ void GameSystem::handleMessage(Msg *msg) {
 		// game running switch case
 		switch (msg->type) {
 		case TEST_KEY_PRESSED:
-			g = gameObjects.front();
-			g->x++;
-			oss << g->id << ',' << g->renderable << ',' << g->x << ',' << g->y << ',' << g->z << ',' << g->orientation;
-			mm = new Msg(UPDATE_OBJECT_POSITION, oss.str());
-			msgBus->postMessage(mm);
+			for (GameObject* g : gameObjects) {
+				if (g->getObjectType() == "ShipObj") {
+					g->x++;
+					g->y++;
+					g->orientation += 10.0;
+					oss << g->id << ',' << g->renderable << ',' << g->x << ',' << g->y << ',' << g->z << ',' << g->orientation << ",2,2,0,0";
+					mm = new Msg(UPDATE_OBJECT_POSITION, oss.str());
+					msgBus->postMessage(mm);
+				}
+			}
 			break;
 		case UP_ARROW_PRESSED:
 			// increase mast
@@ -249,6 +254,7 @@ void GameSystem::handleMessage(Msg *msg) {
 					oss << so->id << "," << so->sail;
 					mm->data = oss.str();
 					msgBus->postMessage(mm);
+
 					break;
 				}
 			}
