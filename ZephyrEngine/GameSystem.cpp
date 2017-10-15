@@ -61,9 +61,15 @@ void GameSystem::saveToFIle(string fileName) {
 // This function adds a created game object to the main list, and posts a message to the render
 // and physics systems so that they can add it to their list as well
 void GameSystem::createGameObject(GameObject* g) {
+	for (GameObject* obj : gameObjects) {
+		if (g->id == obj->id) {
+			//g->id.append(to_string(rand()));
+			return;
+		}
+	}
 	gameObjects.push_back(g);
 	std::ostringstream oss;
-	oss << g->id << ',' << g->renderable << ',' << g->x << ',' << g->y << ',' << g->z << ',' << g->orientation << ',' << g->width << ',' << g->length << ',' << g->orientation;
+	oss << g->id << ',' << g->renderable << ',' << g->x << ',' << g->y << ',' << g->z << ',' << g->orientation << ',' << g->width << ',' << g->length;
 	// maybe add the rest of the variables into the oss as well, but can decide later depending on
 	// what physics needs
 
@@ -158,7 +164,7 @@ void GameSystem::handleMessage(Msg *msg) {
 			markerPosition++;
 			markerPosition = markerPosition % 3;
 			//OutputDebugString("MarkerPos: " + markerPosition + '\n');
-			oss << "obj3,Z6_Marker_P" << markerPosition << ".png," << "0,0,10,0,10,10,0,0";
+			oss << "obj3,Z6_Marker_P" << markerPosition << ".png," << "0,0,10,0,100,100,0,0";
 			mm->type = UPDATE_OBJECT_POSITION;
 			mm->data = oss.str();
 			msgBus->postMessage(mm);
@@ -171,7 +177,7 @@ void GameSystem::handleMessage(Msg *msg) {
 			}
 			markerPosition = markerPosition % 3;
 			
-			oss << "obj3,Z6_Marker_P" << markerPosition << ".png," << "0,0,10,0,10,10,0,0";
+			oss << "obj3,Z6_Marker_P" << markerPosition << ".png," << "0,0,10,0,100,100,0,0";
 			mm->type = UPDATE_OBJECT_POSITION;
 			mm->data = oss.str();
 			msgBus->postMessage(mm);
@@ -232,7 +238,7 @@ void GameSystem::handleMessage(Msg *msg) {
 					g->x++;
 					g->y++;
 					g->orientation += 10.0;
-					oss << g->id << ',' << g->renderable << ',' << g->x << ',' << g->y << ',' << g->z << ',' << g->orientation << ",2,2,0,0";
+					oss << g->id << ',' << g->renderable << ',' << g->x << ',' << g->y << ',' << g->z << ',' << g->orientation << ",20,20,0,0";
 					mm = new Msg(UPDATE_OBJECT_POSITION, oss.str());
 					msgBus->postMessage(mm);
 				}
@@ -314,8 +320,7 @@ void GameSystem::handleMessage(Msg *msg) {
 		case SPACEBAR_PRESSED:{
 			// fire a cannon ball. update later for more functionality
 			// use random id for now
-			std::srand(std::time(0));
-
+			srand(time(NULL));
 			int randomNum = std::rand();
 
 			int cx = 0;
@@ -327,17 +332,16 @@ void GameSystem::handleMessage(Msg *msg) {
 				if (g->getObjectType() == "ShipObj") {
 					cx = g->x;
 					cy = g->y;
-					corient = g->orientation;
+					corient = g->orientation+90;
 					break;
 				}
 			}
-
-			Cannonball* c = new Cannonball(randomNum, "boatTest1.png", cx, cy, corient);
+			
+			Cannonball* c = new Cannonball(to_string(randomNum), "tempCannonball.png", cx, cy, corient, 5, 5);
 
 			// post cannon ball obj to systems
+			createGameObject(c);  
 
-			//commented out because spawning currently bugged
-			//createGameObject(c);  
 			break;
 		}
 		default:

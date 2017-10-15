@@ -5,7 +5,7 @@
 class Cannonball :
 	public GameObject {
 public:
-	Cannonball(int idNum, std::string renderableName, int xpos, int ypos, int orientation);
+	Cannonball(string _id, std::string renderableName, int xpos, int ypos, int _orientation, int _width, int _height);
 	Cannonball(map<string, string> params);
 	~Cannonball();
 

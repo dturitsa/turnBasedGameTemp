@@ -1,11 +1,13 @@
 #include "Cannonball.h"
 
-Cannonball::Cannonball(int idNum, std::string renderableName, int xpos, int ypos, int orientation) {
-	id = idNum;
+Cannonball::Cannonball(string _id, std::string renderableName, int xpos, int ypos, int _orientation, int _width, int _length) {
+	id = _id;
 	renderable = renderableName;
 	x = xpos;
 	y = ypos;
-	orientation = orientation;
+	orientation = _orientation;
+	width = _width;
+	length = _length;
 }
 
 Cannonball::Cannonball(map <string, string> paramsMap) : GameObject(paramsMap) {

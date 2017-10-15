@@ -5,8 +5,8 @@ xPos: 0,
 yPos: 0,
 zPos: 10,
 orientation: 0,
-width: 10,
-length: 10,
+width: 100,
+length: 100,
 physicsEnabled: 0,
 windScale: 0;
 
@@ -17,8 +17,8 @@ xPos: 0,
 yPos: 0,
 zPos: 10,
 orientation: 0,
-width: 10,
-length: 10,
+width: 100,
+length: 100,
 physicsEnabled: 0,
 windScale: 0;
 
@@ -29,8 +29,8 @@ xPos: 0,
 yPos: 0,
 zPos: 10,
 orientation: 0,
-width: 10,
-length: 10,
+width: 100,
+length: 100,
 physicsEnabled: 0,
 windScale: 0;
 

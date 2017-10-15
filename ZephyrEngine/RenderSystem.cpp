@@ -311,7 +311,9 @@ void RenderSystem::startSystemLoop() {
 		string st = to_string(renderCount);
 	//	OutputDebugString(st.c_str());
 		//OutputDebugString("\n");
+		mtx.lock();
 		renderAllItems();
+		mtx.unlock();
 		//Update openGL window
 		SDL_GL_SwapWindow(window);
 		//mtx.unlock();
@@ -340,9 +342,9 @@ void RenderSystem::handleMessage(Msg *msg) {
 		break;
 	case GO_ADDED:
 		// parse data from msg to add obj to list
-		mtx.lock();
+		//mtx.lock();
 		addObjectToRenderList(msg);
-		mtx.unlock();
+		//mtx.unlock();
 		break;
 	case GO_REMOVED:
 		mtx.lock();
@@ -380,7 +382,9 @@ void RenderSystem::removeObjectFromRenderList(Msg* m) {
 }
 
 void RenderSystem::addObjectToRenderList(Msg* m) {
+	mtx.lock();
 	gameObjectsToRender.push_back(&m->data);
+	mtx.unlock();
 }
 
 void RenderSystem::updateObjPosition(Msg* m) {
