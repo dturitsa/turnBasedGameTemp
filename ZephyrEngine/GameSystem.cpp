@@ -69,7 +69,7 @@ void GameSystem::createGameObject(GameObject* g) {
 	}
 	gameObjects.push_back(g);
 	std::ostringstream oss;
-	oss << g->id << ',' << g->renderable << ',' << g->x << ',' << g->y << ',' << g->z << ',' << g->orientation << ',' << g->width << ',' << g->length;
+	oss << g->id << ',' << g->renderable << ',' << g->x << ',' << g->y << ',' << g->z << ',' << g->orientation << ',' << g->width << ',' << g->length << ',' << g->physicsEnabled;
 	// maybe add the rest of the variables into the oss as well, but can decide later depending on
 	// what physics needs
 
@@ -238,7 +238,7 @@ void GameSystem::handleMessage(Msg *msg) {
 					g->x++;
 					g->y++;
 					g->orientation += 10.0;
-					oss << g->id << ',' << g->renderable << ',' << g->x << ',' << g->y << ',' << g->z << ',' << g->orientation << ",20,20,0,0";
+					oss << g->id << ',' << g->renderable << ',' << g->x << ',' << g->y << ',' << g->z << ',' << g->orientation << ",20,20,1,0";
 					mm = new Msg(UPDATE_OBJECT_POSITION, oss.str());
 					msgBus->postMessage(mm);
 				}

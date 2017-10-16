@@ -17,7 +17,7 @@ I have all the functions to do everything set up, so just use them with your mes
 PhysicsSystem::PhysicsSystem(MessageBus* mbus) : System (mbus)
 {
 	//create wind object(move to message handle?)
-	Physics.addObject("Wind", "Wind", 0, 0, 0, 0, 0, 1, 0, 0);
+	Physics.addObject("Wind", "Wind", 1,1,45, 0, 0, .5, 0, 0);//x,y,orientation,width,height, windscale, rotSPeed, inertia
 }
 
 PhysicsSystem::~PhysicsSystem()
@@ -40,12 +40,12 @@ void PhysicsSystem::startSystemLoop()
 			//Loop through Physics objects to update their movements and check collision.
 			for (std::map<std::string, PhysicsObject>::iterator it = Physics.GameObjects.begin(); it != Physics.GameObjects.end(); ++it)
 			{
-				if (it->second.tag == "Ship")
+				if (it->second.tag == "boatTest1.png")
 				{
 					updateShip(it->second);
 					//checkCollision
 				}
-				else if (it->second.tag == "Projectile")
+				else if (it->second.tag == "tempCannonball.png")
 				{
 					updateProjectile(it->second);
 				}
@@ -53,6 +53,32 @@ void PhysicsSystem::startSystemLoop()
 				{
 					it = Physics.GameObjects.erase(it);
 				}
+				std::ostringstream oss;
+				
+				oss << it->first << "," //id
+					<< it->second.tag << "," //renderable
+					<< it->second.position.x << "," //x
+					<< it->second.position.y //y
+					<< ",0," // z
+					<< it->second.rotation << "," //orientation
+					<< it->second.width << "," //width 
+					<< it->second.height << ","//height
+					<< "0,0"; //not sure if we need these
+
+				Msg* mm = new Msg(UPDATE_OBJECT_POSITION, "");
+				//mm->type = UPDATE_OBJECT_POSITION;
+				mm->data = oss.str();
+				msgBus->postMessage(mm);
+
+				//OutputDebugString(oss.str().c_str());
+				//OutputDebugString("\n");
+				std::string s = std::to_string(Physics.GameObjects[it->first].mast);
+
+				OutputDebugString(s.c_str());
+				OutputDebugString("\n");
+
+				//postmsg update to all TODO
+				//e.g. oss << it->first << ',' << it->second.position.x << etcetc 
 			}
 		
 	}
@@ -105,7 +131,11 @@ void PhysicsSystem::handleMessage(Msg *msg)
 		width = atof(data[6].c_str());//data[6]?
 		height = atof(data[7].c_str());//data[7]?
 
-		Physics.addObject(ID, tag, x, y, width, height, rotation, 1, 1, PROJECTILE_INERTIA);
+		//check if physics enabled
+		if (atof(data[8].c_str()) == 1) {
+			Physics.addObject(ID, tag, x, y, width, height, rotation, 1, 1, PROJECTILE_INERTIA);
+		}
+		
 		break;
 	case GO_REMOVED:
 		//Use this if you are using the iterator in StartPhysicsLoop
@@ -115,9 +145,11 @@ void PhysicsSystem::handleMessage(Msg *msg)
 		Physics.removeObject(ID);
 		break;
 	case CHANGE_MAST:
+		ID = data[0];
 		changeMast(ID, atoi(data[1].c_str())); //  just cast the data 
 		break;
 	case CHANGE_RUDDER:
+		ID = data[0];
 		changeRudder(ID, atoi(data[1].c_str())); 
 		break;
 		/*
@@ -172,19 +204,19 @@ void PhysicsSystem::changeRudder(std::string ID, int rudder)
 	switch (rudder)
 	{
 	case 0:
-		Physics.GameObjects[ID].rudder = STRAIGHT;
+		Physics.GameObjects[ID].rudder = FULLPORT;
 		break;
 	case 1:
-		Physics.GameObjects[ID].rudder = HALFSTARBOARD;
-		break;
-	case 2:
-		Physics.GameObjects[ID].rudder = FULLSTARBOARD;
-		break;
-	case 3:
 		Physics.GameObjects[ID].rudder = HALFPORT;
 		break;
+	case 2:
+		Physics.GameObjects[ID].rudder = STRAIGHT;
+		break;
+	case 3:
+		Physics.GameObjects[ID].rudder = HALFSTARBOARD ;
+		break;
 	case 4:
-		Physics.GameObjects[ID].rudder = FULLPORT;
+		Physics.GameObjects[ID].rudder = FULLSTARBOARD;
 		break;
 	}
 }
@@ -244,6 +276,7 @@ void PhysicsSystem::updateShip(PhysicsObject &ship)
 //Simple shooting for alpha. Projectile slows a bit overtime and gets destroyed.
 void PhysicsSystem::updateProjectile(PhysicsObject &projectile)
 {
+	//TODO remove physics stopping object out of bounds
 	if (projectile.inertia > (PROJECTILE_INERTIA - 30))
 	{
 		Vector2 objectDirection;
@@ -258,7 +291,7 @@ void PhysicsSystem::updateProjectile(PhysicsObject &projectile)
 	}
 	else
 	{
-		Destroy(projectile);
+		//Destroy(projectile);
 	}
 }
 

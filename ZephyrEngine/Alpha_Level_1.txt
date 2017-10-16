@@ -23,3 +23,17 @@ physicsEnabled: 1,
 windScale: 1,
 sail: 0,
 rudder: 2;
+
+gameObjectType: ShipObj,
+id: shipwreck,
+renderable: boatTest1.png,
+xPos: 40,
+yPos: 40,
+zPos: 1,
+orientation: 90,
+width: 30,
+length: 30,
+physicsEnabled: 1,
+windScale: 0,
+sail: 0,
+rudder: 2;
