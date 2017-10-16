@@ -18,7 +18,7 @@ void IOSystem::startSystemLoop() {
 		if (thisTime  < timeFrame) {
 			Sleep(timeFrame - thisTime);
 		}
-		timeFrame += 70;
+		timeFrame += 10;
 			checkKeyPresses();
 
 	}

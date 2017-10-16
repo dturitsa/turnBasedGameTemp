@@ -17,7 +17,7 @@ I have all the functions to do everything set up, so just use them with your mes
 PhysicsSystem::PhysicsSystem(MessageBus* mbus) : System (mbus)
 {
 	//create wind object(move to message handle?)
-	Physics.addObject("Wind", "Wind", 1,1,45, 0, 0, .5, 0, 0);//x,y,orientation,width,height, windscale, rotSPeed, inertia
+	Physics.addObject("Wind", "Wind", 1,1,45, 0, 0, .8, 0, 0);//x,y,orientation,width,height, windscale, rotSPeed, inertia
 }
 
 PhysicsSystem::~PhysicsSystem()
@@ -74,8 +74,8 @@ void PhysicsSystem::startSystemLoop()
 				//OutputDebugString("\n");
 				std::string s = std::to_string(Physics.GameObjects[it->first].mast);
 
-				OutputDebugString(s.c_str());
-				OutputDebugString("\n");
+				//OutputDebugString(s.c_str());
+				//OutputDebugString("\n");
 
 				//postmsg update to all TODO
 				//e.g. oss << it->first << ',' << it->second.position.x << etcetc 
@@ -93,7 +93,7 @@ void PhysicsSystem::handleMessage(Msg *msg)
 	std::vector<std::string> data;
 	std::string token;
 	std::string messageData = msg->data;
-	std::string splitter = ", ";
+	std::string splitter = ",";
 	std::size_t pos = 0;
 	std::string ID, tag;
 	float x, y, rotation, width, height;

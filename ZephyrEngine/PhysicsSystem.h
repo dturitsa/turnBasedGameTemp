@@ -2,7 +2,7 @@
 #include "PhysicsEngine.h"
 #include "System.h"
 
-#define PROJECTILE_FORCE 8
+#define PROJECTILE_FORCE 4
 #define PROJECTILE_INERTIA 100
 
 class PhysicsSystem : public System

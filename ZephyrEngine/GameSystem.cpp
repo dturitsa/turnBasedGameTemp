@@ -344,6 +344,25 @@ void GameSystem::handleMessage(Msg *msg) {
 
 			break;
 		}
+		case UPDATE_OBJECT_POSITION:{
+			
+			vector<string> data = split(msg->data, ',');
+		
+			for (GameObject* g : gameObjects) {
+				//OutputDebugString(g->id.c_str());
+				
+				if (g->id == data[0]) {
+					OutputDebugString(data[0].c_str());
+					OutputDebugString("\n");
+
+					g->x = atof(data[2].c_str());
+					g->y = atof(data[3].c_str());
+					g->orientation = atof(data[5].c_str());
+				}
+					
+			}
+			break;
+			}
 		default:
 			break;
 		}
