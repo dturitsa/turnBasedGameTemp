@@ -18,7 +18,7 @@ PhysicsSystem::PhysicsSystem(MessageBus* mbus) : System(mbus)
 {
 	//create wind object(move to message handle?)
 	//Physics.addObject("Wind", "Wind", 1,1,45, 0, 0, .8, 0, 0);//x,y,orientation,width,height, windscale, rotSPeed, inertia
-	Wind.direction = 45;
+	Wind.direction = 140;
 	Wind.power = 0.8;
 }
 

@@ -108,6 +108,34 @@ bool PhysicsEngine::checkCollision(PhysicsObject A, PhysicsObject B) {
 	getCorners(A, A.corners);
 	getCorners(B, B.corners);
 
+	// Find X min and Y min
+	float minX, minY;
+	minX = A.corners[0].x; minY = A.corners[0].y;
+	for (int i = 0; i < 4; i++) {
+		if (A.corners[i].x < minX)
+			minX = A.corners[i].x;
+		if (B.corners[i].x < minX)
+			minX = B.corners[i].x;
+		if (A.corners[i].y < minY)
+			minY = A.corners[i].y;
+		if (B.corners[i].y < minY)
+			minY = B.corners[i].y;
+	}
+
+	// Shift positions to be positve
+	if (minX < 0) { // Shift X positions
+		for (int i = 0; i < 4; i++) {
+			A.corners[i].x += minX;
+			B.corners[i].x += minX;
+		}
+	}
+	if (minY < 0) { // Shift Y positions
+		for (int i = 0; i < 4; i++) {
+			A.corners[i].y += minY;
+			B.corners[i].y += minY;
+		}
+	}
+
 	// Step 2: Get the 2 axis for each bounding box (4 axis total)
 	Axis axis[4];
 	axis[0].axis = convertAngleToVector(A.rotation);
