@@ -96,6 +96,11 @@ void GameSystem::startSystemLoop() {
 		}
 		timeFrame += 20;
 
+		std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
+		OutputDebugString("GameSystem Loop on thread: ");
+		OutputDebugString(s.c_str());
+		OutputDebugString("\n");
+
 		/////////////////////////////////////////////////////////////////////
 		//							OK to Run							   //
 		/////////////////////////////////////////////////////////////////////
@@ -157,8 +162,15 @@ void GameSystem::gameObjectRemoved(GameObject* g) {
 }
 
 void GameSystem::handleMessage(Msg *msg) {
+
 	// call the parent first 
 	System::handleMessage(msg);
+
+	std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
+	OutputDebugString("GameSystem Handle on thread: ");
+	OutputDebugString(s.c_str());
+	OutputDebugString("\n");
+
 	std::ostringstream oss;
 	Msg* mm = new Msg(EMPTY_MESSAGE, "");
 	GameObject* g;

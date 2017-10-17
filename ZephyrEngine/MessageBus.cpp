@@ -10,6 +10,7 @@ MessageBus::~MessageBus() {
 
 void MessageBus::postMessage(Msg* m) {
 	// send the message to every system so that they can all see it
+
 	for (System* s : systemList) {
 		s->handleMessage(m);
 	}

@@ -14,6 +14,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <windows.h>
+#include <thread>
 
 class GameSystem : public System {
 public:

@@ -38,6 +38,11 @@ void PhysicsSystem::startSystemLoop()
 		}
 		timeFrame += 20;
 
+		std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
+		OutputDebugString("Physics Loop on thread: ");
+		OutputDebugString(s.c_str());
+		OutputDebugString("\n");
+
 		//Subject to change! Will discuss how the loop will actually work.
 		//Loop through Physics objects to update their movements and check collision.
 		mtx.lock();
@@ -83,7 +88,7 @@ void PhysicsSystem::startSystemLoop()
 			Msg* mm = new Msg(UPDATE_OBJECT_POSITION, "");
 			//mm->type = UPDATE_OBJECT_POSITION;
 			mm->data = oss.str();
-			msgBus->postMessage(mm);
+			//msgBus->postMessage(mm);
 
 			//OutputDebugString(oss.str().c_str());
 			//OutputDebugString("\n");
@@ -112,9 +117,10 @@ void PhysicsSystem::startSystemLoop()
 void PhysicsSystem::handleMessage(Msg *msg)
 {
 	System::handleMessage(msg);
-
-	//if (main_thread_id == std::this_thread::get_id())
-		//std::cout << "This is the main thread.\n";
+	std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
+	OutputDebugString("Physics Handle Messsage on thread: ");
+	OutputDebugString(s.c_str());
+	OutputDebugString("\n");
 
 	std::vector<std::string> data;
 	std::string token;
@@ -349,7 +355,7 @@ void PhysicsSystem::collisionHandler(std::string object1)
 
 				Msg* mm = new Msg(GO_COLLISION, "");
 				mm->data = oss.str();
-				msgBus->postMessage(mm);
+				//msgBus->postMessage(mm);
 			}
 		}
 	}

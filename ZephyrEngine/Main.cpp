@@ -38,10 +38,10 @@ int main(int argc, char *argv[]) {
 	std::vector<std::string> configData = split(rawConfigData, ',');
 	std::string::size_type sz;
 
-	gs->timeFrame = std::stoi(configData.at(0), &sz);
-	rs->timeFrame = std::stoi(configData.at(1), &sz);
-	ios->timeFrame = std::stoi(configData.at(2), &sz);
-	ps->timeFrame = std::stoi(configData.at(3), &sz);
+	//gs->timeFrame = std::stoi(configData.at(0), &sz);
+	//rs->timeFrame = std::stoi(configData.at(1), &sz);
+	//ios->timeFrame = std::stoi(configData.at(2), &sz);
+//	ps->timeFrame = std::stoi(configData.at(3), &sz);
 
 	// Not using this right now, move it to game system/Render/Physics later maybe
 	//// Create worker thread pool
@@ -52,9 +52,10 @@ int main(int argc, char *argv[]) {
 	//				Start Core System Threads     					//
 	//////////////////////////////////////////////////////////////////
 	std::thread gameSystemThread(startGameSystem, gs);
+	std::thread physicsThread(startPhysicsSystem, ps);
 	std::thread renderThread(startRenderSystem, rs);
 	std::thread ioThread(startIOSystem, ios);
-	std::thread physicsThread(startPhysicsSystem, ps);
+	
 
 
 	//////////////////////////////////////////////////////////////////
@@ -76,9 +77,10 @@ int main(int argc, char *argv[]) {
 	//						Thread Joining							//
 	//////////////////////////////////////////////////////////////////
 	ioThread.join();
+	physicsThread.join();
 	renderThread.join();
 	gameSystemThread.join();
-	physicsThread.join();
+	
 
 	return 1;
 }

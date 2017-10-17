@@ -295,6 +295,11 @@ void RenderSystem::startSystemLoop() {
 		}
 		timeFrame += 20;
 
+		std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
+		OutputDebugString("Render Loop on thread: ");
+		OutputDebugString(s.c_str());
+		OutputDebugString("\n");
+
 		//string str = to_string(renderCount);
 		//OutputDebugString(str.c_str());
 	//OutputDebugString("\n");
@@ -330,6 +335,10 @@ void RenderSystem::stopSystemLoop() {
 
 }
 void RenderSystem::handleMessage(Msg *msg) {
+	std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
+	OutputDebugString("Render  Handle Messsage on thread: ");
+	OutputDebugString(s.c_str());
+	OutputDebugString("\n");
 	// call the parent first 
 	System::handleMessage(msg);
 
