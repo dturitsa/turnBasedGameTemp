@@ -88,7 +88,7 @@ void PhysicsSystem::startSystemLoop()
 			Msg* mm = new Msg(UPDATE_OBJECT_POSITION, "");
 			//mm->type = UPDATE_OBJECT_POSITION;
 			mm->data = oss.str();
-			//msgBus->postMessage(mm);
+			msgBus->postMessage(mm);
 
 			//OutputDebugString(oss.str().c_str());
 			//OutputDebugString("\n");
@@ -355,7 +355,7 @@ void PhysicsSystem::collisionHandler(std::string object1)
 
 				Msg* mm = new Msg(GO_COLLISION, "");
 				mm->data = oss.str();
-				//msgBus->postMessage(mm);
+				msgBus->postMessage(mm);
 			}
 		}
 	}

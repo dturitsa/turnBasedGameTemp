@@ -1,7 +1,6 @@
 #pragma once
 #include "System.h"
 #include "GameObject.h"
-#include "DummyGameObj.h"
 #include "FullscreenObj.h"
 #include "Cannonball.h"
 #include "ShipObj.h"

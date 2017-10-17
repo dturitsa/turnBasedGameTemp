@@ -32,9 +32,7 @@ void GameSystem::addGameObjects(string fileName) {
 		string gameObjectType = gameObjDataMap.find("gameObjectType")->second;
 		g = NULL;
 		//just hard coded else ifs for now... should probably make retreive available classes automatically <- Did some research, cpp doesn't support reflection (Hank)
-		if (gameObjectType.compare("DummyGameObj") == 0) {
-			g = new DummyGameObj(gameObjDataMap);
-		} else if (gameObjectType.compare("ShipObj") == 0) {
+		if (gameObjectType.compare("ShipObj") == 0) {
 			g = new ShipObj(gameObjDataMap);
 		} else if (gameObjectType.compare("GameObject") == 0) {
 			g = new GameObject(gameObjDataMap);

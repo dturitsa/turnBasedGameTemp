@@ -131,7 +131,6 @@
     <ClInclude Include="Cannonball.h" />
     <ClInclude Include="ConsoleRenderer.h" />
     <ClInclude Include="ctpl_stl.h" />
-    <ClInclude Include="DummyGameObj.h" />
     <ClInclude Include="FullscreenObj.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameSystem.h" />
@@ -154,7 +153,6 @@
     <ClCompile Include="Axis.cpp" />
     <ClCompile Include="Cannonball.cpp" />
     <ClCompile Include="ConsoleRenderer.cpp" />
-    <ClCompile Include="DummyGameObj.cpp" />
     <ClCompile Include="FullscreenObj.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameSystem.cpp" />

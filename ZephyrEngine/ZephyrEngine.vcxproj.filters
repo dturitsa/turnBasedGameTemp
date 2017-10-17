@@ -48,9 +48,6 @@
     <ClInclude Include="GameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DummyGameObj.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GameSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -108,9 +105,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DummyGameObj.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameSystem.cpp">
