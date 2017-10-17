@@ -8,11 +8,14 @@ MessageBus::MessageBus() {
 MessageBus::~MessageBus() {
 }
 
-void MessageBus::postMessage(Msg* m) {
+void MessageBus::postMessage(Msg* m, System* sender) {
 	// send the message to every system so that they can all see it
 
 	for (System* s : systemList) {
-		s->handleMessage(m);
+		if (sender != s) {
+			s->addToMsgQ(m);
+		}
+		
 	}
 }
 

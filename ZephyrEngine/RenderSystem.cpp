@@ -295,6 +295,8 @@ void RenderSystem::startSystemLoop() {
 		}
 		timeFrame += 20;
 
+		handleMsgQ();
+
 		std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
 		OutputDebugString("Render Loop on thread: ");
 		OutputDebugString(s.c_str());

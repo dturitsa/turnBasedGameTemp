@@ -20,10 +20,10 @@ void IOSystem::startSystemLoop() {
 		}
 		timeFrame += 10;
 
-		std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
-		OutputDebugString("IO Loop on thread: ");
-		OutputDebugString(s.c_str());
-		OutputDebugString("\n");
+		//std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
+		//OutputDebugString("IO Loop on thread: ");
+		//OutputDebugString(s.c_str());
+		//OutputDebugString("\n");
 
 		checkKeyPresses();
 
@@ -45,37 +45,37 @@ void IOSystem::checkKeyPresses() {
 	if (GetKeyState(VK_UP) & 0x8000) {
 		OutputDebugString("Up Pressed\n");
 		m->type = UP_ARROW_PRESSED;
-		msgBus->postMessage(m);
+		msgBus->postMessage(m, this);
 	}
 
 	if (GetAsyncKeyState(VK_DOWN) & 0x8000) {
 		OutputDebugString("Down Pressed\n");
 		m->type = DOWN_ARROW_PRESSED;
-		msgBus->postMessage(m);
+		msgBus->postMessage(m, this);
 	}
 
 	if (GetKeyState(VK_SPACE) & 0x8000) {
 		OutputDebugString("Space Pressed\n");
 		m->type = SPACEBAR_PRESSED;
-		msgBus->postMessage(m);
+		msgBus->postMessage(m, this);
 	}
 
 	if (GetKeyState(VK_RIGHT) & 0x8000) {
 		OutputDebugString("Right Pressed\n");
 		m->type = RIGHT_ARROW_PRESSED;
-		msgBus->postMessage(m);
+		msgBus->postMessage(m, this);
 	}
 
 	if (GetKeyState(VK_LEFT) & 0x8000) {
 		OutputDebugString("Left Pressed\n");
 		m->type = LEFT_ARROW_PRESSED;
-		msgBus->postMessage(m);
+		msgBus->postMessage(m, this);
 	}
 
 	if (GetAsyncKeyState('Z') & 0x8000) {
 		OutputDebugString("Z Pressed\n");
 		m->type = TEST_KEY_PRESSED;
-		msgBus->postMessage(m);
+		msgBus->postMessage(m, this);
 	}
 
 	/*

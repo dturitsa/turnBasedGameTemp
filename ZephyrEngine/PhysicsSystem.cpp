@@ -38,6 +38,8 @@ void PhysicsSystem::startSystemLoop()
 		}
 		timeFrame += 20;
 
+		handleMsgQ();
+
 		std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
 		OutputDebugString("Physics Loop on thread: ");
 		OutputDebugString(s.c_str());
@@ -45,7 +47,7 @@ void PhysicsSystem::startSystemLoop()
 
 		//Subject to change! Will discuss how the loop will actually work.
 		//Loop through Physics objects to update their movements and check collision.
-		mtx.lock();
+		//mtx.lock();
 		for (std::map<std::string, PhysicsObject>::iterator it = Physics.GameObjects.begin(); it != Physics.GameObjects.end(); ++it /* not hoisted */ /* no increment */)
 		{
 			collisionHandler(it->first);
@@ -88,7 +90,7 @@ void PhysicsSystem::startSystemLoop()
 			Msg* mm = new Msg(UPDATE_OBJECT_POSITION, "");
 			//mm->type = UPDATE_OBJECT_POSITION;
 			mm->data = oss.str();
-			msgBus->postMessage(mm);
+			msgBus->postMessage(mm, this);
 
 			//OutputDebugString(oss.str().c_str());
 			//OutputDebugString("\n");
@@ -105,7 +107,7 @@ void PhysicsSystem::startSystemLoop()
 
 
 
-		mtx.unlock();
+		//mtx.unlock();
 
 	}
 }
@@ -321,7 +323,7 @@ void PhysicsSystem::updateShip(PhysicsObject &ship)
 void PhysicsSystem::updateProjectile(PhysicsObject &projectile)
 {
 	//TODO remove physics stopping object out of bounds
-	if (projectile.inertia > (PROJECTILE_INERTIA - 30))
+	if (projectile.inertia > (PROJECTILE_INERTIA - 80))
 	{
 		Vector2 objectDirection;
 		float forceScale, force;
@@ -355,7 +357,7 @@ void PhysicsSystem::collisionHandler(std::string object1)
 
 				Msg* mm = new Msg(GO_COLLISION, "");
 				mm->data = oss.str();
-				msgBus->postMessage(mm);
+				msgBus->postMessage(mm, this);
 			}
 		}
 	}

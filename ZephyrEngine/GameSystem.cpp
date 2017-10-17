@@ -18,7 +18,7 @@ void GameSystem::addGameObjects(string fileName) {
 	GameObject* g; //new gameobject to be created
 	//loop through objects read in from file
 	for (int j = 0; j < splitDataVector.size(); j++) {
-		
+
 		vector<string> splitObjData = split(splitDataVector[j], ',');
 
 		std::map<std::string, std::string> gameObjDataMap;
@@ -34,9 +34,11 @@ void GameSystem::addGameObjects(string fileName) {
 		//just hard coded else ifs for now... should probably make retreive available classes automatically <- Did some research, cpp doesn't support reflection (Hank)
 		if (gameObjectType.compare("ShipObj") == 0) {
 			g = new ShipObj(gameObjDataMap);
-		} else if (gameObjectType.compare("GameObject") == 0) {
+		}
+		else if (gameObjectType.compare("GameObject") == 0) {
 			g = new GameObject(gameObjDataMap);
-		} else if (gameObjectType.compare("FullscreenObj") == 0) {
+		}
+		else if (gameObjectType.compare("FullscreenObj") == 0) {
 			g = new FullscreenObj(gameObjDataMap);
 		}
 
@@ -49,10 +51,10 @@ void GameSystem::addGameObjects(string fileName) {
 void GameSystem::saveToFIle(string fileName) {
 	string output = "";
 	for (GameObject* obj : gameObjects) {
-		output+= obj->toString();
+		output += obj->toString();
 		output.pop_back();//remove the tailing ','
 		output += ";\n";
-	}	
+	}
 	writeToFile(fileName, output);
 }
 
@@ -78,21 +80,23 @@ void GameSystem::createGameObject(GameObject* g) {
 	// maybe add the rest of the variables into the oss as well, but can decide later depending on
 	// what physics needs
 
-	msgBus->postMessage(new Msg(GO_ADDED, oss.str()));
+	msgBus->postMessage(new Msg(GO_ADDED, oss.str()), this);
 }
 
 
 
-void GameSystem::startSystemLoop() {	
+void GameSystem::startSystemLoop() {
 	//clocks for limiting gameloop speed
 	clock_t thisTime = clock();
 
 	while (true) {
 		thisTime = clock();
-		if (thisTime  < timeFrame) {
+		if (thisTime < timeFrame) {
 			Sleep(timeFrame - thisTime);
 		}
 		timeFrame += 20;
+
+		handleMsgQ();
 
 		std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
 		OutputDebugString("GameSystem Loop on thread: ");
@@ -108,7 +112,7 @@ void GameSystem::startSystemLoop() {
 			// this means we've just started up the system. We should load the main menu
 			levelLoaded = 0;
 			// Load Main Menu Scene
-			addGameObjects("main_menu.txt"); 
+			addGameObjects("main_menu.txt");
 			break;
 		case 0: // Menu page
 			// does nothing as user changes are handled inside handleMessage. In this state,
@@ -134,7 +138,7 @@ void GameSystem::startSystemLoop() {
 
 			for (GameObject* obj : gameObjects) {
 				obj->lateUpdate();
-				
+
 			}
 			break;
 		default:
@@ -149,14 +153,15 @@ void GameSystem::startSystemLoop() {
 void GameSystem::removeAllGameObjects() {
 	for (GameObject* go : gameObjects) {
 		gameObjectRemoved(go);
+		gameObjects.erase(remove(gameObjects.begin(), gameObjects.end(), go), gameObjects.end());
 	}
 
-	gameObjects.clear();
+	//gameObjects.clear();
 }
 
 void GameSystem::gameObjectRemoved(GameObject* g) {
 	Msg* m = new Msg(GO_REMOVED, g->id);
-	msgBus->postMessage(m);
+	msgBus->postMessage(m, this);
 }
 
 void GameSystem::handleMessage(Msg *msg) {
@@ -181,10 +186,10 @@ void GameSystem::handleMessage(Msg *msg) {
 			markerPosition++;
 			markerPosition = markerPosition % 3;
 			//OutputDebugString("MarkerPos: " + markerPosition + '\n');
-			oss << "obj3,Z6_Marker_P" << markerPosition << ".png," << "0,0,10,0,100,100,0,0";
+			oss << "obj3,Z6_Marker_P" << markerPosition << ".png," << "0,0,10,0,200,200,0,0";
 			mm->type = UPDATE_OBJECT_POSITION;
 			mm->data = oss.str();
-			msgBus->postMessage(mm);
+			msgBus->postMessage(mm, this);
 			break;
 		case UP_ARROW_PRESSED:
 			// move the marker location and let rendering know?
@@ -193,22 +198,23 @@ void GameSystem::handleMessage(Msg *msg) {
 				markerPosition = 0;
 			}
 			markerPosition = markerPosition % 3;
-			
-			oss << "obj3,Z6_Marker_P" << markerPosition << ".png," << "0,0,10,0,100,100,0,0";
+
+			oss << "obj3,Z6_Marker_P" << markerPosition << ".png," << "0,0,10,0,200,200,0,0";
 			mm->type = UPDATE_OBJECT_POSITION;
 			mm->data = oss.str();
-			msgBus->postMessage(mm);
+			msgBus->postMessage(mm, this);
 			break;
 		case SPACEBAR_PRESSED:
 			if (markerPosition == 2) {
 				// Exit was selected
 				mm->type = EXIT_GAME;
-				msgBus->postMessage(mm);
+				msgBus->postMessage(mm, this);
 			}
 
 			if (markerPosition == 1) {
 				// Go to settings
-			} else if (markerPosition == 0) {
+			}
+			else if (markerPosition == 0) {
 				// start the game (or go to level select?)
 				// first, clear all objects
 				removeAllGameObjects();
@@ -221,10 +227,11 @@ void GameSystem::handleMessage(Msg *msg) {
 		default:
 			break;
 		}
-		 
-	} else if (levelLoaded == 1) {
+
+	}
+	else if (levelLoaded == 1) {
 		// settings menu
-	
+
 
 		switch (msg->type) {
 		case UP_ARROW_PRESSED:
@@ -246,7 +253,8 @@ void GameSystem::handleMessage(Msg *msg) {
 		default:
 			break;
 		}
-	}  else if (levelLoaded == 2) {
+	}
+	else if (levelLoaded == 2) {
 		// game running switch case
 		switch (msg->type) {
 		case TEST_KEY_PRESSED:
@@ -262,7 +270,7 @@ void GameSystem::handleMessage(Msg *msg) {
 					mm = new Msg(UPDATE_OBJECT_POSITION, oss.str());
 					msgBus->postMessage(mm);
 					*/
-					
+
 				}
 			}
 			break;
@@ -272,16 +280,14 @@ void GameSystem::handleMessage(Msg *msg) {
 			for (GameObject* g : gameObjects) {
 				//OutputDebugString(g->id.c_str());
 
-				if (g->id == data[0]) {
+				if (g->id == data[0] && data[0] != "playerShip" && data[1] != "playerShip") {
 					OutputDebugString(data[0].c_str());
 					OutputDebugString(" Collided With ");
 					OutputDebugString(data[1].c_str());
 					OutputDebugString("\n");
-					//gameObjectRemoved(g);
-					//gameObjects.erase(remove(gameObjects.begin(), gameObjects.end(), g), gameObjects.end());
-					
+					gameObjectRemoved(g);
 				}
-				
+
 			}
 			break;
 		}
@@ -298,7 +304,7 @@ void GameSystem::handleMessage(Msg *msg) {
 					mm->type = CHANGE_MAST;
 					oss << so->id << "," << so->sail;
 					mm->data = oss.str();
-					msgBus->postMessage(mm);
+					msgBus->postMessage(mm, this);
 
 					break;
 				}
@@ -317,7 +323,7 @@ void GameSystem::handleMessage(Msg *msg) {
 					mm->type = CHANGE_MAST;
 					oss << so->id << "," << so->sail;
 					mm->data = oss.str();
-					msgBus->postMessage(mm);
+					msgBus->postMessage(mm, this);
 					break;
 				}
 			}
@@ -326,7 +332,7 @@ void GameSystem::handleMessage(Msg *msg) {
 			// change rudder to right
 			for (GameObject* g : gameObjects) {
 				if (g->getObjectType() == "ShipObj") {
- 					ShipObj* so = dynamic_cast<ShipObj*>(g);
+					ShipObj* so = dynamic_cast<ShipObj*>(g);
 					so->rudder++;
 					if (so->sail > 4) {
 						so->sail = 4;
@@ -335,7 +341,7 @@ void GameSystem::handleMessage(Msg *msg) {
 					mm->type = CHANGE_RUDDER;
 					oss << so->id << "," << so->rudder;
 					mm->data = oss.str();
-					msgBus->postMessage(mm);
+					msgBus->postMessage(mm, this);
 					break;
 				}
 			}
@@ -345,7 +351,7 @@ void GameSystem::handleMessage(Msg *msg) {
 			for (GameObject* g : gameObjects) {
 				if (g->getObjectType() == "ShipObj") {
 					ShipObj* so = dynamic_cast<ShipObj*>(g);
- 					so->rudder--;
+					so->rudder--;
 					if (so->rudder < 0) {
 						so->rudder = 0;
 					}
@@ -353,12 +359,12 @@ void GameSystem::handleMessage(Msg *msg) {
 					mm->type = CHANGE_RUDDER;
 					oss << so->id << "," << so->rudder;
 					mm->data = oss.str();
-					msgBus->postMessage(mm);
+					msgBus->postMessage(mm, this);
 					break;
 				}
 			}
 			break;
-		case SPACEBAR_PRESSED:{
+		case SPACEBAR_PRESSED: {
 			// fire a cannon ball. update later for more functionality
 			// use random id for now
 			srand(time(NULL));
@@ -373,25 +379,25 @@ void GameSystem::handleMessage(Msg *msg) {
 				if (g->getObjectType() == "ShipObj") {
 					cx = g->x;
 					cy = g->y;
-					corient = g->orientation+90;
+					corient = g->orientation + 90;
 					break;
 				}
 			}
-			
+
 			Cannonball* c = new Cannonball(to_string(randomNum), "tempCannonball.png", cx, cy, corient, 5, 5);
 
 			// post cannon ball obj to systems
-			createGameObject(c);  
+			createGameObject(c);
 
 			break;
 		}
-		case UPDATE_OBJECT_POSITION:{
-			
+		case UPDATE_OBJECT_POSITION: {
+
 			vector<string> data = split(msg->data, ',');
-		
+
 			for (GameObject* g : gameObjects) {
 				//OutputDebugString(g->id.c_str());
-				
+
 				if (g->id == data[0]) {
 					//OutputDebugString(data[0].c_str());
 					//OutputDebugString("\n");
@@ -400,14 +406,15 @@ void GameSystem::handleMessage(Msg *msg) {
 					g->y = atof(data[3].c_str());
 					g->orientation = atof(data[5].c_str());
 				}
-					
+
 			}
 			break;
-			}
+		}
 		default:
 			break;
 		}
-	} else {
+	}
+	else {
 		// -1 case; ignore since we haven't even loaded anything yet
 	}
 }

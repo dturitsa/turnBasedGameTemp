@@ -88,7 +88,7 @@ int main(int argc, char *argv[]) {
 // note: Must have "int id" for functinos that are to be run in worker threads
 // the id is the thread ID - required for the pooling library
 void postMessage(int id, Msg* msg) {
-	mbus->postMessage(msg);
+	//mbus->postMessage(msg);
 }
 
 // Required wrapper functions to thread the calls

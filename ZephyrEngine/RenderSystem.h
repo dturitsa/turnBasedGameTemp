@@ -19,9 +19,9 @@ public:
 	void stopSystemLoop();
 	void init();
 
-	GLint XSTART = 100, YSTART = 100, WIDTH = 800, HEIGHT = 700; //Constants for drawing the window
-	GLfloat GAMEWIDTH = 100.0f, GAMEHEIGHT = 100.0f, //Amount of sprites that can fit in X and Y respectively
-				MAX_X = 100.0f, MAX_Y = 100.0f; //Amount of "x" and "y" coordinates in our world (x2 for - values)
+	GLint XSTART = 100, YSTART = 100, WIDTH = 800, HEIGHT = 800; //Constants for drawing the window
+	GLfloat GAMEWIDTH = 200.0f, GAMEHEIGHT = 200.0f, //Amount of sprites that can fit in X and Y respectively
+				MAX_X = 200.0f, MAX_Y = 200.0f; //Amount of "x" and "y" coordinates in our world (x2 for - values)
 	GLfloat aspectRatio;
 	int timeFrame = 10;
 private:
