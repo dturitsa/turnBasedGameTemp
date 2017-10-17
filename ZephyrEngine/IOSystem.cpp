@@ -18,7 +18,7 @@ void IOSystem::startSystemLoop() {
 		if (thisTime  < timeFrame) {
 			Sleep(timeFrame - thisTime);
 		}
-		timeFrame += 10;
+		timeFrame += 50;
 
 		//std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
 		//OutputDebugString("IO Loop on thread: ");

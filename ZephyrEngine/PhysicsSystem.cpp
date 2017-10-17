@@ -40,10 +40,11 @@ void PhysicsSystem::startSystemLoop()
 
 		handleMsgQ();
 
-		std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
-		OutputDebugString("Physics Loop on thread: ");
-		OutputDebugString(s.c_str());
-		OutputDebugString("\n");
+		////Display Thread ID for Debugging
+		//std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
+		//OutputDebugString("Physics Loop on thread: ");
+		//OutputDebugString(s.c_str());
+		//OutputDebugString("\n");
 
 		//Subject to change! Will discuss how the loop will actually work.
 		//Loop through Physics objects to update their movements and check collision.
@@ -119,10 +120,12 @@ void PhysicsSystem::startSystemLoop()
 void PhysicsSystem::handleMessage(Msg *msg)
 {
 	System::handleMessage(msg);
-	std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
-	OutputDebugString("Physics Handle Messsage on thread: ");
-	OutputDebugString(s.c_str());
-	OutputDebugString("\n");
+
+	////Display Thread ID for Debugging
+	//std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
+	//OutputDebugString("Physics Handle Messsage on thread: ");
+	//OutputDebugString(s.c_str());
+	//OutputDebugString("\n");
 
 	std::vector<std::string> data;
 	std::string token;

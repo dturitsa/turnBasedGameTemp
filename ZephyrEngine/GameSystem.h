@@ -42,6 +42,9 @@ public:
 	int levelLoaded = -1;
 
 private:
+	void mainMenuHandler(Msg * msg);
+	void lvl1Handler(Msg * msg);
+	
 
 	// The position of the marker, goes from 0 to 2, 0 being the top
 	int markerPosition = 0;

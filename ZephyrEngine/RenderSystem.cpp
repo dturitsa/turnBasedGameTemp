@@ -297,10 +297,11 @@ void RenderSystem::startSystemLoop() {
 
 		handleMsgQ();
 
-		std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
-		OutputDebugString("Render Loop on thread: ");
-		OutputDebugString(s.c_str());
-		OutputDebugString("\n");
+		////Display Thread ID for Debugging
+		//std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
+		//OutputDebugString("Render Loop on thread: ");
+		//OutputDebugString(s.c_str());
+		//OutputDebugString("\n");
 
 		//string str = to_string(renderCount);
 		//OutputDebugString(str.c_str());
@@ -318,9 +319,9 @@ void RenderSystem::startSystemLoop() {
 		string st = to_string(renderCount);
 	//	OutputDebugString(st.c_str());
 		//OutputDebugString("\n");
-		mtx.lock();
+		//mtx.lock();
 		renderAllItems();
-		mtx.unlock();
+	//	mtx.unlock();
 		//Update openGL window
 		SDL_GL_SwapWindow(window);
 		//mtx.unlock();
@@ -338,18 +339,20 @@ void RenderSystem::stopSystemLoop() {
 }
 void RenderSystem::handleMessage(Msg *msg) {
 	std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
-	OutputDebugString("Render  Handle Messsage on thread: ");
-	OutputDebugString(s.c_str());
-	OutputDebugString("\n");
+
+	////Display Thread ID for Debugging
+	//OutputDebugString("Render  Handle Messsage on thread: ");
+	//OutputDebugString(s.c_str());
+	//OutputDebugString("\n");
 	// call the parent first 
 	System::handleMessage(msg);
 
 	// personal call 
 	switch (msg->type) {
 	case UPDATE_OBJECT_POSITION:
-		mtx.lock();
+		//mtx.lock();
 		updateObjPosition(msg);
-		mtx.unlock();
+	//	mtx.unlock();
 		break;
 	case GO_ADDED:
 		// parse data from msg to add obj to list
@@ -358,9 +361,9 @@ void RenderSystem::handleMessage(Msg *msg) {
 		//mtx.unlock();
 		break;
 	case GO_REMOVED:
-		mtx.lock();
+	//	mtx.lock();
 		removeObjectFromRenderList(msg);
-		mtx.unlock();
+	//	mtx.unlock();
 		break;
 	default:
 		break;
@@ -393,9 +396,9 @@ void RenderSystem::removeObjectFromRenderList(Msg* m) {
 }
 
 void RenderSystem::addObjectToRenderList(Msg* m) {
-	mtx.lock();
+	//mtx.lock();
 	gameObjectsToRender.push_back(&m->data);
-	mtx.unlock();
+//	mtx.unlock();
 }
 
 void RenderSystem::updateObjPosition(Msg* m) {

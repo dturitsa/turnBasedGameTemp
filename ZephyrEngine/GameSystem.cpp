@@ -98,10 +98,11 @@ void GameSystem::startSystemLoop() {
 
 		handleMsgQ();
 
-		std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
-		OutputDebugString("GameSystem Loop on thread: ");
-		OutputDebugString(s.c_str());
-		OutputDebugString("\n");
+		////Display Thread ID for Debugging
+		//std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
+		//OutputDebugString("GameSystem Loop on thread: ");
+		//OutputDebugString(s.c_str());
+		//OutputDebugString("\n");
 
 		/////////////////////////////////////////////////////////////////////
 		//							OK to Run							   //
@@ -169,10 +170,11 @@ void GameSystem::handleMessage(Msg *msg) {
 	// call the parent first 
 	System::handleMessage(msg);
 
-	std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
-	OutputDebugString("GameSystem Handle on thread: ");
-	OutputDebugString(s.c_str());
-	OutputDebugString("\n");
+	////Display Thread ID for Debugging
+	//std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
+	//OutputDebugString("GameSystem Handle on thread: ");
+	//OutputDebugString(s.c_str());
+	//OutputDebugString("\n");
 
 	std::ostringstream oss;
 	Msg* mm = new Msg(EMPTY_MESSAGE, "");
@@ -255,6 +257,7 @@ void GameSystem::handleMessage(Msg *msg) {
 		}
 	}
 	else if (levelLoaded == 2) {
+		//lvl1Handler(msg);
 		// game running switch case
 		switch (msg->type) {
 		case TEST_KEY_PRESSED:
@@ -417,4 +420,14 @@ void GameSystem::handleMessage(Msg *msg) {
 	else {
 		// -1 case; ignore since we haven't even loaded anything yet
 	}
+}
+
+//should probably break the massive switch statements into functions or even classes
+void GameSystem::mainMenuHandler(Msg * msg) {
+
+}
+
+//should probably break the massive switch statements into functions or even classes
+void GameSystem::lvl1Handler(Msg * msg) {
+
 }
