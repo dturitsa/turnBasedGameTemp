@@ -388,13 +388,13 @@ void RenderSystem::addObjectToRenderList(Msg* m) {
 }
 
 void RenderSystem::updateObjPosition(Msg* m) {
-	std::vector<std::string> data = split(m->data, ',');
+	std::vector<std::string> dataVector = split(m->data, ',');
 
 	for (std::string* s : gameObjectsToRender) {
 		std::vector<std::string> obj = split(*s, ',');
 
 		// found the obj
-		if (obj.front() == data.front()) {
+		if (obj.front() == dataVector.front()) {
 			// replace this string's information with new information
 			*s = m->data;
 			return;

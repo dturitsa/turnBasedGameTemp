@@ -2,13 +2,20 @@
 #include "PhysicsEngine.h"
 #include "System.h"
 
-#define PROJECTILE_FORCE 4
+
+#define PROJECTILE_FORCE 2
 #define PROJECTILE_INERTIA 100
 
 class PhysicsSystem : public System
 {
+	struct WindObject
+	{
+		float direction;
+		float power;
+	};
 public:
 	PhysicsEngine Physics;
+	WindObject Wind;
 
 	PhysicsSystem(MessageBus* mbus);
 	~PhysicsSystem();
@@ -21,9 +28,10 @@ public:
 	void changeRudder(std::string ID, int rudder);
 	void updateShip(PhysicsObject &ship);
 	void updateProjectile(PhysicsObject &projectile);
-	void Destroy(PhysicsObject &object);
+	void collisionHandler(std::string object1);
+	void Destroy(std::string IDin); //PhysicsObject &object);
 
 	int timeFrame = 10;
-
+	std::mutex mtx;
 
 };

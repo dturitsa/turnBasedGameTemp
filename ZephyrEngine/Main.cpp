@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
 	//////////////////////////////////////////////////////////////////
 	//						Loading Config							//
 	//////////////////////////////////////////////////////////////////
-	int numberOfWorkerThreads = 16; // Default to 16
+	//int numberOfWorkerThreads = 16; // Default to 16
 
 	std::string rawConfigData = openFileRemoveSpaces("config.txt");
 	

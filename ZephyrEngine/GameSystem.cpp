@@ -69,7 +69,14 @@ void GameSystem::createGameObject(GameObject* g) {
 	}
 	gameObjects.push_back(g);
 	std::ostringstream oss;
-	oss << g->id << ',' << g->renderable << ',' << g->x << ',' << g->y << ',' << g->z << ',' << g->orientation << ',' << g->width << ',' << g->length << ',' << g->physicsEnabled;
+	oss << g->id << ','
+		<< g->renderable << ','
+		<< g->x << ',' << g->y << ',' << g->z << ','
+		<< g->orientation << ','
+		<< g->width << ',' << g->length << ','
+		<< g->physicsEnabled << ','
+		//<< g->getObjectType();
+		<< g->renderable;
 	// maybe add the rest of the variables into the oss as well, but can decide later depending on
 	// what physics needs
 
@@ -77,7 +84,6 @@ void GameSystem::createGameObject(GameObject* g) {
 }
 
 
-// saveToFIle("testScene2.txt");
 
 void GameSystem::startSystemLoop() {	
 	//clocks for limiting gameloop speed
@@ -125,6 +131,7 @@ void GameSystem::startSystemLoop() {
 
 			for (GameObject* obj : gameObjects) {
 				obj->lateUpdate();
+				
 			}
 			break;
 		default:
@@ -234,16 +241,40 @@ void GameSystem::handleMessage(Msg *msg) {
 		switch (msg->type) {
 		case TEST_KEY_PRESSED:
 			for (GameObject* g : gameObjects) {
-				if (g->getObjectType() == "ShipObj") {
+				if (g->id == "shipwreck") {
+					gameObjectRemoved(g);
+					gameObjects.erase(remove(gameObjects.begin(), gameObjects.end(), g), gameObjects.end());
+					/*
 					g->x++;
 					g->y++;
 					g->orientation += 10.0;
 					oss << g->id << ',' << g->renderable << ',' << g->x << ',' << g->y << ',' << g->z << ',' << g->orientation << ",20,20,1,0";
 					mm = new Msg(UPDATE_OBJECT_POSITION, oss.str());
 					msgBus->postMessage(mm);
+					*/
+					
 				}
 			}
 			break;
+		case GO_COLLISION: {
+			vector<string> data = split(msg->data, ',');
+
+			for (GameObject* g : gameObjects) {
+				//OutputDebugString(g->id.c_str());
+
+				if (g->id == data[0]) {
+					OutputDebugString(data[0].c_str());
+					OutputDebugString(" Collided With ");
+					OutputDebugString(data[1].c_str());
+					OutputDebugString("\n");
+					//gameObjectRemoved(g);
+					//gameObjects.erase(remove(gameObjects.begin(), gameObjects.end(), g), gameObjects.end());
+					
+				}
+				
+			}
+			break;
+		}
 		case UP_ARROW_PRESSED:
 			// increase mast
 			// find the ship obj, and when you find it, increase mast
@@ -285,7 +316,7 @@ void GameSystem::handleMessage(Msg *msg) {
 			// change rudder to right
 			for (GameObject* g : gameObjects) {
 				if (g->getObjectType() == "ShipObj") {
-					ShipObj* so = dynamic_cast<ShipObj*>(g);
+ 					ShipObj* so = dynamic_cast<ShipObj*>(g);
 					so->rudder++;
 					if (so->sail > 4) {
 						so->sail = 4;
@@ -304,7 +335,7 @@ void GameSystem::handleMessage(Msg *msg) {
 			for (GameObject* g : gameObjects) {
 				if (g->getObjectType() == "ShipObj") {
 					ShipObj* so = dynamic_cast<ShipObj*>(g);
-					so->rudder--;
+ 					so->rudder--;
 					if (so->rudder < 0) {
 						so->rudder = 0;
 					}
@@ -352,8 +383,8 @@ void GameSystem::handleMessage(Msg *msg) {
 				//OutputDebugString(g->id.c_str());
 				
 				if (g->id == data[0]) {
-					OutputDebugString(data[0].c_str());
-					OutputDebugString("\n");
+					//OutputDebugString(data[0].c_str());
+					//OutputDebugString("\n");
 
 					g->x = atof(data[2].c_str());
 					g->y = atof(data[3].c_str());
