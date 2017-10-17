@@ -26,7 +26,7 @@ Cannonball::~Cannonball() {
 }
 
 string Cannonball::getObjectType() {
-	return "ShipObj";
+	return "Cannonball";
 }
 
 

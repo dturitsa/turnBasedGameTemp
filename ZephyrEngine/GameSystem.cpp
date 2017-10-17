@@ -75,8 +75,8 @@ void GameSystem::createGameObject(GameObject* g) {
 		<< g->orientation << ','
 		<< g->width << ',' << g->length << ','
 		<< g->physicsEnabled << ','
-		//<< g->getObjectType();
-		<< g->renderable;
+		<< g->getObjectType();
+		//<< g->renderable;
 	// maybe add the rest of the variables into the oss as well, but can decide later depending on
 	// what physics needs
 
@@ -188,7 +188,7 @@ void GameSystem::handleMessage(Msg *msg) {
 			markerPosition++;
 			markerPosition = markerPosition % 3;
 			//OutputDebugString("MarkerPos: " + markerPosition + '\n');
-			oss << "obj3,Z6_Marker_P" << markerPosition << ".png," << "0,0,10,0,200,200,0,0";
+			oss << "obj3,Z6_Marker_P" << markerPosition << ".png," << "0,0,10,0,200,200,0";
 			mm->type = UPDATE_OBJECT_POSITION;
 			mm->data = oss.str();
 			msgBus->postMessage(mm, this);
@@ -201,7 +201,7 @@ void GameSystem::handleMessage(Msg *msg) {
 			}
 			markerPosition = markerPosition % 3;
 
-			oss << "obj3,Z6_Marker_P" << markerPosition << ".png," << "0,0,10,0,200,200,0,0";
+			oss << "obj3,Z6_Marker_P" << markerPosition << ".png," << "0,0,10,0,200,200,0";
 			mm->type = UPDATE_OBJECT_POSITION;
 			mm->data = oss.str();
 			msgBus->postMessage(mm, this);

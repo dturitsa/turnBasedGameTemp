@@ -53,12 +53,12 @@ void PhysicsSystem::startSystemLoop()
 		{
 			collisionHandler(it->first);
 
-			if (it->second.tag == "boatTest1.png")
+			if (it->second.tag == "ShipObj")
 			{
 				updateShip(it->second);
 				//checkCollision
 			}
-			else if (it->second.tag == "tempCannonball.png")
+			else if (it->second.tag == "Cannonball")
 			{
 				updateProjectile(it->second);
 			}
@@ -71,15 +71,11 @@ void PhysicsSystem::startSystemLoop()
 				break;
 			}
 
-			if (it->first == "shipwreck") {
-				//OutputDebugString("Shipwreck found");
-			//	OutputDebugString("\n");
-			}
 
 			std::ostringstream oss;
 
 			oss << it->first << "," //id
-				<< it->second.tag << "," //renderable
+				<< it->second.renderable << "," //renderable
 				<< it->second.position.x << "," //x
 				<< it->second.position.y //y
 				<< ",0," // z
@@ -132,7 +128,7 @@ void PhysicsSystem::handleMessage(Msg *msg)
 	std::string messageData = msg->data;
 	std::string splitter = ",";
 	std::size_t pos = 0;
-	std::string ID, tag;
+	std::string ID, tag, renderable;
 	float x, y, rotation, width, height;
 
 	// This entire section really irks me, from here
@@ -160,6 +156,7 @@ void PhysicsSystem::handleMessage(Msg *msg)
 		//Subject to change! Need to finalize message data system to identify the object type.
 		//For now, only projectiles care about inertia, and you can hardcode windScale and rotationSpeed to 1 for testing purposes
 		ID = data[0];
+		renderable = data[1];
 		tag = data[9];
 		x = atof(data[2].c_str());
 		y = atof(data[3].c_str());
@@ -170,7 +167,7 @@ void PhysicsSystem::handleMessage(Msg *msg)
 
 									   //check if physics enabled
 		if (atof(data[8].c_str()) == 1) {
-			Physics.addObject(ID, tag, x, y, width, height, rotation, 1, 1, PROJECTILE_INERTIA);
+			Physics.addObject(ID, tag, x, y, width, height, rotation, 1, 1, PROJECTILE_INERTIA, renderable);
 		}
 
 		break;
