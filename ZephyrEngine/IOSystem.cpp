@@ -47,59 +47,74 @@ void IOSystem::checkKeyPresses() {
 	if (GetAsyncKeyState(VK_UP) & 0x8000) {
 		OutputDebugString("Up Pressed\n");
 		m->type = UP_ARROW_PRESSED;
-		msgBus->postMessage(m, this);
+		if ((clock() - keyspressed["up"]) > timebetweenPresses) {
+			keyspressed["up"] = clock();
+			msgBus->postMessage(m, this);
+		}
 	}
 
 	if (GetAsyncKeyState(VK_DOWN) & 0x8000) {
 		OutputDebugString("Down Pressed\n");
 		m->type = DOWN_ARROW_PRESSED;
-		msgBus->postMessage(m, this);
+		if ((clock() - keyspressed["down"]) > timebetweenPresses) {
+			keyspressed["down"] = clock();
+			msgBus->postMessage(m, this);
+		}
 	}
 
 	if (GetAsyncKeyState(VK_SPACE) & 0x8000) {
 		OutputDebugString("Space Pressed\n");
 		m->type = SPACEBAR_PRESSED;
-		msgBus->postMessage(m, this);
+		if ((clock() - keyspressed["space"]) > timebetweenPresses) {
+			keyspressed["space"] = clock();
+			msgBus->postMessage(m, this);
+		}
 	}
 
 	if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
 		OutputDebugString("Right Pressed\n");
 		m->type = RIGHT_ARROW_PRESSED;
-		msgBus->postMessage(m, this);
+		if ((clock() - keyspressed["right"]) > timebetweenPresses) {
+			keyspressed["right"] = clock();
+			msgBus->postMessage(m, this);
+		}
 	}
 
 	if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
 		OutputDebugString("Left Pressed\n");
 		m->type = LEFT_ARROW_PRESSED;
-		msgBus->postMessage(m, this);
+		if ((clock() - keyspressed["left"]) > timebetweenPresses) {
+			keyspressed["left"] = clock();
+			msgBus->postMessage(m, this);
+		}
 	}
 
 	if (GetAsyncKeyState('A') & 0x8000) {
 		OutputDebugString("A Pressed\n");
 		m->type = KEY_A_PRESSED;
-		msgBus->postMessage(m, this);
+		if ((clock() - keyspressed["a"]) > timebetweenPresses) {
+			keyspressed["a"] = clock();
+			msgBus->postMessage(m, this);
+		}
 	}
 
 	if (GetAsyncKeyState('D') & 0x8000) {
 		OutputDebugString("D Pressed\n");
 		m->type = KEY_D_PRESSED;
-		msgBus->postMessage(m, this);
+		if ((clock() - keyspressed["d"]) > timebetweenPresses) {
+			keyspressed["d"] = clock();
+			msgBus->postMessage(m, this);
+		}
 	}
 
 	if (GetAsyncKeyState('Z') & 0x8000) {
 		OutputDebugString("Z Pressed\n");
 		m->type = TEST_KEY_PRESSED;
-		msgBus->postMessage(m, this);
+		if ((clock() - keyspressed["z"]) > timebetweenPresses) {
+			keyspressed["z"] = clock();
+			msgBus->postMessage(m, this);
+		}
 	}
-
-	/*
-	if (m->type != EMPTY_MESSAGE) {
-		msgBus->postMessage(m);
-		m->type = EMPTY_MESSAGE;
-		
-	}
-	*/
-
 }
 
 

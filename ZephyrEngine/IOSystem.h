@@ -17,6 +17,10 @@ public:
 	Msg* m;
 	
 	const int timeFrame = 10;
+
+	std::map<std::string, clock_t> keyspressed;
+
+	const int timebetweenPresses = 150;
 private:
 
 };
