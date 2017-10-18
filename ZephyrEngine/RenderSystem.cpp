@@ -411,10 +411,22 @@ void RenderSystem::updateObjPosition(Msg* m) {
 	for (std::string* s : gameObjectsToRender) {
 		std::vector<std::string> obj = split(*s, ',');
 
+		int position = 0;
+		std::ostringstream oss;
+
 		// found the obj
 		if (obj.front() == dataVector.front()) {
-			// replace this string's information with new information
-			*s = m->data;
+			// replace this string's information with new information except the renderable
+			for (std::string ss : obj) {
+				if (position != 1) {
+					oss << dataVector.at(position) << ",";
+				} else if (position == 1) {
+					oss << obj.at(1) << ",";
+				}
+
+				position++;
+			}
+			*s = oss.str();
 			return;
 		}
 
