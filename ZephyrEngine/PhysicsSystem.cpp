@@ -76,7 +76,7 @@ void PhysicsSystem::startSystemLoop()
 			std::ostringstream oss;
 
 			oss << it->first << "," //id
-				<< it->second.renderable << "," //renderable
+				<< ""<< "," //renderable
 				<< it->second.position.x << "," //x
 				<< it->second.position.y //y
 				<< ",0," // z
@@ -188,22 +188,15 @@ void PhysicsSystem::handleMessage(Msg *msg)
 		std::map<std::string, PhysicsObject>::iterator it;
 		it = Physics.GameObjects.find(data[0]);
 		if (it != Physics.GameObjects.end()) {
-			it->second.tag = "Remove";
-			
+			it->second.tag = "Remove";		
 		}
 			
 		break;
 	}
-	case UPDATE_OBJECT_POSITION:
-		if (data[8] == "1" && Physics.GameObjects.find(data[0]) != Physics.GameObjects.end()) {
-			Physics.GameObjects[ID].renderable = data[1];
-			
-		}
-		break;
 	case CHANGE_MAST:
 		ID = data[0];
 		changeMast(ID, atoi(data[1].c_str())); //  just cast the data 
-		Physics.GameObjects[ID].renderable = data[2];
+		//Physics.GameObjects[ID].renderable = data[2];
 		break;
 	case CHANGE_RUDDER:
 		ID = data[0];

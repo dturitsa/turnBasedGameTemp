@@ -136,25 +136,27 @@ void GameSystem::startSystemLoop() {
 				obj->midUpdate();
 			}
 
-
 			// wait for all threads to complete (not yet implemented)
 
 			for (GameObject* obj : gameObjects) {
 				obj->lateUpdate();
-
-				/*			while (!objData.toDestroyVector.empty) {
-								gameObjectRemoved(objData.toDestroyVector.begin());
-								gameObjects.erase(remove(gameObjects.begin(), gameObjects.end(), objData.toDestroyVector.begin()), gameObjects.end());
-								objData.toDestroyVector.erase(objData.toDestroyVector.begin());
-							}*/
-
 			}
 
+			//loop trhough list of objects to destroy added by the gameobjects
 			for each (GameObject* g in objData.toDestroyVector) {
 				gameObjectRemoved(g);
 				gameObjects.erase(remove(gameObjects.begin(), gameObjects.end(), g), gameObjects.end());
 			}
 			objData.toDestroyVector.clear();
+
+
+			//loop through list of messages to send that were added by Game objects
+			for each (Msg* m in objData.toPostVector) {
+				msgBus->postMessage(m, this);
+			
+			}
+			objData.toPostVector.clear();
+
 			break;
 		}
 		default:
@@ -303,8 +305,6 @@ void GameSystem::handleMessage(Msg *msg) {
 
 			for (GameObject* g : gameObjects) {
 				//OutputDebugString(g->id.c_str());
-
-				
 				if (g->id == data[0]) {
 					g->onCollide(data[1]);
 					//gameObjectRemoved(g);

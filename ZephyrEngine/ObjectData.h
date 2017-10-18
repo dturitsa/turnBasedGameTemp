@@ -8,6 +8,7 @@ class ObjectData
 {
 public:
 	std::vector<GameObject*> toDestroyVector;
+	std::vector<Msg*> toPostVector;
 	//std::vector<GameObject*> toMessageVector;
 	//std::map<std::string, GameObject*> gameObjects;
 

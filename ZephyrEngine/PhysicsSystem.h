@@ -31,7 +31,7 @@ public:
 	void collisionHandler(std::string object1);
 	void Destroy(std::string IDin); //PhysicsObject &object);
 
-	const int timeFrame = 10;
+	int timeFrame = 15;
 	std::mutex mtx;
 
 };
