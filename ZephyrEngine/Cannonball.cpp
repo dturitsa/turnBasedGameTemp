@@ -1,6 +1,7 @@
 #include "Cannonball.h"
 
-Cannonball::Cannonball(string _id, std::string renderableName, int xpos, int ypos, int _orientation, int _width, int _length) {
+Cannonball::Cannonball(string _id, std::string renderableName, int xpos, int ypos, int _orientation, int _width, int _length, ObjectData* _objData) {
+	objData = _objData;
 	id = _id;
 	renderable = renderableName;
 	x = xpos;
