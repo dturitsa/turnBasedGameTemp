@@ -16,7 +16,7 @@ public:
 
 	Msg* m;
 	
-	int timeFrame = 10;
+	const int timeFrame = 10;
 private:
 
 };

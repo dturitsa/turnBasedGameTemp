@@ -13,12 +13,14 @@ void IOSystem::startSystemLoop() {
 	// used to prevent the io system from posting messages too often
 	clock_t thisTime = clock();
 
+	int currentGameTime = 0;
 	while (true) {
 		thisTime = clock();
-		if (thisTime  < timeFrame) {
-			Sleep(timeFrame - thisTime);
+		if (thisTime  < currentGameTime) {
+			Sleep(currentGameTime - thisTime);
 		}
-		timeFrame += 10;
+
+		currentGameTime += timeFrame;
 
 		//std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
 		//OutputDebugString("IO Loop on thread: ");

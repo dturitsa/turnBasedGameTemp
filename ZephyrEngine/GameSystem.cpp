@@ -89,12 +89,13 @@ void GameSystem::startSystemLoop() {
 	//clocks for limiting gameloop speed
 	clock_t thisTime = clock();
 
+	int currentGameTime = 0;
 	while (true) {
 		thisTime = clock();
-		if (thisTime < timeFrame) {
-			Sleep(timeFrame - thisTime);
+		if (thisTime  < currentGameTime) {
+			Sleep(currentGameTime - thisTime);
 		}
-		timeFrame += 20;
+		currentGameTime += timeFrame;
 
 		handleMsgQ();
 

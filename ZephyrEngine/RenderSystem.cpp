@@ -288,12 +288,14 @@ void RenderSystem::startSystemLoop() {
 	SDL_Event windowEvent;
 
 	int renderCount = 0;
+
+	int currentGameTime = 0;
 	while (running) {
 		thisTime = clock();
-		if (thisTime  < timeFrame) {		
-			Sleep(timeFrame - thisTime);				
+		if (thisTime  < currentGameTime) {
+			Sleep(currentGameTime - thisTime);
 		}
-		timeFrame += 20;
+		currentGameTime += timeFrame;
 
 		handleMsgQ();
 
