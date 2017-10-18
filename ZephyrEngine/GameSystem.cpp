@@ -204,9 +204,9 @@ void GameSystem::handleMessage(Msg *msg) {
 			if (markerPosition > 2) {
 				markerPosition = 2;
 			}
-			//OutputDebugString("MarkerPos: " + markerPosition + '\n');
-			oss << "obj3,Z6_Marker_P" << markerPosition << ".png," << "0,0,10,0,200,200,0,FullscreenObj";
-			mm->type = UPDATE_OBJECT_POSITION;
+
+			mm->type = UPDATE_OBJ_SPRITE;
+			oss <<"obj3,1,Z6_Marker_P" << markerPosition << ".png,";
 			mm->data = oss.str();
 			msgBus->postMessage(mm, this);
 			break;
@@ -218,8 +218,8 @@ void GameSystem::handleMessage(Msg *msg) {
 			}
 			markerPosition = markerPosition % 3;
 
-			oss << "obj3,Z6_Marker_P" << markerPosition << ".png," << "0,0,10,0,200,200,0,FullscreenObj";
-			mm->type = UPDATE_OBJECT_POSITION;
+			mm->type = UPDATE_OBJ_SPRITE;
+			oss << "obj3,1,Z6_Marker_P" << markerPosition << ".png,";
 			mm->data = oss.str();
 			msgBus->postMessage(mm, this);
 			break;
