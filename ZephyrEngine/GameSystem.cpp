@@ -322,11 +322,21 @@ void GameSystem::handleMessage(Msg *msg) {
 					if (so->sail > 2) {
 						so->sail = 2;
 					}
+
+
+					// change sail image
+					std::ostringstream tOss;
+					tOss << "Boat_S" << so->sail << ".png";
+					so->renderable = tOss.str();
+
 					mm->type = CHANGE_MAST;
-					oss << so->id << "," << so->sail;
+					oss << so->id << "," << so->sail << "," << so->renderable;
 					mm->data = oss.str();
 					msgBus->postMessage(mm, this);
-					//OutputDebugString(g->id.c_str());
+
+					Msg* mm2 = new Msg(UPDATE_OBJ_SPRITE, oss.str());
+					msgBus->postMessage(mm2, this);
+
 					break;
 				}
 			}
@@ -341,10 +351,18 @@ void GameSystem::handleMessage(Msg *msg) {
 						so->sail = 0;
 					}
 
+					// change sail image
+					std::ostringstream tOss;
+					tOss << "Boat_S" << so->sail << ".png";
+					so->renderable = tOss.str();
+
 					mm->type = CHANGE_MAST;
-					oss << so->id << "," << so->sail;
+					oss << so->id << "," << so->sail << "," << so->renderable;
 					mm->data = oss.str();
 					msgBus->postMessage(mm, this);
+
+					Msg* mm2 = new Msg(UPDATE_OBJ_SPRITE, oss.str());
+					msgBus->postMessage(mm2, this);
 					break;
 				}
 			}

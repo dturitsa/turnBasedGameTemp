@@ -365,6 +365,8 @@ void RenderSystem::handleMessage(Msg *msg) {
 		removeObjectFromRenderList(msg);
 	//	mtx.unlock();
 		break;
+	case UPDATE_OBJ_SPRITE:
+		updateObjSprite(msg);
 	default:
 		break;
 	}
@@ -411,6 +413,40 @@ void RenderSystem::updateObjPosition(Msg* m) {
 		if (obj.front() == dataVector.front()) {
 			// replace this string's information with new information
 			*s = m->data;
+			return;
+		}
+
+	}
+}
+
+// id, [dont read], renderable name
+void RenderSystem::updateObjSprite(Msg* m) {
+	std::vector<std::string> dataVector = split(m->data, ',');
+
+	std::ostringstream oss;
+
+	for (std::string* s : gameObjectsToRender) {
+		std::vector<std::string> obj = split(*s, ',');
+
+		// found the obj
+		if (obj.front() == dataVector.front()) {
+
+			int position = 0; // renderable is position 1; comes right after the id
+			
+			// copy everything except the renderable
+			for (std::string ss : obj) {
+				if (position != 1) {
+					oss << ss << ",";
+				} else {
+					// put renderable in
+					oss << dataVector.at(2) << ",";
+				}
+
+				position++;				
+			}
+
+			// replace with data
+			*s = oss.str();
 			return;
 		}
 

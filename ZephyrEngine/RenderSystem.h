@@ -66,5 +66,5 @@ private:
 	void addObjectToRenderList(Msg* m);
 	void removeObjectFromRenderList(Msg* m);
 	void updateObjPosition(Msg* m);
-
+	void updateObjSprite(Msg*m);
 };
