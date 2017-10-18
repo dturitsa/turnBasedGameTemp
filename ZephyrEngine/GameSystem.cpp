@@ -200,7 +200,9 @@ void GameSystem::handleMessage(Msg *msg) {
 		case DOWN_ARROW_PRESSED:
 			// move the marker location and let rendering know?
 			markerPosition++;
-			markerPosition = markerPosition % 3;
+			if (markerPosition > 2) {
+				markerPosition = 2;
+			}
 			//OutputDebugString("MarkerPos: " + markerPosition + '\n');
 			oss << "obj3,Z6_Marker_P" << markerPosition << ".png," << "0,0,10,0,200,200,0,FullscreenObj";
 			mm->type = UPDATE_OBJECT_POSITION;
