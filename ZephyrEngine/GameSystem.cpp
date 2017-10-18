@@ -141,7 +141,6 @@ void GameSystem::startSystemLoop() {
 			for (GameObject* obj : gameObjects) {
 				obj->lateUpdate();
 
-				
 				/*			while (!objData.toDestroyVector.empty) {
 								gameObjectRemoved(objData.toDestroyVector.begin());
 								gameObjects.erase(remove(gameObjects.begin(), gameObjects.end(), objData.toDestroyVector.begin()), gameObjects.end());
