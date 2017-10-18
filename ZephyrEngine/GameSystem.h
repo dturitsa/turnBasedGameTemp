@@ -34,7 +34,7 @@ public:
 	ObjectData objData;
 	void removeAllGameObjects();
 
-	int timeFrame = 10;
+	const int timeFrame = 10;
 
 	// -1	= no level loaded
 	// 0	= Main Menu
