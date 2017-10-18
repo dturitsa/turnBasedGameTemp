@@ -12,7 +12,7 @@ windScale: 0;
 
 gameObjectType: ShipObj,
 id: playerShip,
-renderable: boatTest1.png,
+renderable: Boat_S0.png,
 xPos: -50,
 yPos: 50,
 zPos: 1,

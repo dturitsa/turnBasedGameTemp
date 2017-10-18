@@ -42,7 +42,7 @@ void IOSystem::checkKeyPresses() {
 	// specific keys, and then having another function somewhere that
 	// parses the data to get the proper code to the Gamesystem but that's
 	// a bit convoluted
-	if (GetKeyState(VK_UP) & 0x8000) {
+	if (GetAsyncKeyState(VK_UP) & 0x8000) {
 		OutputDebugString("Up Pressed\n");
 		m->type = UP_ARROW_PRESSED;
 		msgBus->postMessage(m, this);
@@ -54,21 +54,33 @@ void IOSystem::checkKeyPresses() {
 		msgBus->postMessage(m, this);
 	}
 
-	if (GetKeyState(VK_SPACE) & 0x8000) {
+	if (GetAsyncKeyState(VK_SPACE) & 0x8000) {
 		OutputDebugString("Space Pressed\n");
 		m->type = SPACEBAR_PRESSED;
 		msgBus->postMessage(m, this);
 	}
 
-	if (GetKeyState(VK_RIGHT) & 0x8000) {
+	if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
 		OutputDebugString("Right Pressed\n");
 		m->type = RIGHT_ARROW_PRESSED;
 		msgBus->postMessage(m, this);
 	}
 
-	if (GetKeyState(VK_LEFT) & 0x8000) {
+	if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
 		OutputDebugString("Left Pressed\n");
 		m->type = LEFT_ARROW_PRESSED;
+		msgBus->postMessage(m, this);
+	}
+
+	if (GetAsyncKeyState('A') & 0x8000) {
+		OutputDebugString("A Pressed\n");
+		m->type = KEY_A_PRESSED;
+		msgBus->postMessage(m, this);
+	}
+
+	if (GetAsyncKeyState('D') & 0x8000) {
+		OutputDebugString("D Pressed\n");
+		m->type = KEY_D_PRESSED;
 		msgBus->postMessage(m, this);
 	}
 
