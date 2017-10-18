@@ -385,8 +385,8 @@ void GameSystem::handleMessage(Msg *msg) {
 				}
 			}
 			break;
-		case SPACEBAR_PRESSED: {
-			// fire a cannon ball. update later for more functionality
+		case KEY_D_PRESSED: {
+			// fire a cannon ball to the right. update later for more functionality
 			// use random id for now
 			srand(time(NULL));
 			int randomNum = std::rand();
@@ -406,6 +406,33 @@ void GameSystem::handleMessage(Msg *msg) {
 			}
 
 			Cannonball* c = new Cannonball(to_string(randomNum), "tempCannonball.png", cx, cy, corient, 5, 5, &objData);
+			//c->objData = &objData;
+			// post cannon ball obj to systems
+			createGameObject(c);
+
+			break;
+		}
+		case KEY_A_PRESSED: {
+			// fire a cannon ball to the left.
+			// use random id for now
+			srand(time(NULL));
+			int randomNum = std::rand();
+
+			int cx = 0;
+			int cy = 0;
+			int corient = 0;
+
+			// find the ship so that we know where to create the cball
+			for (GameObject* g : gameObjects) {
+				if (g->getObjectType() == "ShipObj") {
+					cx = g->x;
+					cy = g->y;
+					corient = g->orientation + 90;
+					break;
+				}
+			}
+
+			Cannonball* c = new Cannonball(to_string(randomNum), "tempCannonball.png", cx, cy, ((corient+180)%360), 5, 5, &objData);
 			//c->objData = &objData;
 			// post cannon ball obj to systems
 			createGameObject(c);
