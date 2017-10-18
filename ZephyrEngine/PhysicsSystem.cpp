@@ -89,8 +89,8 @@ void PhysicsSystem::startSystemLoop()
 			mm->data = oss.str();
 			msgBus->postMessage(mm, this);
 
-			OutputDebugString("physics posting");
-			OutputDebugString("\n");
+			//OutputDebugString("physics posting");
+			//OutputDebugString("\n");
 
 			//OutputDebugString(oss.str().c_str());
 			//OutputDebugString("\n");
@@ -171,8 +171,8 @@ void PhysicsSystem::handleMessage(Msg *msg)
 									   //check if physics enabled
 		if (atof(data[8].c_str()) == 1) {
 			Physics.addObject(ID, tag, x, y, width, height, rotation, 1, 1, PROJECTILE_INERTIA, renderable);
-			OutputDebugString("GOADDED in physics ");
-			OutputDebugString("\n");
+			//OutputDebugString("GOADDED in physics ");
+			//OutputDebugString("\n");
 		}
 
 		break;
