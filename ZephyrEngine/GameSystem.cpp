@@ -1,7 +1,7 @@
 #include "GameSystem.h"
 
 GameSystem::GameSystem(MessageBus* mbus) : System(mbus) {
-
+	objData = *(new ObjectData());
 }
 
 
