@@ -279,7 +279,7 @@ void GameSystem::handleMessage(Msg *msg) {
 		case TEST_KEY_PRESSED:
 			for (GameObject* g : gameObjects) {
 				if (g->id == "shipwreck") {
-					Msg* m = new Msg(CHANGE_MAST, "shipwreck,2");
+					Msg* m = new Msg(CHANGE_MAST,"shipwreck,2,Boat_S2.png");
 					msgBus->postMessage(m, this);
 
 					Msg* m2 = new Msg(CHANGE_RUDDER, "shipwreck,1");
