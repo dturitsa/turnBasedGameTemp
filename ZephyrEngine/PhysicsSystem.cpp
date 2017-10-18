@@ -89,6 +89,9 @@ void PhysicsSystem::startSystemLoop()
 			mm->data = oss.str();
 			msgBus->postMessage(mm, this);
 
+			OutputDebugString("physics posting");
+			OutputDebugString("\n");
+
 			//OutputDebugString(oss.str().c_str());
 			//OutputDebugString("\n");
 			std::string s = std::to_string(Physics.GameObjects[it->first].mast);
@@ -168,6 +171,8 @@ void PhysicsSystem::handleMessage(Msg *msg)
 									   //check if physics enabled
 		if (atof(data[8].c_str()) == 1) {
 			Physics.addObject(ID, tag, x, y, width, height, rotation, 1, 1, PROJECTILE_INERTIA, renderable);
+			OutputDebugString("GOADDED in physics ");
+			OutputDebugString("\n");
 		}
 
 		break;
@@ -189,8 +194,9 @@ void PhysicsSystem::handleMessage(Msg *msg)
 		break;
 	}
 	case UPDATE_OBJECT_POSITION:
-		ID = data[0];
-		Physics.GameObjects[ID].renderable = data[1];
+		if (data[8] == "1" && Physics.GameObjects.find(data[0]) != Physics.GameObjects.end()) {
+			Physics.GameObjects[ID].renderable = data[1];
+		}
 		break;
 	case CHANGE_MAST:
 		ID = data[0];

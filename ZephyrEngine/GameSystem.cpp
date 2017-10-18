@@ -201,7 +201,7 @@ void GameSystem::handleMessage(Msg *msg) {
 			markerPosition++;
 			markerPosition = markerPosition % 3;
 			//OutputDebugString("MarkerPos: " + markerPosition + '\n');
-			oss << "obj3,Z6_Marker_P" << markerPosition << ".png," << "0,0,10,0,200,200,0";
+			oss << "obj3,Z6_Marker_P" << markerPosition << ".png," << "0,0,10,0,200,200,0,FullscreenObj";
 			mm->type = UPDATE_OBJECT_POSITION;
 			mm->data = oss.str();
 			msgBus->postMessage(mm, this);
@@ -214,7 +214,7 @@ void GameSystem::handleMessage(Msg *msg) {
 			}
 			markerPosition = markerPosition % 3;
 
-			oss << "obj3,Z6_Marker_P" << markerPosition << ".png," << "0,0,10,0,200,200,0";
+			oss << "obj3,Z6_Marker_P" << markerPosition << ".png," << "0,0,10,0,200,200,0,FullscreenObj";
 			mm->type = UPDATE_OBJECT_POSITION;
 			mm->data = oss.str();
 			msgBus->postMessage(mm, this);
@@ -279,7 +279,7 @@ void GameSystem::handleMessage(Msg *msg) {
 					Msg* m = new Msg(CHANGE_MAST, "shipwreck,2");
 					msgBus->postMessage(m, this);
 
-					Msg* m2 = new Msg(CHANGE_RUDDER, "shipwreck,0");
+					Msg* m2 = new Msg(CHANGE_RUDDER, "shipwreck,1");
 					msgBus->postMessage(m2, this);
 					//gameObjectRemoved(g);
 					//gameObjects.erase(remove(gameObjects.begin(), gameObjects.end(), g), gameObjects.end());
