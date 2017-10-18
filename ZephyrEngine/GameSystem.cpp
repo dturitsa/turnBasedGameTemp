@@ -167,10 +167,10 @@ void GameSystem::startSystemLoop() {
 void GameSystem::removeAllGameObjects() {
 	for (GameObject* go : gameObjects) {
 		gameObjectRemoved(go);
-		gameObjects.erase(remove(gameObjects.begin(), gameObjects.end(), go), gameObjects.end());
+		//gameObjects.erase(remove(gameObjects.begin(), gameObjects.end(), go), gameObjects.end());
 	}
 
-	//gameObjects.clear();
+	gameObjects.clear();
 }
 
 void GameSystem::gameObjectRemoved(GameObject* g) {

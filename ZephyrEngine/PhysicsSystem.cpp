@@ -193,11 +193,11 @@ void PhysicsSystem::handleMessage(Msg *msg)
 			
 		break;
 	}
-	case UPDATE_OBJECT_POSITION:
-		if (data[8] == "1" && Physics.GameObjects.find(data[0]) != Physics.GameObjects.end()) {
-			Physics.GameObjects[ID].renderable = data[1];
-		}
-		break;
+	//case UPDATE_OBJECT_POSITION:
+	//	if (data[8] == "1" && Physics.GameObjects.find(data[0]) != Physics.GameObjects.end()) {
+	//		Physics.GameObjects[ID].renderable = data[1];
+	//	}
+	//	break;
 	case CHANGE_MAST:
 		ID = data[0];
 		changeMast(ID, atoi(data[1].c_str())); //  just cast the data 
