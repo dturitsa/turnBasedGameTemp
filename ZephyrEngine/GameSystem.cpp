@@ -141,11 +141,7 @@ void GameSystem::startSystemLoop() {
 			for (GameObject* obj : gameObjects) {
 				obj->lateUpdate();
 
-				/*for each (GameObject* g in objData.toDestroyVector) {
-					gameObjectRemoved(g);
-					gameObjects.erase(remove(gameObjects.begin(), gameObjects.end(), g), gameObjects.end());
-				}
-				objData.toDestroyVector.clear();*/
+				
 				/*			while (!objData.toDestroyVector.empty) {
 								gameObjectRemoved(objData.toDestroyVector.begin());
 								gameObjects.erase(remove(gameObjects.begin(), gameObjects.end(), objData.toDestroyVector.begin()), gameObjects.end());
@@ -153,6 +149,12 @@ void GameSystem::startSystemLoop() {
 							}*/
 
 			}
+
+			for each (GameObject* g in objData.toDestroyVector) {
+				gameObjectRemoved(g);
+				gameObjects.erase(remove(gameObjects.begin(), gameObjects.end(), g), gameObjects.end());
+			}
+			objData.toDestroyVector.clear();
 			break;
 		}
 		default:
