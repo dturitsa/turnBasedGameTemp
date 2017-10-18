@@ -38,12 +38,10 @@ void Cannonball::midUpdate() {
 	//OutputDebugString("\n");
 	counter++;
 	
-	if (counter > 200) {
+	if (counter > 100) {
 		objData->toDestroyVector.push_back(this);
 	}
-	else if (counter > 200) {
 
-	}
 }
 void Cannonball::lateUpdate() {
 
@@ -53,9 +51,6 @@ void Cannonball::onCollide(std::string otherObjId) {
 	if (counter > 12) {
 		objData->toDestroyVector.push_back(this);
 	}
-	OutputDebugString(id.c_str());
-	OutputDebugString(" COLLIDED WITH ");
-	OutputDebugString(otherObjId.c_str());
-	OutputDebugString("\n");
+
 	
 }

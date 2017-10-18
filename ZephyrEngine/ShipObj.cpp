@@ -44,5 +44,16 @@ void ShipObj::lateUpdate() {
 }
 
 void ShipObj::onCollide(std::string otherObjId) {
+	if(id != "playerShip")
+		health -= 10;
+
+	if (health < 0) {
+		objData->toDestroyVector.push_back(this);
+	}
+	OutputDebugString(id.c_str());
+	OutputDebugString(" COLLIDED WITH ");
+	OutputDebugString(otherObjId.c_str());
+	OutputDebugString("\n");
+
 
 }

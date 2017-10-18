@@ -124,7 +124,7 @@ void GameSystem::startSystemLoop() {
 			// the only thing we could possibly do is... idk yet. Basically same shit as
 			// the Menu page tho
 			break;
-		case 2: // Game loaded
+		case 2: { // Game loaded
 			for (GameObject* obj : gameObjects) {
 				obj->earlyUpdate();
 			}
@@ -135,6 +135,7 @@ void GameSystem::startSystemLoop() {
 				obj->midUpdate();
 			}
 
+
 			// wait for all threads to complete (not yet implemented)
 
 			for (GameObject* obj : gameObjects) {
@@ -142,17 +143,18 @@ void GameSystem::startSystemLoop() {
 
 				for each (GameObject* g in objData.toDestroyVector) {
 					gameObjectRemoved(g);
-					gameObjects.erase(remove(gameObjects.begin(), gameObjects.end(), g), gameObjects.end());	
+					gameObjects.erase(remove(gameObjects.begin(), gameObjects.end(), g), gameObjects.end());
 				}
 				objData.toDestroyVector.clear();
-	/*			while (!objData.toDestroyVector.empty) {
-					gameObjectRemoved(objData.toDestroyVector.begin());
-					gameObjects.erase(remove(gameObjects.begin(), gameObjects.end(), objData.toDestroyVector.begin()), gameObjects.end());
-					objData.toDestroyVector.erase(objData.toDestroyVector.begin());
-				}*/
+				/*			while (!objData.toDestroyVector.empty) {
+								gameObjectRemoved(objData.toDestroyVector.begin());
+								gameObjects.erase(remove(gameObjects.begin(), gameObjects.end(), objData.toDestroyVector.begin()), gameObjects.end());
+								objData.toDestroyVector.erase(objData.toDestroyVector.begin());
+							}*/
 
 			}
 			break;
+		}
 		default:
 			break;
 		}
@@ -274,8 +276,13 @@ void GameSystem::handleMessage(Msg *msg) {
 		case TEST_KEY_PRESSED:
 			for (GameObject* g : gameObjects) {
 				if (g->id == "shipwreck") {
-					gameObjectRemoved(g);
-					gameObjects.erase(remove(gameObjects.begin(), gameObjects.end(), g), gameObjects.end());
+					Msg* m = new Msg(CHANGE_MAST, "shipwreck,2");
+					msgBus->postMessage(m, this);
+
+					Msg* m2 = new Msg(CHANGE_RUDDER, "shipwreck,0");
+					msgBus->postMessage(m2, this);
+					//gameObjectRemoved(g);
+					//gameObjects.erase(remove(gameObjects.begin(), gameObjects.end(), g), gameObjects.end());
 					/*
 					g->x++;
 					g->y++;
@@ -284,7 +291,6 @@ void GameSystem::handleMessage(Msg *msg) {
 					mm = new Msg(UPDATE_OBJECT_POSITION, oss.str());
 					msgBus->postMessage(mm);
 					*/
-
 				}
 			}
 			break;
@@ -317,7 +323,7 @@ void GameSystem::handleMessage(Msg *msg) {
 					oss << so->id << "," << so->sail;
 					mm->data = oss.str();
 					msgBus->postMessage(mm, this);
-
+					//OutputDebugString(g->id.c_str());
 					break;
 				}
 			}

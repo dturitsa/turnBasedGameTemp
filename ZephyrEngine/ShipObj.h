@@ -18,6 +18,7 @@ public:
 
 	int sail;//the sail position 0-2
 	int rudder;// 0-4 rudder position
+	int health = 100;
 
 	int counter = 0;
 };
