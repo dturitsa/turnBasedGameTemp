@@ -7,13 +7,14 @@ class ShipObj :
 public:
 	ShipObj(int idNum, std::string renderableName, int xpos, int ypos, int orientation);
 	//DummyGameObj(std::vector<std::string> params);
-	ShipObj(map<string, string> params);
+	ShipObj(map<string, string> params, ObjectData* objData);
 	~ShipObj();
 	virtual std::string getObjectType();
 	virtual std::string toString();
-	void ShipObj::earlyUpdate();
-	void ShipObj::midUpdate();
-	void ShipObj::lateUpdate();
+	void earlyUpdate();
+	void midUpdate();
+	void lateUpdate();
+	void onCollide(std::string otherObjId) override;
 
 	int sail;//the sail position 0-2
 	int rudder;// 0-4 rudder position

@@ -8,7 +8,7 @@ ShipObj::ShipObj(int idNum, std::string renderableName, int xpos, int ypos, int 
 	orientation = orientation;
 }
 
-ShipObj::ShipObj(map <string, string> paramsMap) : GameObject(paramsMap) {
+ShipObj::ShipObj(map <string, string> paramsMap, ObjectData* objData) : GameObject(paramsMap, objData) {
 	try {	
 		sail = stoi(paramsMap.find("sail")->second);
 		rudder = stoi(paramsMap.find("rudder")->second);
@@ -40,5 +40,9 @@ void ShipObj::midUpdate() {
 
 }
 void ShipObj::lateUpdate() {
+
+}
+
+void ShipObj::onCollide(std::string otherObjId) {
 
 }

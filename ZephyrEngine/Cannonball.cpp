@@ -11,7 +11,7 @@ Cannonball::Cannonball(string _id, std::string renderableName, int xpos, int ypo
 	physicsEnabled = 1;
 }
 
-Cannonball::Cannonball(map <string, string> paramsMap) : GameObject(paramsMap) {
+Cannonball::Cannonball(map <string, string> paramsMap, ObjectData* objData) : GameObject(paramsMap, objData) {
 	
 }
 
@@ -34,8 +34,28 @@ void Cannonball::earlyUpdate() {
 
 }
 void Cannonball::midUpdate() {
+	//OutputDebugString("Cannon miduptdate");
+	//OutputDebugString("\n");
+	counter++;
+	
+	if (counter > 200) {
+		objData->toDestroyVector.push_back(this);
+	}
+	else if (counter > 200) {
 
+	}
 }
 void Cannonball::lateUpdate() {
 
+}
+
+void Cannonball::onCollide(std::string otherObjId) {
+	if (counter > 12) {
+		objData->toDestroyVector.push_back(this);
+	}
+	OutputDebugString(id.c_str());
+	OutputDebugString(" COLLIDED WITH ");
+	OutputDebugString(otherObjId.c_str());
+	OutputDebugString("\n");
+	
 }

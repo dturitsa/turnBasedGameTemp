@@ -9,7 +9,7 @@ FullscreenObj::FullscreenObj(int idNum, std::string renderableName, int xpos, in
 	direction = 0;
 }
 
-FullscreenObj::FullscreenObj(map <string, string> paramsMap) : GameObject(paramsMap) {
+FullscreenObj::FullscreenObj(map <string, string> paramsMap, ObjectData* objData) : GameObject(paramsMap, objData) {
 	
 }
 

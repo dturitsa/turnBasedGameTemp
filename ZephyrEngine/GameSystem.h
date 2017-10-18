@@ -1,6 +1,6 @@
 #pragma once
 #include "System.h"
-#include "GameObject.h"
+//#include "GameObject.h"
 #include "FullscreenObj.h"
 #include "Cannonball.h"
 #include "ShipObj.h"
@@ -14,6 +14,7 @@
 #include <ctime>
 #include <windows.h>
 #include <thread>
+#include "ObjectData.h"
 
 class GameSystem : public System {
 public:
@@ -30,6 +31,7 @@ public:
 	void GameSystem::gameObjectRemoved(GameObject* g);
 	std::vector<GameObject*> gameObjects;
 	
+	ObjectData objData;
 	void removeAllGameObjects();
 
 	int timeFrame = 10;

@@ -2,7 +2,8 @@
 #include "Msg.h"
 #include <map>
 #include <iostream>
-
+#include "ObjectData.h"
+#include <Windows.h>
 using namespace std;
 
 class GameObject {
@@ -20,17 +21,18 @@ public:
 	// in degrees, same as orientation; difference is that orientation is used for rendering, direction is the direction of movement
 	// this CAN BE DIFFERENT from orientation; eg: cannon ball orientated one direction, but affecteed by the wind will curve.
 	int direction; 
-
+	ObjectData* objData;
 	std::string renderable; // name of a file/sprite? probably needs to be changed
 
 	GameObject();
 	~GameObject();
-	GameObject::GameObject(map <string, string> paramsMap);
+	GameObject::GameObject(std::map <std::string, std::string> paramsMap, ObjectData* objData);
 	virtual std::string getObjectType();
 	virtual std::string toString();
 	void earlyUpdate();
-	void midUpdate();
+	virtual void midUpdate();
 	void lateUpdate();
+	virtual void onCollide(std::string otherObj);
 protected:
 
 private:

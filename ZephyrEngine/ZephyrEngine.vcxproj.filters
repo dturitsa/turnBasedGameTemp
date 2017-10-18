@@ -78,6 +78,9 @@
     <ClInclude Include="Cannonball.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="System.cpp">
@@ -138,6 +141,9 @@
       <Filter>Source Files</Filter>
     </Text>
     <ClCompile Include="Cannonball.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

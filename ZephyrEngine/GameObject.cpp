@@ -5,8 +5,8 @@ GameObject::GameObject() {
 
 GameObject::~GameObject() {
 }
-GameObject::GameObject(map <string, string> paramsMap) {
-
+GameObject::GameObject(map <string, string> paramsMap, ObjectData* _objData) {
+	objData = _objData;
 	try {
 		id = paramsMap.find("id")->second;
 		renderable = paramsMap.find("renderable")->second;
@@ -51,4 +51,13 @@ void GameObject::midUpdate() {
 
 void GameObject::lateUpdate() {
 
+}
+
+void GameObject::onCollide(std::string otherObjId) {
+	OutputDebugString(id.c_str());
+	OutputDebugString( " COLLIDED WITH " );
+	OutputDebugString(otherObjId.c_str());
+	OutputDebugString("\n");
+
+	objData->toDestroyVector.push_back(this);
 }

@@ -33,13 +33,13 @@ void GameSystem::addGameObjects(string fileName) {
 		g = NULL;
 		//just hard coded else ifs for now... should probably make retreive available classes automatically <- Did some research, cpp doesn't support reflection (Hank)
 		if (gameObjectType.compare("ShipObj") == 0) {
-			g = new ShipObj(gameObjDataMap);
+			g = new ShipObj(gameObjDataMap, &objData);
 		}
 		else if (gameObjectType.compare("GameObject") == 0) {
-			g = new GameObject(gameObjDataMap);
+			g = new GameObject(gameObjDataMap, &objData);
 		}
 		else if (gameObjectType.compare("FullscreenObj") == 0) {
-			g = new FullscreenObj(gameObjDataMap);
+			g = new FullscreenObj(gameObjDataMap, &objData);
 		}
 
 		if (g != NULL) {
@@ -76,7 +76,7 @@ void GameSystem::createGameObject(GameObject* g) {
 		<< g->width << ',' << g->length << ','
 		<< g->physicsEnabled << ','
 		<< g->getObjectType();
-		//<< g->renderable;
+	//<< g->renderable;
 	// maybe add the rest of the variables into the oss as well, but can decide later depending on
 	// what physics needs
 
@@ -139,6 +139,17 @@ void GameSystem::startSystemLoop() {
 
 			for (GameObject* obj : gameObjects) {
 				obj->lateUpdate();
+
+				for each (GameObject* g in objData.toDestroyVector) {
+					gameObjectRemoved(g);
+					gameObjects.erase(remove(gameObjects.begin(), gameObjects.end(), g), gameObjects.end());	
+				}
+				objData.toDestroyVector.clear();
+	/*			while (!objData.toDestroyVector.empty) {
+					gameObjectRemoved(objData.toDestroyVector.begin());
+					gameObjects.erase(remove(gameObjects.begin(), gameObjects.end(), objData.toDestroyVector.begin()), gameObjects.end());
+					objData.toDestroyVector.erase(objData.toDestroyVector.begin());
+				}*/
 
 			}
 			break;
@@ -283,12 +294,10 @@ void GameSystem::handleMessage(Msg *msg) {
 			for (GameObject* g : gameObjects) {
 				//OutputDebugString(g->id.c_str());
 
-				if (g->id == data[0] && data[0] != "playerShip" && data[1] != "playerShip") {
-					OutputDebugString(data[0].c_str());
-					OutputDebugString(" Collided With ");
-					OutputDebugString(data[1].c_str());
-					OutputDebugString("\n");
-					gameObjectRemoved(g);
+				
+				if (g->id == data[0]) {
+					g->onCollide(data[1]);
+					//gameObjectRemoved(g);
 				}
 
 			}
@@ -388,7 +397,7 @@ void GameSystem::handleMessage(Msg *msg) {
 			}
 
 			Cannonball* c = new Cannonball(to_string(randomNum), "tempCannonball.png", cx, cy, corient, 5, 5);
-
+			c->objData = &objData;
 			// post cannon ball obj to systems
 			createGameObject(c);
 
