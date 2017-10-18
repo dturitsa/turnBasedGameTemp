@@ -142,7 +142,13 @@ void GameSystem::startSystemLoop() {
 				obj->lateUpdate();
 			}
 
-			//loop trhough list of objects to destroy added by the gameobjects
+			//loop through list of objects to create added by the gameobjects
+			for each (GameObject* g in objData.toCreateVector) {
+				gameObjectRemoved(g);
+			}
+			objData.toCreateVector.clear();
+
+			//loop through list of objects to destroy added by the gameobjects
 			for each (GameObject* g in objData.toDestroyVector) {
 				gameObjectRemoved(g);
 				gameObjects.erase(remove(gameObjects.begin(), gameObjects.end(), g), gameObjects.end());
@@ -153,7 +159,6 @@ void GameSystem::startSystemLoop() {
 			//loop through list of messages to send that were added by Game objects
 			for each (Msg* m in objData.toPostVector) {
 				msgBus->postMessage(m, this);
-			
 			}
 			objData.toPostVector.clear();
 
