@@ -68,9 +68,9 @@ void Cannonball::onCollide(GameObject* otherObj) {
 
 	if (otherObj != parentObject) {
 	}
-	OutputDebugString(id.c_str());
-	OutputDebugString(" COLLIDED WITH ");
-	OutputDebugString(otherObj->id.c_str());
-	OutputDebugString("\n");
+	//OutputDebugString(id.c_str());
+	//OutputDebugString(" COLLIDED WITH ");
+	//OutputDebugString(otherObj->id.c_str());
+	//OutputDebugString("\n");
 	
 }

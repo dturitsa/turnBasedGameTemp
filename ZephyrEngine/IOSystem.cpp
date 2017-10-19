@@ -45,7 +45,7 @@ void IOSystem::checkKeyPresses() {
 	// parses the data to get the proper code to the Gamesystem but that's
 	// a bit convoluted
 	if (GetAsyncKeyState(VK_UP) & 0x8000) {
-		OutputDebugString("Up Pressed\n");
+		//OutputDebugString("Up Pressed\n");
 		m->type = UP_ARROW_PRESSED;
 		if ((clock() - keyspressed["up"]) > timebetweenPresses) {
 			keyspressed["up"] = clock();
@@ -54,7 +54,7 @@ void IOSystem::checkKeyPresses() {
 	}
 
 	if (GetAsyncKeyState(VK_DOWN) & 0x8000) {
-		OutputDebugString("Down Pressed\n");
+		//OutputDebugString("Down Pressed\n");
 		m->type = DOWN_ARROW_PRESSED;
 		if ((clock() - keyspressed["down"]) > timebetweenPresses) {
 			keyspressed["down"] = clock();
@@ -63,7 +63,7 @@ void IOSystem::checkKeyPresses() {
 	}
 
 	if (GetAsyncKeyState(VK_SPACE) & 0x8000) {
-		OutputDebugString("Space Pressed\n");
+		//OutputDebugString("Space Pressed\n");
 		m->type = SPACEBAR_PRESSED;
 		if ((clock() - keyspressed["space"]) > timebetweenPresses) {
 			keyspressed["space"] = clock();
@@ -72,7 +72,7 @@ void IOSystem::checkKeyPresses() {
 	}
 
 	if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
-		OutputDebugString("Right Pressed\n");
+		//OutputDebugString("Right Pressed\n");
 		m->type = RIGHT_ARROW_PRESSED;
 		if ((clock() - keyspressed["right"]) > timebetweenPresses) {
 			keyspressed["right"] = clock();
@@ -81,7 +81,7 @@ void IOSystem::checkKeyPresses() {
 	}
 
 	if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
-		OutputDebugString("Left Pressed\n");
+		//OutputDebugString("Left Pressed\n");
 		m->type = LEFT_ARROW_PRESSED;
 		if ((clock() - keyspressed["left"]) > timebetweenPresses) {
 			keyspressed["left"] = clock();
@@ -90,7 +90,7 @@ void IOSystem::checkKeyPresses() {
 	}
 
 	if (GetAsyncKeyState('A') & 0x8000) {
-		OutputDebugString("A Pressed\n");
+		//OutputDebugString("A Pressed\n");
 		m->type = KEY_A_PRESSED;
 		if ((clock() - keyspressed["a"]) > timebetweenPresses) {
 			keyspressed["a"] = clock();
@@ -99,7 +99,7 @@ void IOSystem::checkKeyPresses() {
 	}
 
 	if (GetAsyncKeyState('D') & 0x8000) {
-		OutputDebugString("D Pressed\n");
+		//OutputDebugString("D Pressed\n");
 		m->type = KEY_D_PRESSED;
 		if ((clock() - keyspressed["d"]) > timebetweenPresses) {
 			keyspressed["d"] = clock();
@@ -108,7 +108,7 @@ void IOSystem::checkKeyPresses() {
 	}
 
 	if (GetAsyncKeyState('Z') & 0x8000) {
-		OutputDebugString("Z Pressed\n");
+		//OutputDebugString("Z Pressed\n");
 		m->type = TEST_KEY_PRESSED;
 		if ((clock() - keyspressed["z"]) > timebetweenPresses) {
 			keyspressed["z"] = clock();

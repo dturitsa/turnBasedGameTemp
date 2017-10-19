@@ -65,9 +65,9 @@ void PhysicsSystem::startSystemLoop()
 			}
 			else if (it->second.tag == "Remove")
 			{
-				OutputDebugString("removing: ");
+		/*		OutputDebugString("removing: ");
 				OutputDebugString(it->first.c_str());
-				OutputDebugString("\n");
+				OutputDebugString("\n");*/
 				it = Physics.GameObjects.erase(it);
 				break;
 			}

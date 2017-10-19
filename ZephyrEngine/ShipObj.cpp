@@ -91,10 +91,10 @@ void ShipObj::onCollide(GameObject* otherObj) {
 	if (health < 0) {
 		objData->toDestroyVector.push_back(this);
 	}
-	OutputDebugString(id.c_str());
-	OutputDebugString(" COLLIDED WITH ");
-	OutputDebugString(otherObj->id.c_str());
-	OutputDebugString("\n");
+	//OutputDebugString(id.c_str());
+	//OutputDebugString(" COLLIDED WITH ");
+	//OutputDebugString(otherObj->id.c_str());
+	//OutputDebugString("\n");
 }
 
 //direction = "left",  "right", forward
