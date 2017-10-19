@@ -18,7 +18,7 @@ PhysicsSystem::PhysicsSystem(MessageBus* mbus) : System(mbus)
 {
 	//create wind object(move to message handle?)
 	//Physics.addObject("Wind", "Wind", 1,1,45, 0, 0, .8, 0, 0);//x,y,orientation,width,height, windscale, rotSPeed, inertia
-	Wind.direction = 140;
+	Wind.direction = 90;
 	Wind.power = 0.8;
 }
 
@@ -319,6 +319,10 @@ void PhysicsSystem::updateShip(PhysicsObject &ship)
 	Physics.absolute(windPercentage);
 	windPercentage = 1 - (windPercentage / 180);
 	Physics.absolute(windPercentage);
+
+	if (windPercentage < 0.2)//temp limit the min movement to 40% speed
+		windPercentage = 0.2;
+
 	movementScale *= windPercentage;
 	objectDirection = Physics.convertAngleToVector(ship.rotation);
 	ship.position.translate(objectDirection.x * movementScale, objectDirection.y * movementScale);

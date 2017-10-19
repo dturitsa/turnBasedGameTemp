@@ -14,8 +14,8 @@ public:
 	void Cannonball::earlyUpdate();
 	void Cannonball::midUpdate() override;
 	void Cannonball::lateUpdate();
-	void onCollide(std::string otherObjId) override;
-
+	void onCollide(GameObject* otherObj) override;
+	std::string deathSprite = "WaterSplash.png";
 	int counter = 0;
 };
 

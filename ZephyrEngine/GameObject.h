@@ -32,7 +32,8 @@ public:
 	void earlyUpdate();
 	virtual void midUpdate();
 	void lateUpdate();
-	virtual void onCollide(std::string otherObj);
+	virtual void onCollide(GameObject* otherObj);
+	GameObject* parentObject;
 protected:
 
 private:

@@ -39,9 +39,10 @@ void Cannonball::midUpdate() {
 	//OutputDebugString("\n");
 	counter++;
 	
+
 	if (counter > 90 && counter < 110) {
 		std::ostringstream oss;
-		oss << id << "," << "1" << "," << "WaterSplash.png";
+		oss << id << "," << "1" << "," << deathSprite;
 		//Msg* m = new Msg(UPDATE_OBJ_SPRITE, oss.str());
 		objData->toPostVector.push_back(new Msg(UPDATE_OBJ_SPRITE, oss.str()));
 		//objData->toPostVector.push_back(new Msg(CHANGE_MAST, "shipwreck,0,Boat_S2.png"));
@@ -58,13 +59,18 @@ void Cannonball::lateUpdate() {
 
 }
 
-void Cannonball::onCollide(std::string otherObjId) {
+void Cannonball::onCollide(GameObject* otherObj) {
 	if (counter > 15) {
 		objData->toDestroyVector.push_back(this);
+		//deathSprite = "explosion.png";
+		//counter = 107;
+	}
+
+	if (otherObj != parentObject) {
 	}
 	OutputDebugString(id.c_str());
 	OutputDebugString(" COLLIDED WITH ");
-	OutputDebugString(otherObjId.c_str());
+	OutputDebugString(otherObj->id.c_str());
 	OutputDebugString("\n");
 	
 }

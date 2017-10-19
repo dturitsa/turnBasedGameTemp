@@ -53,10 +53,10 @@ void GameObject::lateUpdate() {
 
 }
 
-void GameObject::onCollide(std::string otherObjId) {
+void GameObject::onCollide(GameObject* otherObj) {
 	OutputDebugString(id.c_str());
 	OutputDebugString( " COLLIDED WITH " );
-	OutputDebugString(otherObjId.c_str());
+	OutputDebugString(otherObj->id.c_str());
 	OutputDebugString("\n");
 
 	objData->toDestroyVector.push_back(this);

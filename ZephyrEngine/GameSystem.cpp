@@ -64,6 +64,7 @@ void GameSystem::createGameObject(GameObject* g) {
 	for (GameObject* obj : gameObjects) {
 		if (g->id == obj->id) {
 			//g->id.append(to_string(rand()));
+			OutputDebugString("error id found");
 			return;
 		}
 	}
@@ -143,8 +144,8 @@ void GameSystem::startSystemLoop() {
 			}
 
 			//loop through list of objects to create added by the gameobjects
-			for each (GameObject* g in objData.toCreateVector) {
-				gameObjectRemoved(g);
+			for each (GameObject* c in objData.toCreateVector) {
+				createGameObject(c);
 			}
 			objData.toCreateVector.clear();
 
@@ -311,8 +312,12 @@ void GameSystem::handleMessage(Msg *msg) {
 			for (GameObject* g : gameObjects) {
 				//OutputDebugString(g->id.c_str());
 				if (g->id == data[0]) {
-					g->onCollide(data[1]);
-					//gameObjectRemoved(g);
+					for (GameObject* o : gameObjects) {
+						if (o->id == data[1]) {
+							g->onCollide(o);
+							break;
+						}
+					}
 				}
 
 			}
@@ -410,57 +415,27 @@ void GameSystem::handleMessage(Msg *msg) {
 			}
 			break;
 		case KEY_D_PRESSED: {
-			// fire a cannon ball to the right. update later for more functionality
-			// use random id for now
-			srand(time(NULL));
-			int randomNum = std::rand();
+			// fire a cannon ball to the right. 
 
-			int cx = 0;
-			int cy = 0;
-			int corient = 0;
-
-			// find the ship so that we know where to create the cball
 			for (GameObject* g : gameObjects) {
-				if (g->getObjectType() == "ShipObj") {
-					cx = g->x;
-					cy = g->y;
-					corient = g->orientation + 90;
+				if (g->id == "playerShip") {
+					ShipObj* so = dynamic_cast<ShipObj*>(g);
+					so->shoot("right");
 					break;
 				}
 			}
-
-			Cannonball* c = new Cannonball(to_string(randomNum), "tempCannonball.png", cx, cy, corient, 5, 5, &objData);
-			//c->objData = &objData;
-			// post cannon ball obj to systems
-			createGameObject(c);
 
 			break;
 		}
 		case KEY_A_PRESSED: {
 			// fire a cannon ball to the left.
-			// use random id for now
-			srand(time(NULL));
-			int randomNum = std::rand();
-
-			int cx = 0;
-			int cy = 0;
-			int corient = 0;
-
-			// find the ship so that we know where to create the cball
 			for (GameObject* g : gameObjects) {
-				if (g->getObjectType() == "ShipObj") {
-					cx = g->x;
-					cy = g->y;
-					corient = g->orientation + 90;
+				if (g->id == "playerShip") {
+					ShipObj* so = dynamic_cast<ShipObj*>(g);
+					so->shoot("left");
 					break;
 				}
 			}
-
-			Cannonball* c = new Cannonball(to_string(randomNum), "tempCannonball.png", cx, cy, ((corient+180)%360), 5, 5, &objData);
-			//c->objData = &objData;
-			// post cannon ball obj to systems
-			createGameObject(c);
-
 			break;
 		}
 		case UPDATE_OBJECT_POSITION: {

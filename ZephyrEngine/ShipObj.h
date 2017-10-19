@@ -1,6 +1,6 @@
 #pragma once
 #include "GameObject.h"
-
+#include "Cannonball.h"
 
 class ShipObj :
 	public GameObject {
@@ -14,8 +14,8 @@ public:
 	void earlyUpdate();
 	void midUpdate();
 	void lateUpdate();
-	void onCollide(std::string otherObjId) override;
-
+	void onCollide(GameObject* otherObj) override;
+	void shoot(std::string direction);
 	int sail;//the sail position 0-2
 	int rudder;// 0-4 rudder position
 	int health = 100;
