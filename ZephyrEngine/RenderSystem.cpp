@@ -5,7 +5,7 @@ const GLchar *vertexShaderSource = "#version 330 core\n"
 "layout ( location = 0 ) in vec3 position;\n"
 "layout ( location = 1 ) in vec2 texCoord;\n"
 "out vec2 TexCoord;\n"
-"uniform mat4 transform[3];\n" //transform[0] = scale, transform[1] = translate, transform[2] = rotation
+"uniform mat4 transform[3];\n" //transform[0] = rotate, transform[1] = scale, transform[2] = translate
 "void main()\n"
 "{\n"
 "gl_Position = transform[2] * transform[1] * transform[0] * vec4( position.x, position.y, position.z, 1.0 );\n"
@@ -21,8 +21,6 @@ const GLchar *fragmentShaderSource = "#version 330 core\n"
 "{\n"
 "color = texture(ourTexture1, TexCoord);\n"
 "}";
-
-vector<string> gameObjectsToTest;
 
 
 RenderSystem::RenderSystem(MessageBus* mbus) : System(mbus) {
@@ -40,13 +38,6 @@ RenderSystem::~RenderSystem() {
 }
 
 void RenderSystem::init() {
-
-	//TEMPORARY TEST OBJECTS	params:ID(useless), translateX, translateY, scale(=1), rotation
-	gameObjectsToTest.push_back("obj1,boatTest1.png,40,-60,1,0");
-	gameObjectsToTest.push_back("obj2,boatTest1.png,-40,-48,1,0");
-	gameObjectsToTest.push_back("obj3,boatTest.png,20,30,1,0");
-	gameObjectsToTest.push_back("obj3,boatTest.png,-20,40,0,0");
-
 
 	//Setup window and context
 	context = SDL_GL_CreateContext(window);
@@ -216,14 +207,6 @@ void RenderSystem::renderAllItems() {
 		//OutputDebugString("\n");
 		renderObject(*s);
 	}
-
-	//RENDER BOAT SCREEN
-	/*for (std::string s : gameObjectsToTest) {
-	//std::vector<std::string> data = split(s, ',');
-	//std::cout << s << "\n";
-	renderObject(s);
-	}
-	*/
 }
 
 void RenderSystem::renderObject(string object) {
@@ -295,7 +278,7 @@ void RenderSystem::startSystemLoop() {
 		if (thisTime  < currentGameTime) {
 			Sleep(currentGameTime - thisTime);
 		}
-		currentGameTime = thisTime + timeFrame;
+		currentGameTime += timeFrame;
 
 		handleMsgQ();
 

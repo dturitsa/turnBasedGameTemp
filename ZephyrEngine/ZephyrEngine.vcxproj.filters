@@ -78,6 +78,9 @@
     <ClInclude Include="ObjectData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WindArrowObj.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="System.cpp">
@@ -141,6 +144,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ObjectData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WindArrowObj.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

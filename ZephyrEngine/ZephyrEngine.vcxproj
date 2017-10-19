@@ -148,6 +148,7 @@
     <ClInclude Include="System.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="Vector2.h" />
+    <ClInclude Include="WindArrowObj.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Axis.cpp" />
@@ -169,6 +170,7 @@
     <ClCompile Include="ShipObj.cpp" />
     <ClCompile Include="System.cpp" />
     <ClCompile Include="Vector2.cpp" />
+    <ClCompile Include="WindArrowObj.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="fragmentShader.txt" />
