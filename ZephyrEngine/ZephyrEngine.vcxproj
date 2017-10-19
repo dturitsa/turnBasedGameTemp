@@ -130,7 +130,6 @@
     <ClInclude Include="Axis.h" />
     <ClInclude Include="Cannonball.h" />
     <ClInclude Include="ConsoleRenderer.h" />
-    <ClInclude Include="ctpl_stl.h" />
     <ClInclude Include="FullscreenObj.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameSystem.h" />
