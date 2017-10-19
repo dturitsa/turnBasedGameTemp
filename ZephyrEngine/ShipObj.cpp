@@ -64,12 +64,13 @@ void ShipObj::earlyUpdate() {
 }
 void ShipObj::midUpdate() {
 	counter++;
-	if (counter > 150 && id != "playerShip") {
+	if (counter == 150 && id != "playerShip") {
 		shoot("left");
+	}
+	else if (counter == 200 && id != "playerShip") {
 		shoot("right");
 		counter = 0;
 	}
-	
 }
 void ShipObj::lateUpdate() {
 
