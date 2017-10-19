@@ -16,7 +16,7 @@ public:
 
 	Msg* m;
 	
-	const int timeFrame = 10;
+	const int timeFrame = 20;
 
 	std::map<std::string, clock_t> keyspressed;
 

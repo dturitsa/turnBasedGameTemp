@@ -295,7 +295,7 @@ void RenderSystem::startSystemLoop() {
 		if (thisTime  < currentGameTime) {
 			Sleep(currentGameTime - thisTime);
 		}
-		currentGameTime += timeFrame;
+		currentGameTime = thisTime + timeFrame;
 
 		handleMsgQ();
 

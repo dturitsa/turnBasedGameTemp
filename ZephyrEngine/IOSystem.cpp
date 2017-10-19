@@ -20,7 +20,7 @@ void IOSystem::startSystemLoop() {
 			Sleep(currentGameTime - thisTime);
 		}
 
-		currentGameTime += timeFrame;
+		currentGameTime = thisTime + timeFrame;
 
 		//std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
 		//OutputDebugString("IO Loop on thread: ");

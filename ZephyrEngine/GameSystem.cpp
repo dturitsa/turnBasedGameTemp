@@ -96,7 +96,7 @@ void GameSystem::startSystemLoop() {
 		if (thisTime  < currentGameTime) {
 			Sleep(currentGameTime - thisTime);
 		}
-		currentGameTime += timeFrame;
+		currentGameTime = thisTime + timeFrame;
 
 		handleMsgQ();
 

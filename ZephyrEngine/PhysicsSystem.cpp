@@ -19,7 +19,7 @@ PhysicsSystem::PhysicsSystem(MessageBus* mbus) : System(mbus)
 	//create wind object(move to message handle?)
 	//Physics.addObject("Wind", "Wind", 1,1,45, 0, 0, .8, 0, 0);//x,y,orientation,width,height, windscale, rotSPeed, inertia
 	Wind.direction = 90;
-	Wind.power = 0.8;
+	Wind.power = 0.5;
 }
 
 PhysicsSystem::~PhysicsSystem()
@@ -37,7 +37,7 @@ void PhysicsSystem::startSystemLoop()
 		if (thisTime  < currentGameTime) {
 			Sleep(currentGameTime - thisTime);
 		}
-		currentGameTime += timeFrame;
+		currentGameTime = thisTime + timeFrame;
 
 		handleMsgQ();
 
@@ -171,7 +171,7 @@ void PhysicsSystem::handleMessage(Msg *msg)
 
 									   //check if physics enabled
 		if (atof(data[8].c_str()) == 1) {
-			Physics.addObject(ID, tag, x, y, width, height, rotation, 1, 1, PROJECTILE_INERTIA, renderable);
+			Physics.addObject(ID, tag, x, y, width, height, rotation, 1, .5, PROJECTILE_INERTIA, renderable);
 			//OutputDebugString("GOADDED in physics ");
 			//OutputDebugString("\n");
 		}
