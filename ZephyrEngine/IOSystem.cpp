@@ -14,7 +14,7 @@ void IOSystem::startSystemLoop() {
 	clock_t thisTime = clock();
 
 	int currentGameTime = 0;
-	while (true) {
+	while (alive) {
 		thisTime = clock();
 		if (thisTime  < currentGameTime) {
 			Sleep(currentGameTime - thisTime);

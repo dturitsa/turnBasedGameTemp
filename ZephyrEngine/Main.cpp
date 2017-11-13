@@ -62,12 +62,23 @@ int main(int argc, char *argv[]) {
 	//						Console Loop							//
 	//////////////////////////////////////////////////////////////////
 	bool alive = true; //Move this
+	clock_t thisTime = clock();
+	int currentGameTime = 0;
+
 	// TO DO: Implement 
 	while (alive) {
+		if (thisTime  < currentGameTime) {
+			Sleep(currentGameTime - thisTime);
+		}
+		currentGameTime = thisTime + 100;
+
 		SDL_Event windowEvent;
 		while (SDL_PollEvent(&windowEvent)) {
 			if (SDL_QUIT == windowEvent.type) {
 				rs->stopSystemLoop();
+				gs->alive  = false;
+				ps->alive = false;
+				ios->alive = false;
 				alive = false;
 			}
 		}
