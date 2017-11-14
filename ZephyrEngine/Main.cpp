@@ -99,7 +99,7 @@ int main(int argc, char *argv[]) {
 	gs->alive = false;
 	rs->alive = false;
 	ps->alive = false;
-
+	ais->alive = false;
 
 	//////////////////////////////////////////////////////////////////
 	//						Thread Joining							//
