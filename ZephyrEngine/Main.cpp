@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
 
 			}
 		}
-		OutputDebugString("outside\n");
+		//OutputDebugString("outside\n");
 	}
 	
 	// if we're out here, that means malive was set to false.

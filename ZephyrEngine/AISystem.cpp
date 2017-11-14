@@ -28,8 +28,8 @@ void AISystem::handleMessage(Msg *msg)
 		if (data[0] == "enemy1" || data[0] == "enemy2") {
 			AIObject* a = new AIObject();
 			a->id = data[0];
-			a->x = atof(data[2].c_str());
-			a->y = atof(data[3].c_str());
+			a->pos.x = atof(data[2].c_str());
+			a->pos.y = atof(data[3].c_str());
 			a->orientation = atof(data[5].c_str());
 			a->aiData = &aiData;
 			AIObjects.push_back(a);
@@ -39,8 +39,8 @@ void AISystem::handleMessage(Msg *msg)
 		if (atof(data[8].c_str()) == 1 && data[9] != "Cannonball") {
 			WorldObject* w = new WorldObject();
 			w->id = data[0];
-			w->x = atof(data[2].c_str());
-			w->y = atof(data[3].c_str());
+			w->pos.x = atof(data[2].c_str());
+			w->pos.y = atof(data[3].c_str());
 			w->orientation = atof(data[5].c_str());
 			aiData.worldObjects.push_back(w);
 		}
@@ -51,17 +51,31 @@ void AISystem::handleMessage(Msg *msg)
 
 		for (AIObject* a : AIObjects) {
 			if (a->id == data[0]) {
-				a->x = atof(data[2].c_str());
-				a->y = atof(data[3].c_str());
+				a->pos.x = atof(data[2].c_str());
+				a->pos.y = atof(data[3].c_str());
 				a->orientation = atof(data[5].c_str());
 			}
 		}
 
 		for (WorldObject* w : aiData.worldObjects) {
 			if (w->id == data[0]) {
-				w->x = atof(data[2].c_str());
-				w->y = atof(data[3].c_str());
+				w->pos.x = atof(data[2].c_str());
+				w->pos.y = atof(data[3].c_str());
 				w->orientation = atof(data[5].c_str());
+			}
+		}
+		break;
+	}
+	case GO_REMOVED: {
+		for (AIObject* a : AIObjects) {
+			if (a->id == data[0]) {
+				AIObjects.erase(remove(AIObjects.begin(), AIObjects.end(), a), AIObjects.end());
+			}
+		}
+
+		for (WorldObject* w : aiData.worldObjects) {
+			if (w->id == data[0]) {
+				aiData.worldObjects.erase(remove(aiData.worldObjects.begin(), aiData.worldObjects.end(), w), aiData.worldObjects.end());
 			}
 		}
 		break;

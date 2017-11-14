@@ -19,7 +19,7 @@ public:
 	AISystem(MessageBus* mbus);
 	void startSystemLoop();
 	void handleMessage(Msg *msg);
-	int timeFrame = 200;
+	int timeFrame = 100;
 	//std::mutex mtx;
 	AIData aiData;
 
