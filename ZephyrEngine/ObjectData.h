@@ -13,7 +13,7 @@ public:
 	//std::vector<GameObject*> toMessageVector;
 	//std::map<std::string, GameObject*> gameObjects;
 
-	ObjectData();
-	~ObjectData();
+	//ObjectData();
+//	~ObjectData();
 };
 

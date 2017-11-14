@@ -24,6 +24,9 @@ int main(int argc, char *argv[]) {
 	PhysicsSystem* ps = new PhysicsSystem(mbus);
 	mbus->addSystem(ps);
 
+	AISystem* ais = new AISystem(mbus);
+	mbus->addSystem(ais);
+
 	std::cout << "All systems created";
 
 	//////////////////////////////////////////////////////////////////
@@ -55,6 +58,7 @@ int main(int argc, char *argv[]) {
 	std::thread physicsThread(startPhysicsSystem, ps);
 	std::thread renderThread(startRenderSystem, rs);
 	std::thread ioThread(startIOSystem, ios);
+	std::thread aiThread(startAISystem, ais);
 	
 
 
@@ -79,6 +83,7 @@ int main(int argc, char *argv[]) {
 				gs->alive  = false;
 				ps->alive = false;
 				ios->alive = false;
+				ais->alive = false;
 				alive = false;
 			}
 		}
@@ -116,5 +121,9 @@ void startGameSystem(GameSystem* s) {
 }
 
 void startPhysicsSystem(PhysicsSystem* s) {
+	s->startSystemLoop();
+}
+
+void startAISystem(AISystem* s) {
 	s->startSystemLoop();
 }

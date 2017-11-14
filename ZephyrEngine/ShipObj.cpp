@@ -18,16 +18,16 @@ ShipObj::ShipObj(map <string, string> paramsMap, ObjectData* objData) : GameObje
 		cout << "\n" << e.what(); // information from length_error printed
 	}
 
-	if (id == "enemy1") {
-		string msgData = id + ",2,Boat_S2.png";
-		objData->toPostVector.push_back(new Msg(CHANGE_MAST, msgData));
+	//if (id == "enemy1") {
+	//	string msgData = id + ",2,Boat_S2.png";
+	//	objData->toPostVector.push_back(new Msg(CHANGE_MAST, msgData));
 
-		msgData = id + ",1,Boat_S2.png";
-		objData->toPostVector.push_back(new Msg(CHANGE_RUDDER, msgData));
+	//	msgData = id + ",1,Boat_S2.png";
+	//	objData->toPostVector.push_back(new Msg(CHANGE_RUDDER, msgData));
 
-		msgData = id + ",1,Boat_S2.png";
-		objData->toPostVector.push_back(new Msg(UPDATE_OBJ_SPRITE, msgData));
-	}
+	//	msgData = id + ",1,Boat_S2.png";
+	//	objData->toPostVector.push_back(new Msg(UPDATE_OBJ_SPRITE, msgData));
+	//}
 
 	if (id == "enemy2") {
 		string msgData = id + ",1,Boat_S2.png";
