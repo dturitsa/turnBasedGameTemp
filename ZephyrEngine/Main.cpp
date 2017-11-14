@@ -24,6 +24,9 @@ int main(int argc, char *argv[]) {
 	PhysicsSystem* ps = new PhysicsSystem(mbus);
 	mbus->addSystem(ps);
 
+	AISystem* ais = new AISystem(mbus);
+	mbus->addSystem(ais);
+
 	std::cout << "All systems created";
 
 	//////////////////////////////////////////////////////////////////
@@ -55,6 +58,7 @@ int main(int argc, char *argv[]) {
 	std::thread physicsThread(startPhysicsSystem, ps);
 	std::thread renderThread(startRenderSystem, rs);
 	std::thread ioThread(startIOSystem, ios);
+	std::thread aiThread(startAISystem, ais);
 	
 
 
@@ -81,9 +85,12 @@ int main(int argc, char *argv[]) {
 				rs->alive = false;
 				ps->alive = false;
 				malive = false;
+				ais->alive = false;
+	
+
 			}
 		}
-		OutputDebugString("outside\n");
+		//OutputDebugString("outside\n");
 	}
 	
 	// if we're out here, that means malive was set to false.
@@ -105,6 +112,8 @@ int main(int argc, char *argv[]) {
 	OutputDebugString("\nRT Ended\n");
 	gameSystemThread.join();
 	OutputDebugString("\nGS Ended\n");
+	aiThread.join();
+	OutputDebugString("\nAI Ended\n");
 
 
 	return 1;
@@ -130,5 +139,9 @@ void startGameSystem(GameSystem* s) {
 }
 
 void startPhysicsSystem(PhysicsSystem* s) {
+	s->startSystemLoop();
+}
+
+void startAISystem(AISystem* s) {
 	s->startSystemLoop();
 }

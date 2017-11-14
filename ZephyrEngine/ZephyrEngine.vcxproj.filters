@@ -84,6 +84,15 @@
     <ClInclude Include="NeuralNetwork.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AISystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AIObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AIData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="System.cpp">
@@ -153,6 +162,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="NeuralNetwork.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AISystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AIObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
