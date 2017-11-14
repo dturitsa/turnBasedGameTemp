@@ -9,6 +9,7 @@
 
 
 MessageBus* mbus;
+volatile bool malive;
 
 int main(int argc, char *argv[]);
 
@@ -17,3 +18,4 @@ void startIOSystem(IOSystem* s);
 void startRenderSystem(RenderSystem* s);
 void startGameSystem(GameSystem* s);
 void startPhysicsSystem(PhysicsSystem* s);
+

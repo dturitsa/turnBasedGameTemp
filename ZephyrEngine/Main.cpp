@@ -61,12 +61,12 @@ int main(int argc, char *argv[]) {
 	//////////////////////////////////////////////////////////////////
 	//						Console Loop							//
 	//////////////////////////////////////////////////////////////////
-	bool alive = true; //Move this
+	malive = true; //Move this
 	clock_t thisTime = clock();
 	int currentGameTime = 0;
 
 	// TO DO: Implement 
-	while (alive) {
+	while (malive) {
 		if (thisTime  < currentGameTime) {
 			Sleep(currentGameTime - thisTime);
 		}
@@ -76,22 +76,36 @@ int main(int argc, char *argv[]) {
 		while (SDL_PollEvent(&windowEvent)) {
 			if (SDL_QUIT == windowEvent.type) {
 				rs->stopSystemLoop();
-				gs->alive  = false;
-				ps->alive = false;
 				ios->alive = false;
-				alive = false;
+				gs->alive = false;
+				rs->alive = false;
+				ps->alive = false;
+				malive = false;
 			}
 		}
+		OutputDebugString("outside\n");
 	}
 	
+	// if we're out here, that means malive was set to false.
+	rs->stopSystemLoop();
+	ios->alive = false;
+	gs->alive = false;
+	rs->alive = false;
+	ps->alive = false;
+
+
 	//////////////////////////////////////////////////////////////////
 	//						Thread Joining							//
 	//////////////////////////////////////////////////////////////////
 	ioThread.join();
+	OutputDebugString("\nIO Ended\n");
 	physicsThread.join();
+	OutputDebugString("\nPS Ended\n");
 	renderThread.join();
+	OutputDebugString("\nRT Ended\n");
 	gameSystemThread.join();
-	
+	OutputDebugString("\nGS Ended\n");
+
 
 	return 1;
 }

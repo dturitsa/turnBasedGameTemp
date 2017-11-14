@@ -1,5 +1,7 @@
 #include "GameSystem.h"
 
+extern volatile bool malive;
+
 GameSystem::GameSystem(MessageBus* mbus) : System(mbus) {
 	objData = *(new ObjectData());
 }
@@ -236,9 +238,8 @@ void GameSystem::handleMessage(Msg *msg) {
 			break;
 		case SPACEBAR_PRESSED:
 			if (markerPosition == 2) {
-				// Exit was selected
-				mm->type = EXIT_GAME;
-				msgBus->postMessage(mm, this);
+				// Exit was selected, kill main
+				malive = false;
 			}
 
 			if (markerPosition == 1) {

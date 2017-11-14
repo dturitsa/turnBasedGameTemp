@@ -315,7 +315,6 @@ void RenderSystem::startSystemLoop() {
 }
 
 void RenderSystem::stopSystemLoop() {
-
 	SDL_GL_DeleteContext(context);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
@@ -352,6 +351,7 @@ void RenderSystem::handleMessage(Msg *msg) {
 		break;
 	case UPDATE_OBJ_SPRITE:
 		updateObjSprite(msg);
+		break;
 	default:
 		break;
 	}

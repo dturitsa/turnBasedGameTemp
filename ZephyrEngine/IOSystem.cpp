@@ -28,8 +28,6 @@ void IOSystem::startSystemLoop() {
 		//OutputDebugString("\n");
 
 		checkKeyPresses();
-
-
 	}
 }
 

@@ -15,7 +15,7 @@ public:
 	virtual void handleMessage(Msg *msg);
 	void addToMsgQ(Msg *msg);
 	
-	bool alive = true;
+	volatile bool alive = true;
 protected:
 	MessageBus* msgBus;
 	std::queue<Msg*> msgQ;
