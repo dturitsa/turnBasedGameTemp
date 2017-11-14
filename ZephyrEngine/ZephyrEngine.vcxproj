@@ -127,6 +127,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AIData.h" />
+    <ClInclude Include="AIObject.h" />
+    <ClInclude Include="AISystem.h" />
     <ClInclude Include="Axis.h" />
     <ClInclude Include="Cannonball.h" />
     <ClInclude Include="ConsoleRenderer.h" />
@@ -151,6 +154,8 @@
     <ClInclude Include="WindArrowObj.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AIObject.cpp" />
+    <ClCompile Include="AISystem.cpp" />
     <ClCompile Include="Axis.cpp" />
     <ClCompile Include="Cannonball.cpp" />
     <ClCompile Include="ConsoleRenderer.cpp" />
