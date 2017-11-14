@@ -25,14 +25,14 @@ void AIObject::update(){
 		}
 	}
 
-	if (target != NULL && this->id == "enemy1") {
+	if (target != NULL) {
 		int faceAngle = angleToTarget(this->pos, target->pos);
 		int range = distanceToTarget(this->pos, target->pos);
 
 		if (range > 120) {
 			turnToFace(faceAngle);
 		}
-		else if (range < 100) {
+		else if (range < 90) {
 			turnToFace(faceAngle + 90);
 		}
 		
