@@ -138,6 +138,7 @@
     <ClInclude Include="MessageBus.h" />
     <ClInclude Include="Msg.h" />
     <ClInclude Include="ConsoleRenderSystem.h" />
+    <ClInclude Include="NeuralNetwork.h" />
     <ClInclude Include="ObjectData.h" />
     <ClInclude Include="PhysicsEngine.h" />
     <ClInclude Include="PhysicsHeader.h" />
@@ -162,6 +163,7 @@
     <ClCompile Include="MessageBus.cpp" />
     <ClCompile Include="Msg.cpp" />
     <ClCompile Include="ConsoleRenderSystem.cpp" />
+    <ClCompile Include="NeuralNetwork.cpp" />
     <ClCompile Include="ObjectData.cpp" />
     <ClCompile Include="PhysicsEngine.cpp" />
     <ClCompile Include="PhysicsObject.cpp" />
