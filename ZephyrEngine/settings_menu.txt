@@ -24,7 +24,7 @@ windScale: 0;
 
 gameObjectType: FullscreenObj,
 id: obj3,
-renderable: sZ6_Marker_P0.png,
+renderable: Z6_Marker_P0.png,
 xPos: 0,
 yPos: 0,
 zPos: 10,

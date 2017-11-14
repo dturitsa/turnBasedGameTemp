@@ -1,7 +1,5 @@
 #include "GameSystem.h"
 
-extern volatile bool malive;
-
 GameSystem::GameSystem(MessageBus* mbus) : System(mbus) {
 	objData = *(new ObjectData());
 }
@@ -244,6 +242,10 @@ void GameSystem::handleMessage(Msg *msg) {
 
 			if (markerPosition == 1) {
 				// Go to settings
+				removeAllGameObjects();
+				addGameObjects("settings_menu.txt");
+				levelLoaded = 1;
+				markerPosition = 0;
 			}
 			else if (markerPosition == 0) {
 				// start the game (or go to level select?)
@@ -262,24 +264,52 @@ void GameSystem::handleMessage(Msg *msg) {
 	}
 	else if (levelLoaded == 1) {
 		// settings menu
-
-
 		switch (msg->type) {
-		case UP_ARROW_PRESSED:
-			// move the marker location and let rendering know
-			markerPosition++;
-			markerPosition = markerPosition % 3;
-			break;
 		case DOWN_ARROW_PRESSED:
-			// move the marker location and let rendering know
+			// move the marker location and let rendering know?
+			markerPosition++;
+			if (markerPosition > 2) {
+				markerPosition = 2;
+			}
+
+			mm->type = UPDATE_OBJ_SPRITE;
+			oss << "obj3,1,Z6_Marker_P" << markerPosition << ".png,";
+			mm->data = oss.str();
+			msgBus->postMessage(mm, this);
+			break;
+		case UP_ARROW_PRESSED:
+			// move the marker location and let rendering know?
 			markerPosition--;
 			if (markerPosition < 0) {
 				markerPosition = 0;
 			}
 			markerPosition = markerPosition % 3;
+
+			mm->type = UPDATE_OBJ_SPRITE;
+			oss << "obj3,1,Z6_Marker_P" << markerPosition << ".png,";
+			mm->data = oss.str();
+			msgBus->postMessage(mm, this);
 			break;
 		case SPACEBAR_PRESSED:
-			// post message of current marker location activation?
+			if (markerPosition == 2) {
+				// Back button, go to menu
+				removeAllGameObjects();
+				addGameObjects("main_menu.txt");
+				levelLoaded = 0;
+				markerPosition = 0;
+			}
+
+			if (markerPosition == 1) {
+				// change game sound to "off"
+				mm->type = AUDIO_MUTE;
+				mm->data = "1";
+				msgBus->postMessage(mm, this);
+			} else if (markerPosition == 0) {
+				// change game sound to "on"
+				mm->type = AUDIO_MUTE;
+				mm->data = "0";
+				msgBus->postMessage(mm, this);
+			}
 			break;
 		default:
 			break;

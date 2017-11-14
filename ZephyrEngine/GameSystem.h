@@ -18,6 +18,8 @@
 #include <thread>
 #include "ObjectData.h"
 
+extern volatile bool malive;
+
 class GameSystem : public System {
 public:
 	GameSystem(MessageBus* mbus);
