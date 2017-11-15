@@ -32,6 +32,10 @@ public:
 	int angleToTarget(vector2 origin, vector2 target);
 	int distanceToTarget(vector2 origin, vector2 target);
 	void turnToFace(int newOrientation);
+	int seekBehaviour();
+	int engageBehaviour();
+	int colAvoidanceBehaviour();
+	inline int signedOrientation(int unsignedOrientation);
 
 	std::string id;
 	int orientation;

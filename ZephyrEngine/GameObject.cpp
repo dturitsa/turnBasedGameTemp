@@ -59,5 +59,5 @@ void GameObject::onCollide(GameObject* otherObj) {
 	//OutputDebugString(otherObj->id.c_str());
 	//OutputDebugString("\n");
 
-	objData->toDestroyVector.push_back(this);
+	//objData->toDestroyVector.push_back(this);
 }

@@ -175,6 +175,8 @@ void PhysicsSystem::handleMessage(Msg *msg)
 				Physics.addObject(ID, tag, x, y, width, height, rotation, 1, .5, 0, SHIP_ACCELERATION, renderable);
 			if(tag == "Cannonball")
 				Physics.addObject(ID, tag, x, y, width, height, rotation, 1, .5, PROJECTILE_SPEED, 0, renderable);
+			if (tag == "GameObject")
+				Physics.addObject(ID, tag, x, y, width, height, rotation, 1, .5, 0, 0, renderable);
 			//OutputDebugString("GOADDED in physics ");
 			//OutputDebugString("\n");
 		}

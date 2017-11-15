@@ -38,6 +38,20 @@ windScale: 1,
 sail: 0,
 rudder: 2;
 
+gameObjectType: GameObject,
+id: island1,
+renderable: island.png,
+xPos: -70,
+yPos: -60,
+zPos: 1,
+orientation: 90,
+width: 70,
+length: 70,
+physicsEnabled: 1,
+windScale: 0,
+sail: 0,
+rudder: 2;
+
 gameObjectType: ShipObj,
 id: enemy2,
 renderable: boatTest1.png,

@@ -23,23 +23,17 @@ void AIObject::update(){
 	}
 
 	if (target != NULL) {
-		int faceAngle = angleToTarget(this->pos, target->pos);
 		int range = distanceToTarget(this->pos, target->pos);
 
 		if (range > 90) {
-			turnToFace(faceAngle);
+			seekBehaviour();
 		}
 		else if (range < 80) {
-			int oldDir = this->orientation;
-			if (oldDir > 180)
-				oldDir -= 360;
-
-			if(oldDir - faceAngle > 0)
-				turnToFace(faceAngle + 90);
-			else
-				turnToFace(faceAngle - 90);
+			engageBehaviour();
 		}
 	}
+
+	//set mast
 	string msgData = id + ",2,Boat_S2.png";
 	aiData->toPostVector.push_back(new Msg(CHANGE_MAST, msgData));
 
@@ -50,19 +44,64 @@ void AIObject::update(){
 	//aiData->toPostVector.push_back(new Msg(CHANGE_RUDDER, msgData));
 }
 
+int AIObject::colAvoidanceBehaviour() {
+	return 0;
+}
+
+//close distance to the traget the target
+int AIObject::seekBehaviour() {
+	int faceAngle = angleToTarget(this->pos, target->pos);
+	turnToFace(faceAngle);
+
+	return faceAngle;
+}
+
+//aim guns on target and fire
+int AIObject::engageBehaviour() {
+	int faceAngle = angleToTarget(this->pos, target->pos);
+	//int faceAngle = target->orientation;
+	int ownDir = this->orientation;
+
+	ownDir = signedOrientation(ownDir);
+	faceAngle = signedOrientation(faceAngle);
+
+	if ((ownDir - 90 - faceAngle) < (ownDir + 90 - faceAngle)) {
+		faceAngle -= 90;
+		OutputDebugString("TURN LEFT\n");
+	}
+	else {
+		faceAngle -= 90;
+		OutputDebugString("TURN RIGHT\n");
+	}
+	
+	turnToFace(faceAngle);
+
+	return faceAngle;
+}
+
+inline int AIObject::signedOrientation(int unsignedOrientation) {
+	int signedOrientation = unsignedOrientation;
+	if (signedOrientation > 180) {
+		signedOrientation -= 360;
+	}
+	return signedOrientation;
+}
+
+
+//returns the distance to the target
 int AIObject::distanceToTarget(vector2 origin, vector2 destination) {
 	vector2 targetDir;
 	targetDir.x = destination.x - origin.x;
 	targetDir.y = destination.y - origin.y;
 
 	int magnitude = sqrt(pow(targetDir.x, 2) + pow(targetDir.y, 2));
-	OutputDebugString(to_string(magnitude).c_str());
+	//OutputDebugString(to_string(magnitude).c_str());
 	//OutputDebugString(id.c_str());
-	OutputDebugString("\n");
+	//OutputDebugString("\n");
 	return magnitude;
 }
 
-//returns the facing to the target
+//returns the facing to the target in degrees
 int AIObject::angleToTarget(vector2 origin, vector2 destination) {
 	
 	vector2 targetDir;
@@ -76,6 +115,7 @@ int AIObject::angleToTarget(vector2 origin, vector2 destination) {
 	return outputAngle;
 }
 
+//turn ship to face specified direction
 void AIObject::turnToFace(int newDir) {
 	int oldDir = this->orientation;
 	if (oldDir > 180)
