@@ -173,8 +173,8 @@ void PhysicsSystem::handleMessage(Msg *msg)
 		if (atof(data[8].c_str()) == 1) {
 			if(tag == "ShipObj")
 				Physics.addObject(ID, tag, x, y, width, height, rotation, 1, .5, 0, SHIP_ACCELERATION, renderable);
-			//if(tag == "Cannonball")
-				//Physics.addObject(ID, tag, x, y, width, height, rotation, 1, .5, PROJECTILE_SPEED, 0, renderable);
+			if(tag == "Cannonball")
+				Physics.addObject(ID, tag, x, y, width, height, rotation, 1, .5, PROJECTILE_SPEED, 0, renderable);
 			//OutputDebugString("GOADDED in physics ");
 			//OutputDebugString("\n");
 		}
