@@ -5,10 +5,7 @@ using namespace std;
 AIObject::AIObject()
 {
 	target = NULL;
-
-
 }
-
 
 AIObject::~AIObject()
 {
@@ -29,19 +26,22 @@ void AIObject::update(){
 		int faceAngle = angleToTarget(this->pos, target->pos);
 		int range = distanceToTarget(this->pos, target->pos);
 
-		if (range > 120) {
+		if (range > 90) {
 			turnToFace(faceAngle);
 		}
-		else if (range < 90) {
-			turnToFace(faceAngle + 90);
+		else if (range < 80) {
+			int oldDir = this->orientation;
+			if (oldDir > 180)
+				oldDir -= 360;
+
+			if(oldDir - faceAngle > 0)
+				turnToFace(faceAngle + 90);
+			else
+				turnToFace(faceAngle - 90);
 		}
-		
-		
-		
 	}
 	string msgData = id + ",2,Boat_S2.png";
 	aiData->toPostVector.push_back(new Msg(CHANGE_MAST, msgData));
-
 
 	msgData = id + ",1,Boat_S2.png";
 	aiData->toPostVector.push_back(new Msg(UPDATE_OBJ_SPRITE, msgData));
@@ -85,15 +85,15 @@ void AIObject::turnToFace(int newDir) {
 
 	string msgData = id + ",0,Boat_S2.png";
 
-	if (turnMagnitude > 20) {
+	if (turnMagnitude > 10) {
 		msgData = id + ",0,Boat_S2.png";
 		aiData->toPostVector.push_back(new Msg(CHANGE_RUDDER, msgData));
 	}
-	else if (turnMagnitude < -20) {
+	else if (turnMagnitude < -10) {
 		msgData = id + ",4,Boat_S2.png";
 		aiData->toPostVector.push_back(new Msg(CHANGE_RUDDER, msgData));
 	}
-	else if (turnMagnitude > -10 && turnMagnitude < 10) {
+	else if (turnMagnitude > -5 && turnMagnitude < 5) {
 		msgData = id + ",2,Boat_S2.png";
 		aiData->toPostVector.push_back(new Msg(CHANGE_RUDDER, msgData));
 	}
