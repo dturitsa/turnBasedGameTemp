@@ -99,22 +99,21 @@ void ShipObj::onCollide(GameObject* otherObj) {
 
 //direction = "left",  "right", forward
 void ShipObj::shoot(string direction) {
-	//srand(time(NULL));
-	int shootDir;
-	int randomNum = std::rand();
-	if (direction == "right") {
-		 shootDir = orientation + 90;
-	}
-	else if (direction == "left") {
-		shootDir = orientation + -90;
-	} 
-	else if (direction == "forward") {
-		shootDir = orientation;
-	}
-	
-	Cannonball* c = new Cannonball(to_string(randomNum), "cannon_ball.png", x, y, shootDir, 5, 5, objData);
-	c->parentObject = this;
-	objData->toCreateVector.push_back(c);
+	if (counter >= 200) {
+		//srand(time(NULL));
+		int shootDir;
+		int randomNum = std::rand();
+		if (direction == "right") {
+			shootDir = orientation + 90;
+		} else if (direction == "left") {
+			shootDir = orientation + -90;
+		} else if (direction == "forward") {
+			shootDir = orientation;
+		}
 
-
+		Cannonball* c = new Cannonball(to_string(randomNum), "cannon_ball.png", x, y, shootDir, 5, 5, objData);
+		c->parentObject = this;
+		objData->toCreateVector.push_back(c);
+	}
+	counter = 0;
 }
