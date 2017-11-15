@@ -24,6 +24,8 @@ public:
 	void stopSystemLoop();
 	void init();
 
+	int loadedLevel = 0;
+
 	GLint XSTART = 100, YSTART = 100, WIDTH = 1000, HEIGHT = 800; //Constants for drawing the window
 	GLfloat GAMEWIDTH = 200.0f, GAMEHEIGHT = 200.0f, //Amount of sprites that can fit in X and Y respectively
 				MAX_X = 200.0f, MAX_Y = 200.0f; //Amount of "x" and "y" coordinates in our world (x2 for - values)
@@ -85,4 +87,6 @@ private:
 	void panUp();
 	void panDown();
 	void cameraToPlayer();
+
+	void levelLoaded(Msg*m);
 };

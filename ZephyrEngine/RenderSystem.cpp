@@ -385,21 +385,34 @@ void RenderSystem::handleMessage(Msg *msg) {
 		updateObjSprite(msg);
 		break;
 
+	case LEVEL_LOADED:
+		levelLoaded(msg);
+		break;
 	//PANNING CAMERA
 	case SPACEBAR_PRESSED:
-		cameraToPlayer();
+		if (loadedLevel == 2) {
+			cameraToPlayer();
+		}
 		break;
 	case UP_ARROW_PRESSED:
-		panUp();
+		if (loadedLevel == 2) {
+			panUp();
+		}
 		break;
 	case DOWN_ARROW_PRESSED: 
-		panDown();
+		if (loadedLevel == 2) {
+			panDown();
+		}
 		break;
 	case RIGHT_ARROW_PRESSED:
-		panRight();
+		if (loadedLevel == 2) {
+			panRight();
+		}
 		break;
 	case LEFT_ARROW_PRESSED:
-		panLeft();
+		if (loadedLevel == 2) {
+			panLeft();
+		}
 		break;
 	default:
 		break;
@@ -533,4 +546,8 @@ void RenderSystem::cameraToPlayer() {
 			break;
 		}
 	}
+}
+
+void RenderSystem::levelLoaded(Msg* m) {
+	loadedLevel = atoi(m->data.c_str());
 }
