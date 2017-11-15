@@ -19,6 +19,7 @@
 #include "ObjectData.h"
 
 extern volatile bool malive;
+int volatile levelLoaded = -1;
 
 class GameSystem : public System {
 public:
@@ -45,7 +46,6 @@ public:
 	// 1	= Settings
 	// 2	= In Game
 	// 3	= Level select (if required)
-	int levelLoaded = -1;
 
 private:
 	void mainMenuHandler(Msg * msg);
