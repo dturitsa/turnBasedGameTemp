@@ -10,9 +10,9 @@ PhysicsEngine::~PhysicsEngine()
 
 }
 
-void PhysicsEngine::addObject(std::string ID, std::string tag, float xPosition, float yPosition, float width, float height, float rotation, float windscale, float rotationspeed, float inertia, std::string _renderable)
+void PhysicsEngine::addObject(std::string ID, std::string tag, float xPosition, float yPosition, float width, float height, float rotation, float windscale, float rotationspeed, float speed, float acceleration, std::string _renderable)
 {
-	PhysicsObject NewObject(tag, xPosition, yPosition, width, height, rotation, windscale, rotationspeed, inertia, _renderable);
+	PhysicsObject NewObject(tag, xPosition, yPosition, width, height, rotation, windscale, rotationspeed, speed, acceleration, _renderable);
 	GameObjects[ID] = NewObject;
 }
 
