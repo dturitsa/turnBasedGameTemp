@@ -19,6 +19,9 @@ public:
 	std::string id;
 	int orientation;
 	vector2 pos;
+	int height;
+	int width;
+	vector2 c[4]; //corner positions
 };
 
 
@@ -36,6 +39,7 @@ public:
 	int engageBehaviour();
 	int colAvoidanceBehaviour();
 	inline int signedOrientation(int unsignedOrientation);
+	inline int angleBetween(vector2 v1, vector2 v2);
 
 	std::string id;
 	int orientation;

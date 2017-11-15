@@ -62,6 +62,8 @@ void AISystem::handleMessage(Msg *msg)
 				w->pos.x = atof(data[2].c_str());
 				w->pos.y = atof(data[3].c_str());
 				w->orientation = atof(data[5].c_str());
+				w->width = atof(data[6].c_str());
+				w->height = atof(data[7].c_str());
 			}
 		}
 		break;
@@ -103,6 +105,26 @@ void AISystem::startSystemLoop() {
 		//update AI state
 		for (AIObject* a : AIObjects) {
 			a->update();
+		}
+
+		for (WorldObject* w : aiData.worldObjects) {
+			float halfWidth = w->width / 2;
+			float halfHeight = w->height / 2;
+			// Upper Left
+			w->c[0].x = w->pos.x - halfWidth;
+			w->c[0].y = w->pos.y + halfHeight;
+
+			//Upper Right
+			w->c[1].x = w->pos.x + halfWidth;
+			w->c[1].y = w->pos.y + halfHeight;
+
+			// Bottom Right
+			w->c[2].x = w->pos.x + halfWidth;
+			w->c[2].y = w->pos.y - halfHeight;
+
+			// Bottom Left
+			w->c[3].x = w->pos.x - halfWidth;
+			w->c[3].y = w->pos.y - halfHeight;
 		}
 
 		//loop through list of messages to send that were added by AI objects

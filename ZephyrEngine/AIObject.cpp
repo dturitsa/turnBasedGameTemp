@@ -22,6 +22,8 @@ void AIObject::update(){
 		}
 	}
 
+	colAvoidanceBehaviour();
+
 	if (target != NULL) {
 		int range = distanceToTarget(this->pos, target->pos);
 
@@ -45,8 +47,39 @@ void AIObject::update(){
 }
 
 int AIObject::colAvoidanceBehaviour() {
+	vector2 cDir[4];
+
+	for (WorldObject* w : aiData->worldObjects) {	
+
+		//if (w->id != "island1")
+		if (w->id == id ) //don't avoid collisions with yourself
+			continue;
+
+		for (int i = 0; i < 4; i++) {
+			cDir[i].x = w->c[i].x - this->pos.x;
+			cDir[i].y = w->c[i].y - this->pos.y;
+			//OutputDebugString(to_string(distanceToTarget(this->pos, w->c[i])).c_str());
+
+			//TODO fix angle to look at own facing
+			if (abs(distanceToTarget(pos, w->c[i])) < 70) {
+				abs(angleToTarget(pos, cDir[i]) - orientation) < 20;
+				OutputDebugString(id.c_str());
+				OutputDebugString(" AVOIDING COLLISION WITH ");
+				OutputDebugString(w->id.c_str());
+				OutputDebugString("\n");
+			}
+		}
+
+	}
 	return 0;
 }
+inline int AIObject::angleBetween(vector2 v1, vector2 v2) {
+	float dot = v1.x*v2.x + v1.y*v2.y;     // dot product between[x1, y1] and [x2, y2]
+	float det = v1.x*v2.y - v1.y*v2.x;     // determinant
+	return atan2(det, dot);  
+}
+
+
 
 //close distance to the traget the target
 int AIObject::seekBehaviour() {
@@ -67,11 +100,11 @@ int AIObject::engageBehaviour() {
 
 	if ((ownDir - 90 - faceAngle) < (ownDir + 90 - faceAngle)) {
 		faceAngle -= 90;
-		OutputDebugString("TURN LEFT\n");
+
 	}
 	else {
 		faceAngle -= 90;
-		OutputDebugString("TURN RIGHT\n");
+
 	}
 	
 	turnToFace(faceAngle);
