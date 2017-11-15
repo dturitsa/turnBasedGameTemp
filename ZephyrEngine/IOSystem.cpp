@@ -105,6 +105,42 @@ void IOSystem::checkKeyPresses() {
 		}
 	}
 
+	if (GetAsyncKeyState('Q') & 0x8000) {
+		//OutputDebugString("D Pressed\n");
+		m->type = KEY_Q_PRESSED;
+		if ((clock() - keyspressed["q"]) > timebetweenPresses) {
+			keyspressed["q"] = clock();
+			msgBus->postMessage(m, this);
+		}
+	}
+
+	if (GetAsyncKeyState('E') & 0x8000) {
+		//OutputDebugString("D Pressed\n");
+		m->type = KEY_E_PRESSED;
+		if ((clock() - keyspressed["e"]) > timebetweenPresses) {
+			keyspressed["e"] = clock();
+			msgBus->postMessage(m, this);
+		}
+	}
+
+	if (GetAsyncKeyState('S') & 0x8000) {
+		//OutputDebugString("D Pressed\n");
+		m->type = KEY_S_PRESSED;
+		if ((clock() - keyspressed["s"]) > timebetweenPresses) {
+			keyspressed["s"] = clock();
+			msgBus->postMessage(m, this);
+		}
+	}
+
+	if (GetAsyncKeyState('W') & 0x8000) {
+		//OutputDebugString("D Pressed\n");
+		m->type = KEY_W_PRESSED;
+		if ((clock() - keyspressed["w"]) > timebetweenPresses) {
+			keyspressed["w"] = clock();
+			msgBus->postMessage(m, this);
+		}
+	}
+
 	if (GetAsyncKeyState('Z') & 0x8000) {
 		//OutputDebugString("Z Pressed\n");
 		m->type = TEST_KEY_PRESSED;
