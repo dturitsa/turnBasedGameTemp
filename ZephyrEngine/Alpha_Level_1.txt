@@ -5,8 +5,8 @@ xPos: 0,
 yPos: 0,
 zPos: 10,
 orientation: 0,
-width: 200,
-length: 200,
+width: 600,
+length: 600,
 physicsEnabled: 0,
 windScale: 0;
 

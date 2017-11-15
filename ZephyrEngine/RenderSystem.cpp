@@ -149,6 +149,27 @@ void RenderSystem::draw(string ID, string sprite, float x, float y, float z, flo
 		transX(x), transY(y), 0, 1 //should add z posiiton at tome point
 
 	};
+	if (ID == "windmarker") {
+		temp = new GLfloat[80]{
+
+
+			cosf(radRot), -sinf(radRot), 0, 0, //Rotate 
+			sinf(radRot), cosf(radRot), 0, 0,
+			0, 0, 1, 0,
+			0, 0, 0, 1,
+
+			getScaleX(width), 0, 0, 0, //Scale
+			0, getScaleY(height), 0, 0,
+			0, 0, 1, 0,
+			0, 0, 0, 1,
+
+			1, 0, 0, 0, //Translate
+			0, 1, 0, 0,
+			0, 0, 1, 0,
+			(x / MAX_X), (y / MAX_Y), 0, 1 //should add z posiiton at tome point
+
+		};
+	}
 	GLint ourTransform = glGetUniformLocation(shaderProgram, "transform");
 	glUniformMatrix4fv(ourTransform, 3, GL_FALSE, temp);
 	
@@ -178,11 +199,13 @@ void RenderSystem::draw(string ID, string sprite, float x, float y, float z, flo
 }
 
 float RenderSystem::transX(float x) {
+	x += cameraX;
 	x *= 1 / MAX_X;
 	return x;
 }
 
 float RenderSystem::transY(float y) {
+	y += cameraY;
 	y *= 1 / MAX_Y;
 	return y;
 }
@@ -212,7 +235,7 @@ void RenderSystem::renderAllItems() {
 void RenderSystem::renderObject(string object) {
 	//object format: ID,png,x,y,z,orientation
 	string ID, sprite;
-	float x, y, z, orientation;
+	float x, y, z, orientation, w, h;
 
 	//Split object
 	vector<string> objectData = split(object, ',');
@@ -224,9 +247,18 @@ void RenderSystem::renderObject(string object) {
 	y = atof(objectData[3].c_str());
 	z = atof(objectData[4].c_str());
 	orientation = atof(objectData[5].c_str());
-	float w = atof(objectData[6].c_str());
-	float h = atof(objectData[7].c_str());
-	
+	w = atof(objectData[6].c_str());
+	h = atof(objectData[7].c_str());
+
+	/*ID = object->ID;
+	sprite = object->sprite;
+	x = object->x;
+	y = object->y;
+	z = object->z;
+	orientation = object->orientation;
+	w = object->w;
+	h = object->h;*/
+
 	//Load texture into memory if it is not already 
 	//(probably not the right way to do it)
 	map<string, GLuint>::iterator it = textures.find(sprite);
@@ -352,6 +384,23 @@ void RenderSystem::handleMessage(Msg *msg) {
 	case UPDATE_OBJ_SPRITE:
 		updateObjSprite(msg);
 		break;
+
+	//PANNING CAMERA
+	case SPACEBAR_PRESSED:
+		cameraToPlayer();
+		break;
+	case UP_ARROW_PRESSED:
+		panUp();
+		break;
+	case DOWN_ARROW_PRESSED: 
+		panDown();
+		break;
+	case RIGHT_ARROW_PRESSED:
+		panRight();
+		break;
+	case LEFT_ARROW_PRESSED:
+		panLeft();
+		break;
 	default:
 		break;
 	}
@@ -447,5 +496,41 @@ void RenderSystem::updateObjSprite(Msg* m) {
 			return;
 		}
 
+	}
+}
+
+void RenderSystem::panLeft() {
+	if (cameraX + CAMERAPAN_X <= maxCameraX) {
+		cameraX += CAMERAPAN_X;
+	}
+}
+
+void RenderSystem::panRight() {
+	if (cameraX - CAMERAPAN_X >= minCameraX) {
+		cameraX -= CAMERAPAN_X;
+	}
+}
+
+void RenderSystem::panUp() {
+	if (cameraY - CAMERAPAN_Y >= minCameraY) {
+		cameraY -= CAMERAPAN_Y;
+	}
+}
+
+void RenderSystem::panDown() {
+	if (cameraY + CAMERAPAN_Y <= maxCameraY) {
+		cameraY += CAMERAPAN_Y;
+	}
+}
+
+void RenderSystem::cameraToPlayer() {
+	for (string* s : gameObjectsToRender) {
+		vector<string> obj = split(*s, ',');
+
+		if (obj.at(0) == "playerShip") {
+			cameraX = -atof(obj.at(2).c_str());
+			cameraY = -atof(obj.at(3).c_str());
+			break;
+		}
 	}
 }
