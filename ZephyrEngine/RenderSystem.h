@@ -9,8 +9,6 @@
 #include <freeglut.h>
 #include <math.h>  
 
-extern volatile int levelLoaded;
-
 class RenderSystem : public System {
 public:
 	RenderSystem(MessageBus* mbus);
