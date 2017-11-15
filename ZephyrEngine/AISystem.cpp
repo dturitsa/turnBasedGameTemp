@@ -69,17 +69,24 @@ void AISystem::handleMessage(Msg *msg)
 		break;
 	}
 	case GO_REMOVED: {
+		AIObject* toEraseA;
+		WorldObject* toEraseW;
+
 		for (AIObject* a : AIObjects) {
 			if (a->id == data[0]) {
-				AIObjects.erase(remove(AIObjects.begin(), AIObjects.end(), a), AIObjects.end());
+				toEraseA = a;
+				
 			}
 		}
+		AIObjects.erase(remove(AIObjects.begin(), AIObjects.end(), toEraseA), AIObjects.end());
 
 		for (WorldObject* w : aiData.worldObjects) {
 			if (w->id == data[0]) {
-				aiData.worldObjects.erase(remove(aiData.worldObjects.begin(), aiData.worldObjects.end(), w), aiData.worldObjects.end());
+				toEraseW = w;	
 			}
+			
 		}
+		aiData.worldObjects.erase(remove(aiData.worldObjects.begin(), aiData.worldObjects.end(), toEraseW), aiData.worldObjects.end());
 		break;
 	}
 	default:
