@@ -114,6 +114,7 @@ void ShipObj::shoot(string direction) {
 		Cannonball* c = new Cannonball(to_string(randomNum), "cannon_ball.png", x, y, shootDir, 5, 5, objData);
 		c->parentObject = this;
 		objData->toCreateVector.push_back(c);
+
+		counter = 0;
 	}
-	counter = 0;
 }
