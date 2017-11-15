@@ -113,10 +113,15 @@ void GameSystem::startSystemLoop() {
 		//							OK to Run							   //
 		/////////////////////////////////////////////////////////////////////
 
+		Msg* m = new Msg(EMPTY_MESSAGE, "");
+
 		switch (levelLoaded) {
 		case -1: // First launch
 			// this means we've just started up the system. We should load the main menu
 			levelLoaded = 0;
+			m = new Msg(LEVEL_LOADED, "0");
+			msgBus->postMessage(m, this);
+
 			// Load Main Menu Scene
 			addGameObjects("main_menu.txt");
 			break;
@@ -246,6 +251,8 @@ void GameSystem::handleMessage(Msg *msg) {
 				addGameObjects("settings_menu.txt");
 				levelLoaded = 1;
 				markerPosition = 0;
+				Msg* m = new Msg(LEVEL_LOADED, "1");
+				msgBus->postMessage(m, this);
 			}
 			else if (markerPosition == 0) {
 				// start the game (or go to level select?)
@@ -255,6 +262,8 @@ void GameSystem::handleMessage(Msg *msg) {
 				// then, load new objects
 				addGameObjects("Alpha_Level_1.txt"); // TEMPORARY 
 				levelLoaded = 2;
+				Msg* m = new Msg(LEVEL_LOADED, "2");
+				msgBus->postMessage(m, this);
 			}
 			break;
 		default:
@@ -297,6 +306,8 @@ void GameSystem::handleMessage(Msg *msg) {
 				addGameObjects("main_menu.txt");
 				levelLoaded = 0;
 				markerPosition = 0;
+				Msg* m = new Msg(LEVEL_LOADED, "0");
+				msgBus->postMessage(m, this);
 			}
 
 			if (markerPosition == 1) {
