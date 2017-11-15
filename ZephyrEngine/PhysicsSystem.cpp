@@ -171,7 +171,10 @@ void PhysicsSystem::handleMessage(Msg *msg)
 
 									   //check if physics enabled
 		if (atof(data[8].c_str()) == 1) {
-			Physics.addObject(ID, tag, x, y, width, height, rotation, 1, .5, PROJECTILE_INERTIA, renderable);
+			if(tag == "ShipObj")
+				Physics.addObject(ID, tag, x, y, width, height, rotation, 1, .5, 0, SHIP_ACCELERATION, renderable);
+			//if(tag == "Cannonball")
+				//Physics.addObject(ID, tag, x, y, width, height, rotation, 1, .5, PROJECTILE_SPEED, 0, renderable);
 			//OutputDebugString("GOADDED in physics ");
 			//OutputDebugString("\n");
 		}
@@ -281,49 +284,60 @@ void PhysicsSystem::updateShip(PhysicsObject &ship)
 {
 	Vector2 objectDirection;
 	float windPercentage;
+	float maxSpeed = ship.windScale * Wind.power;
 	float movementScale = 0;
-
-	switch (ship.rudder)
-	{
-	case STRAIGHT:
-		break;
-	case HALFPORT:
-		ship.rotation -= ship.rotationSpeed / 2;
-		break;
-	case FULLPORT:
-		ship.rotation -= ship.rotationSpeed;
-		break;
-	case HALFSTARBOARD:
-		ship.rotation += ship.rotationSpeed / 2;
-		break;
-	case FULLSTARBOARD:
-		ship.rotation += ship.rotationSpeed;
-		break;
+	if (ship.speed > 0) {
+		switch (ship.rudder)
+		{
+		case STRAIGHT:
+			break;
+		case HALFPORT:
+			ship.rotation -= ship.rotationSpeed / 2;
+			break;
+		case FULLPORT:
+			ship.rotation -= ship.rotationSpeed;
+			break;
+		case HALFSTARBOARD:
+			ship.rotation += ship.rotationSpeed / 2;
+			break;
+		case FULLSTARBOARD:
+			ship.rotation += ship.rotationSpeed;
+			break;
+		}
 	}
 	ship.rotation = Physics.checkAngle(ship.rotation);
-
-	switch (ship.mast)
-	{
-	case NONE:
-		movementScale = 0;
-		break;
-	case HALFMAST:
-		movementScale = (ship.windScale * Wind.power) / 2;
-		break;
-	case FULLMAST:
-		movementScale = ship.windScale * Wind.power;
-		break;
-	}
 
 	windPercentage = Wind.direction - ship.rotation;
 	Physics.absolute(windPercentage);
 	windPercentage = 1 - (windPercentage / 180);
 	Physics.absolute(windPercentage);
 
-	if (windPercentage < 0.2)//temp limit the min movement to 40% speed
+	if (windPercentage < 0.2)//temp limit the min movement to 20% speed
 		windPercentage = 0.2;
 
-	movementScale *= windPercentage;
+	switch (ship.mast)
+	{
+	case NONE:
+		if (ship.speed > 0)
+			ship.speed -= ship.acceleration * timeFrame/1000;
+		else
+			ship.speed = 0;
+		break;
+	case HALFMAST:
+		if (ship.speed < maxSpeed / 2)
+			ship.speed += ship.acceleration * timeFrame/1000;
+		else if (ship.speed > maxSpeed / 2)
+			ship.speed -= ship.acceleration * timeFrame/1000;
+		break;
+	case FULLMAST:
+		if (ship.speed < maxSpeed) 
+			ship.speed += ship.acceleration * timeFrame/1000; //ship.acceleration * timeFrame/1000;
+		else if (ship.speed >= maxSpeed)
+			ship.speed = maxSpeed;
+		break;
+	}
+	movementScale = ship.speed * windPercentage;
+	
 	objectDirection = Physics.convertAngleToVector(ship.rotation);
 	ship.position.translate(objectDirection.x * movementScale, objectDirection.y * movementScale);
 }
@@ -333,17 +347,17 @@ void PhysicsSystem::updateShip(PhysicsObject &ship)
 void PhysicsSystem::updateProjectile(PhysicsObject &projectile)
 {
 	//TODO remove physics stopping object out of bounds
-	if (projectile.inertia > (PROJECTILE_INERTIA - 80))
+	if (projectile.speed > (PROJECTILE_SPEED - 80))
 	{
 		Vector2 objectDirection;
 		float forceScale, force;
 
 		objectDirection = Physics.convertAngleToVector(projectile.rotation);
-		forceScale = projectile.inertia / 100;
+		forceScale = projectile.speed / 100;
 		force = PROJECTILE_FORCE * forceScale;
 
 		projectile.position.translate(objectDirection.x * force, objectDirection.y * force);
-		projectile.inertia--;
+		projectile.speed--;
 	}
 	else
 	{

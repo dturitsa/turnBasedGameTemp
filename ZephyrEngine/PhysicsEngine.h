@@ -12,7 +12,7 @@ public:
 	PhysicsEngine();
 	~PhysicsEngine();
 
-	void addObject(std::string ID, std::string tag, float x, float y, float width, float height, float rotation, float windscale, float rotationspeed, float inertia, std::string _renderable);
+	void addObject(std::string ID, std::string tag, float x, float y, float width, float height, float rotation, float windscale, float rotationspeed, float speed, float acceleration, std::string _renderable);
 	void removeObject(std::string ID);
 	void absolute(float &number);
 	Vector2 convertAngleToVector(float angle);

@@ -15,11 +15,12 @@ public:
 	Rudder rudder;
 	float windScale;
 	float rotationSpeed;
-	float inertia;
+	float speed;
+	float acceleration;
 	Vector2 corners[4]; //UL, UR, BR, BL
 
 	PhysicsObject();
-	PhysicsObject(std::string tagIn, float xIn, float yIn, float wIn, float hIn, float rotIn, float scale, float rotSpeedIn, float inertiaIn, std::string _renderable);
+	PhysicsObject(std::string tagIn, float xIn, float yIn, float wIn, float hIn, float rotIn, float scale, float rotSpeedIn, float speedIn, float accelerationIn, std::string _renderable);
 	~PhysicsObject();
 };
 

@@ -357,7 +357,7 @@ void GameSystem::handleMessage(Msg *msg) {
 			}
 			break;
 		}
-		case UP_ARROW_PRESSED:
+		case KEY_W_PRESSED:
 			// increase mast
 			// find the ship obj, and when you find it, increase mast
 			for (GameObject* g : gameObjects) {
@@ -386,7 +386,7 @@ void GameSystem::handleMessage(Msg *msg) {
 				}
 			}
 			break;
-		case DOWN_ARROW_PRESSED:
+		case KEY_S_PRESSED:
 			// decrease mast
 			for (GameObject* g : gameObjects) {
 				if (g->getObjectType() == "ShipObj") {
@@ -412,7 +412,7 @@ void GameSystem::handleMessage(Msg *msg) {
 				}
 			}
 			break;
-		case RIGHT_ARROW_PRESSED:
+		case KEY_D_PRESSED:
 			// change rudder to right
 			for (GameObject* g : gameObjects) {
 				if (g->getObjectType() == "ShipObj") {
@@ -430,7 +430,7 @@ void GameSystem::handleMessage(Msg *msg) {
 				}
 			}
 			break;
-		case LEFT_ARROW_PRESSED:
+		case KEY_A_PRESSED:
 			// change rudder left
 			for (GameObject* g : gameObjects) {
 				if (g->getObjectType() == "ShipObj") {
@@ -448,7 +448,7 @@ void GameSystem::handleMessage(Msg *msg) {
 				}
 			}
 			break;
-		case KEY_D_PRESSED: {
+		case KEY_E_PRESSED: {
 			// fire a cannon ball to the right. 
 
 			for (GameObject* g : gameObjects) {
@@ -461,7 +461,7 @@ void GameSystem::handleMessage(Msg *msg) {
 
 			break;
 		}
-		case KEY_A_PRESSED: {
+		case KEY_Q_PRESSED: {
 			// fire a cannon ball to the left.
 			for (GameObject* g : gameObjects) {
 				if (g->id == "playerShip") {
@@ -494,8 +494,9 @@ void GameSystem::handleMessage(Msg *msg) {
 		default:
 			break;
 		}
-	}
-	else {
+	} else if (levelLoaded == 3) {
+		// End Game Screen
+	} else {
 		// -1 case; ignore since we haven't even loaded anything yet
 	}
 }
