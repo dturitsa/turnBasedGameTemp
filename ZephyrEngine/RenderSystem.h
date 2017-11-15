@@ -31,8 +31,8 @@ public:
 	const int timeFrame = 20;
 
 	float CAMERAPAN_X = 30.0f, CAMERAPAN_Y = 30.0f;
-	float minCameraX = -300.0f, maxCameraX = 300.0f, cameraX = 0.0f, 
-		minCameraY = -300.0f, maxCameraY = 300.0f, cameraY = 0.0f;
+	float minCameraX = -330.0f, maxCameraX = 330.0f, cameraX = 0.0f, 
+		minCameraY = -330.0f, maxCameraY = 330.0f, cameraY = 0.0f;
 private:
 	bool running;
 	GLuint vertexShader;
