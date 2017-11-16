@@ -83,9 +83,7 @@ void ShipObj::onCollide(GameObject* otherObj) {
 	}
 		
 
-	if (id != "playerShip") {
-		health -= 7;
-	}
+	health -= 7;
 		
 
 	if (health < 0) {

@@ -288,6 +288,7 @@ void GameSystem::handleMessage(Msg *msg) {
 				levelLoaded = 2;
 				Msg* m = new Msg(LEVEL_LOADED, "2");
 				msgBus->postMessage(m, this);
+				score = 0;
 			}
 			break;
 		default:
@@ -530,7 +531,59 @@ void GameSystem::handleMessage(Msg *msg) {
 			break;
 		}
 	} else if (levelLoaded == 3) {
-		// End Game Screen
+		switch (msg->type) {
+		case DOWN_ARROW_PRESSED:
+			// move the marker location and let rendering know?
+			markerPosition++;
+			if (markerPosition > 2) {
+				markerPosition = 2;
+			}
+
+			mm->type = UPDATE_OBJ_SPRITE;
+			oss << "obj3,1,Z6_Marker_P" << markerPosition << ".png,";
+			mm->data = oss.str();
+			msgBus->postMessage(mm, this);
+			break;
+		case UP_ARROW_PRESSED:
+			// move the marker location and let rendering know?
+			markerPosition--;
+			if (markerPosition < 1) {
+				markerPosition = 1;
+			}
+			markerPosition = markerPosition % 3;
+
+			mm->type = UPDATE_OBJ_SPRITE;
+			oss << "obj3,1,Z6_Marker_P" << markerPosition << ".png,";
+			mm->data = oss.str();
+			msgBus->postMessage(mm, this);
+			break;
+		case SPACEBAR_PRESSED:
+			// End Game Screen
+			if (markerPosition == 2) {
+				// go to menu
+				removeAllGameObjects();
+				addGameObjects("main_menu.txt");
+				levelLoaded = 0;
+				markerPosition = 0;
+				Msg* m = new Msg(LEVEL_LOADED, "0");
+				msgBus->postMessage(m, this);
+			}
+
+			if (markerPosition == 1) {
+				// start the game (or go to level select?)
+				// first, clear all objects
+				removeAllGameObjects();
+
+				// then, load new objects
+				addGameObjects("Alpha_Level_1.txt"); // TEMPORARY 
+				levelLoaded = 2;
+				Msg* m = new Msg(LEVEL_LOADED, "2");
+				msgBus->postMessage(m, this);
+				score = 0;
+			}
+		default:
+			break;
+		}
 	} else {
 		// -1 case; ignore since we haven't even loaded anything yet
 	}
