@@ -164,7 +164,9 @@ void GameSystem::startSystemLoop() {
 
 				// increase score
 				if (g->id != "playerShip") {
-					// if ()
+					if (g->getObjectType() == "ShipObj") {
+						score++;
+					}
 				}
 
 				// end game
@@ -199,6 +201,19 @@ void GameSystem::startSystemLoop() {
 				int p0 = score / 10;
 				// position 1
 				int p1 = score % 10;
+
+				std::ostringstream oss;
+				Msg* mm = new Msg(UPDATE_OBJ_SPRITE, "");
+				oss << "scorepos0,1," << p0 << ".png,";
+				mm->data = oss.str();
+				msgBus->postMessage(mm, this);
+
+				std::ostringstream osss;
+				Msg* m = new Msg(UPDATE_OBJ_SPRITE, "");
+				osss << "scorepos1,1," << p1 << ".png,";
+				m->data = osss.str();
+				msgBus->postMessage(m, this);
+				break;
 
 
 			}
