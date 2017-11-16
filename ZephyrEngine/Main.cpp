@@ -24,6 +24,12 @@ int main(int argc, char *argv[]) {
 	PhysicsSystem* ps = new PhysicsSystem(mbus);
 	mbus->addSystem(ps);
 
+	AISystem* ais = new AISystem(mbus);
+	mbus->addSystem(ais);
+
+	AudioSystem* aus = new AudioSystem(mbus);
+	mbus->addSystem(aus);
+
 	std::cout << "All systems created";
 
 	//////////////////////////////////////////////////////////////////
@@ -55,32 +61,66 @@ int main(int argc, char *argv[]) {
 	std::thread physicsThread(startPhysicsSystem, ps);
 	std::thread renderThread(startRenderSystem, rs);
 	std::thread ioThread(startIOSystem, ios);
+	std::thread aiThread(startAISystem, ais);
+	std::thread audThread(startAudioSystem, aus);
 	
 
 
 	//////////////////////////////////////////////////////////////////
 	//						Console Loop							//
 	//////////////////////////////////////////////////////////////////
-	bool alive = true; //Move this
+	malive = true; //Move this
+	clock_t thisTime = clock();
+	int currentGameTime = 0;
+
 	// TO DO: Implement 
-	while (alive) {
+	while (malive) {
+		if (thisTime  < currentGameTime) {
+			Sleep(currentGameTime - thisTime);
+		}
+		currentGameTime = thisTime + 100;
+
 		SDL_Event windowEvent;
 		while (SDL_PollEvent(&windowEvent)) {
 			if (SDL_QUIT == windowEvent.type) {
 				rs->stopSystemLoop();
-				alive = false;
+				ios->alive = false;
+				gs->alive = false;
+				rs->alive = false;
+				ps->alive = false;
+				malive = false;
+				ais->alive = false;
+				aus->alive = false;
+
 			}
 		}
+		//OutputDebugString("outside\n");
 	}
 	
+	// if we're out here, that means malive was set to false.
+	rs->stopSystemLoop();
+	ios->alive = false;
+	gs->alive = false;
+	rs->alive = false;
+	ps->alive = false;
+	ais->alive = false;
+	aus->alive = false;
+
 	//////////////////////////////////////////////////////////////////
 	//						Thread Joining							//
 	//////////////////////////////////////////////////////////////////
 	ioThread.join();
+	OutputDebugString("\nIO Ended\n");
 	physicsThread.join();
+	OutputDebugString("\nPS Ended\n");
 	renderThread.join();
+	OutputDebugString("\nRT Ended\n");
 	gameSystemThread.join();
-	
+	OutputDebugString("\nGS Ended\n");
+	aiThread.join();
+	OutputDebugString("\nAI Ended\n");
+	audThread.join();
+
 
 	return 1;
 }
@@ -105,5 +145,13 @@ void startGameSystem(GameSystem* s) {
 }
 
 void startPhysicsSystem(PhysicsSystem* s) {
+	s->startSystemLoop();
+}
+
+void startAISystem(AISystem* s) {
+	s->startSystemLoop();
+}
+
+void startAudioSystem(AudioSystem* s) {
 	s->startSystemLoop();
 }

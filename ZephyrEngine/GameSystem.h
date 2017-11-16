@@ -18,6 +18,8 @@
 #include <thread>
 #include "ObjectData.h"
 
+extern volatile bool malive;
+
 class GameSystem : public System {
 public:
 	GameSystem(MessageBus* mbus);
@@ -45,6 +47,7 @@ public:
 	// 3	= Level select (if required)
 	int levelLoaded = -1;
 
+	int score = 0;
 private:
 	void mainMenuHandler(Msg * msg);
 	void lvl1Handler(Msg * msg);

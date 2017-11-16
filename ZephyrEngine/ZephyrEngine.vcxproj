@@ -84,8 +84,9 @@
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>freeglut.lib;glew32.lib;glew32s.lib;SDL2.lib;SDL2_image.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>fmodL_vc.lib;freeglut.lib;glew32.lib;glew32s.lib;SDL2.lib;SDL2_image.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>$(ProjectDir)\FMOD;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -111,6 +112,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -127,6 +129,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AIData.h" />
+    <ClInclude Include="AIObject.h" />
+    <ClInclude Include="AISystem.h" />
+    <ClInclude Include="AudioEngine.h" />
+    <ClInclude Include="AudioSystem.h" />
     <ClInclude Include="Axis.h" />
     <ClInclude Include="Cannonball.h" />
     <ClInclude Include="ConsoleRenderer.h" />
@@ -151,6 +158,10 @@
     <ClInclude Include="WindArrowObj.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AIObject.cpp" />
+    <ClCompile Include="AISystem.cpp" />
+    <ClCompile Include="AudioEngine.cpp" />
+    <ClCompile Include="AudioSystem.cpp" />
     <ClCompile Include="Axis.cpp" />
     <ClCompile Include="Cannonball.cpp" />
     <ClCompile Include="ConsoleRenderer.cpp" />
@@ -162,7 +173,6 @@
     <ClCompile Include="MessageBus.cpp" />
     <ClCompile Include="Msg.cpp" />
     <ClCompile Include="ConsoleRenderSystem.cpp" />
-    <ClCompile Include="ObjectData.cpp" />
     <ClCompile Include="PhysicsEngine.cpp" />
     <ClCompile Include="PhysicsObject.cpp" />
     <ClCompile Include="PhysicsSystem.cpp" />

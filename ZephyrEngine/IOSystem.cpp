@@ -14,7 +14,7 @@ void IOSystem::startSystemLoop() {
 	clock_t thisTime = clock();
 
 	int currentGameTime = 0;
-	while (true) {
+	while (alive) {
 		thisTime = clock();
 		if (thisTime  < currentGameTime) {
 			Sleep(currentGameTime - thisTime);
@@ -28,8 +28,6 @@ void IOSystem::startSystemLoop() {
 		//OutputDebugString("\n");
 
 		checkKeyPresses();
-
-
 	}
 }
 
@@ -103,6 +101,42 @@ void IOSystem::checkKeyPresses() {
 		m->type = KEY_D_PRESSED;
 		if ((clock() - keyspressed["d"]) > timebetweenPresses) {
 			keyspressed["d"] = clock();
+			msgBus->postMessage(m, this);
+		}
+	}
+
+	if (GetAsyncKeyState('Q') & 0x8000) {
+		//OutputDebugString("D Pressed\n");
+		m->type = KEY_Q_PRESSED;
+		if ((clock() - keyspressed["q"]) > timebetweenPresses) {
+			keyspressed["q"] = clock();
+			msgBus->postMessage(m, this);
+		}
+	}
+
+	if (GetAsyncKeyState('E') & 0x8000) {
+		//OutputDebugString("D Pressed\n");
+		m->type = KEY_E_PRESSED;
+		if ((clock() - keyspressed["e"]) > timebetweenPresses) {
+			keyspressed["e"] = clock();
+			msgBus->postMessage(m, this);
+		}
+	}
+
+	if (GetAsyncKeyState('S') & 0x8000) {
+		//OutputDebugString("D Pressed\n");
+		m->type = KEY_S_PRESSED;
+		if ((clock() - keyspressed["s"]) > timebetweenPresses) {
+			keyspressed["s"] = clock();
+			msgBus->postMessage(m, this);
+		}
+	}
+
+	if (GetAsyncKeyState('W') & 0x8000) {
+		//OutputDebugString("D Pressed\n");
+		m->type = KEY_W_PRESSED;
+		if ((clock() - keyspressed["w"]) > timebetweenPresses) {
+			keyspressed["w"] = clock();
 			msgBus->postMessage(m, this);
 		}
 	}

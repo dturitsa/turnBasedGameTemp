@@ -14,18 +14,30 @@ public:
 	RenderSystem(MessageBus* mbus);
 	~RenderSystem();
 
+	struct renderObj {
+		string ID, sprite;
+		float x, y, z, orientation, w, h;
+	};
+
 	void handleMessage(Msg * msg);
 	void startSystemLoop();
 	void stopSystemLoop();
 	void init();
+
+	int loadedLevel = 0;
 
 	GLint XSTART = 100, YSTART = 100, WIDTH = 1000, HEIGHT = 800; //Constants for drawing the window
 	GLfloat GAMEWIDTH = 200.0f, GAMEHEIGHT = 200.0f, //Amount of sprites that can fit in X and Y respectively
 				MAX_X = 200.0f, MAX_Y = 200.0f; //Amount of "x" and "y" coordinates in our world (x2 for - values)
 	GLfloat aspectRatio;
 	const int timeFrame = 20;
+
+	float CAMERAPAN_X = 30.0f, CAMERAPAN_Y = 30.0f;
+	float minCameraX = -330.0f, maxCameraX = 330.0f, cameraX = 0.0f, 
+		minCameraY = -330.0f, maxCameraY = 330.0f, cameraY = 0.0f;
 private:
 	bool running;
+	int animationCount;
 	GLuint vertexShader;
 	GLuint fragmentShader;
 	GLuint shaderProgram;
@@ -54,17 +66,28 @@ private:
 	GLubyte indices[10] = { 0,1,2, // first triangle (bottom left - bottom right - top left)
 		1,2,3 }; // second triangle (bottom right - top left - top right)
 	
+	vector<string*> gameObjectsToRender;
+	vector<renderObj*> renderObjects;
+
 	void renderAllItems();
-	void draw(string ID, string path, float x, float y, float z, float rotation, float width, float height);
+	void draw(string ID, string path, float x, float y, float z, float rotation, float width, float height, int frames);
 	GLuint getTexture(string path);
 	void renderObject(string object);
+	void renderObject(renderObj* object);
 	float transX(float x);
 	float transY(float y);
 	float getScaleX(float x);
 	float getScaleY(float y);
-	vector<string*> gameObjectsToRender;
 	void addObjectToRenderList(Msg* m);
 	void removeObjectFromRenderList(Msg* m);
 	void updateObjPosition(Msg* m);
 	void updateObjSprite(Msg*m);
+
+	void panLeft();
+	void panRight();
+	void panUp();
+	void panDown();
+	void cameraToPlayer();
+
+	void levelLoaded(Msg*m);
 };

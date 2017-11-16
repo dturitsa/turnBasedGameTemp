@@ -4,7 +4,8 @@
 
 
 #define PROJECTILE_FORCE 2
-#define PROJECTILE_INERTIA 100
+#define PROJECTILE_SPEED 100
+#define SHIP_ACCELERATION 0.1
 
 class PhysicsSystem : public System
 {
@@ -35,3 +36,4 @@ public:
 	std::mutex mtx;
 
 };
+ 

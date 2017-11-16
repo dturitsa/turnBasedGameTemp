@@ -11,9 +11,9 @@ System::~System() {
 
 void System::handleMessage(Msg *msg) {
 	switch (msg->type) {
-		//// Example
-		//case Msg::OPEN_INVENTORY:
-		//    break;
+	case EXIT_GAME: 
+		alive = false;
+		break;
 	default:
 		break;
 	}

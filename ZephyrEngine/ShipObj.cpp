@@ -18,16 +18,16 @@ ShipObj::ShipObj(map <string, string> paramsMap, ObjectData* objData) : GameObje
 		cout << "\n" << e.what(); // information from length_error printed
 	}
 
-	if (id == "enemy1") {
-		string msgData = id + ",2,Boat_S2.png";
-		objData->toPostVector.push_back(new Msg(CHANGE_MAST, msgData));
+	//if (id == "enemy1") {
+	//	string msgData = id + ",2,Boat_S2.png";
+	//	objData->toPostVector.push_back(new Msg(CHANGE_MAST, msgData));
 
-		msgData = id + ",1,Boat_S2.png";
-		objData->toPostVector.push_back(new Msg(CHANGE_RUDDER, msgData));
+	//	msgData = id + ",1,Boat_S2.png";
+	//	objData->toPostVector.push_back(new Msg(CHANGE_RUDDER, msgData));
 
-		msgData = id + ",1,Boat_S2.png";
-		objData->toPostVector.push_back(new Msg(UPDATE_OBJ_SPRITE, msgData));
-	}
+	//	msgData = id + ",1,Boat_S2.png";
+	//	objData->toPostVector.push_back(new Msg(UPDATE_OBJ_SPRITE, msgData));
+	//}
 
 	if (id == "enemy2") {
 		string msgData = id + ",1,Boat_S2.png";
@@ -83,9 +83,7 @@ void ShipObj::onCollide(GameObject* otherObj) {
 	}
 		
 
-	if (id != "playerShip") {
-		health -= 7;
-	}
+	health -= 7;
 		
 
 	if (health < 0) {
@@ -99,22 +97,22 @@ void ShipObj::onCollide(GameObject* otherObj) {
 
 //direction = "left",  "right", forward
 void ShipObj::shoot(string direction) {
-	//srand(time(NULL));
-	int shootDir;
-	int randomNum = std::rand();
-	if (direction == "right") {
-		 shootDir = orientation + 90;
-	}
-	else if (direction == "left") {
-		shootDir = orientation + -90;
-	} 
-	else if (direction == "forward") {
-		shootDir = orientation;
-	}
-	
-	Cannonball* c = new Cannonball(to_string(randomNum), "cannon_ball.png", x, y, shootDir, 5, 5, objData);
-	c->parentObject = this;
-	objData->toCreateVector.push_back(c);
+	if (counter >= 20) {
+		//srand(time(NULL));
+		int shootDir;
+		int randomNum = std::rand();
+		if (direction == "right") {
+			shootDir = orientation + 90;
+		} else if (direction == "left") {
+			shootDir = orientation + -90;
+		} else if (direction == "forward") {
+			shootDir = orientation;
+		}
 
+		Cannonball* c = new Cannonball(to_string(randomNum), "cannon_ball.png", x, y, shootDir, 5, 5, objData);
+		c->parentObject = this;
+		objData->toCreateVector.push_back(c);
 
+		counter = 0;
+	}
 }

@@ -3,7 +3,7 @@
 #include "MessageBus.h"
 #include <queue>
 #include <mutex>
-
+#include <windows.h>
 
 class MessageBus;
 
@@ -15,6 +15,7 @@ public:
 	virtual void handleMessage(Msg *msg);
 	void addToMsgQ(Msg *msg);
 	
+	volatile bool alive = true;
 protected:
 	MessageBus* msgBus;
 	std::queue<Msg*> msgQ;
