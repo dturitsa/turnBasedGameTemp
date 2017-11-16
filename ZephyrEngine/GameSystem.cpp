@@ -164,7 +164,7 @@ void GameSystem::startSystemLoop() {
 
 				// increase score
 				if (g->id != "playerShip") {
-
+					// if ()
 				}
 
 				// end game
@@ -195,6 +195,12 @@ void GameSystem::startSystemLoop() {
 				addGameObjects("gameover_menu.txt");
 
 				// add score code here
+				// position 0
+				int p0 = score / 10;
+				// position 1
+				int p1 = score % 10;
+
+
 			}
 			break;
 		}
@@ -268,9 +274,7 @@ void GameSystem::handleMessage(Msg *msg) {
 			if (markerPosition == 2) {
 				// Exit was selected, kill main
 				malive = false;
-			}
-
-			if (markerPosition == 1) {
+			} else if (markerPosition == 1) {
 				// Go to settings
 				removeAllGameObjects();
 				addGameObjects("settings_menu.txt");
@@ -278,8 +282,7 @@ void GameSystem::handleMessage(Msg *msg) {
 				markerPosition = 0;
 				Msg* m = new Msg(LEVEL_LOADED, "1");
 				msgBus->postMessage(m, this);
-			}
-			else if (markerPosition == 0) {
+			} else if (markerPosition == 0) {
 				// start the game (or go to level select?)
 				// first, clear all objects
 				removeAllGameObjects();
@@ -334,9 +337,7 @@ void GameSystem::handleMessage(Msg *msg) {
 				markerPosition = 0;
 				Msg* m = new Msg(LEVEL_LOADED, "0");
 				msgBus->postMessage(m, this);
-			}
-
-			if (markerPosition == 1) {
+			} else if (markerPosition == 1) {
 				// change game sound to "off"
 				mm->type = AUDIO_MUTE;
 				mm->data = "1";
@@ -568,9 +569,7 @@ void GameSystem::handleMessage(Msg *msg) {
 				markerPosition = 0;
 				Msg* m = new Msg(LEVEL_LOADED, "0");
 				msgBus->postMessage(m, this);
-			}
-
-			if (markerPosition == 1) {
+			} else if (markerPosition == 1) {
 				// start the game (or go to level select?)
 				// first, clear all objects
 				removeAllGameObjects();

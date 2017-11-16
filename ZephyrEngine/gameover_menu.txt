@@ -37,3 +37,28 @@ physicsEnabled: 0,
 windScale: 0,
 imageFrames: 1;
 
+gameObjectType: FullscreenObj,
+id: scorepos0,
+renderable: 0.png,
+xPos: 0,
+yPos: 0,
+zPos: 10,
+orientation: 0,
+width: 200,
+length: 200,
+physicsEnabled: 0,
+windScale: 0,
+imageFrames: 1;
+
+gameObjectType: FullscreenObj,
+id: scorepos1,
+renderable: 0.png,
+xPos: 10,
+yPos: 0,
+zPos: 10,
+orientation: 0,
+width: 200,
+length: 200,
+physicsEnabled: 0,
+windScale: 0,
+imageFrames: 1;
