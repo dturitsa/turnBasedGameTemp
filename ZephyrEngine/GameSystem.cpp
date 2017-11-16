@@ -135,6 +135,7 @@ void GameSystem::startSystemLoop() {
 			// the Menu page tho
 			break;
 		case 2: { // Game loaded
+			bool endgame = false;
 			for (GameObject* obj : gameObjects) {
 				obj->earlyUpdate();
 			}
@@ -166,6 +167,11 @@ void GameSystem::startSystemLoop() {
 
 				}
 
+				// end game
+				if (g->id == "playerShip") {
+					endgame = true;
+				}
+
 				gameObjects.erase(remove(gameObjects.begin(), gameObjects.end(), g), gameObjects.end());
 			}
 			objData.toDestroyVector.clear();
@@ -177,6 +183,18 @@ void GameSystem::startSystemLoop() {
 			}
 			objData.toPostVector.clear();
 
+			if (endgame) {
+				removeAllGameObjects();
+
+				levelLoaded = 3;
+				m = new Msg(LEVEL_LOADED, "3");
+				msgBus->postMessage(m, this);
+
+				// Load Main Menu Scene
+				addGameObjects("gameover_menu.txt");
+
+				// add score code here
+			}
 			break;
 		}
 		default:
