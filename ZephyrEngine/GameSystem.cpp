@@ -189,6 +189,7 @@ void GameSystem::startSystemLoop() {
 				levelLoaded = 3;
 				m = new Msg(LEVEL_LOADED, "3");
 				msgBus->postMessage(m, this);
+				markerPosition = 1;
 
 				// Load Main Menu Scene
 				addGameObjects("gameover_menu.txt");
