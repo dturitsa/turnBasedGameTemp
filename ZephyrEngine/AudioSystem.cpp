@@ -33,13 +33,19 @@ void AudioSystem::handleMessage(Msg *msg)
 		loadedLevel = atoi(msg->data.c_str());
 		if (loadedLevel == 2)
 		{
-			PlayMusic(SOUNDTRACK_GAMEPLAY, DEFAULT_VOLUME);
-			StopMusic(SOUNDTRACK_MENU);
+			if (loadedLevel != lastLevel)
+			{
+				PlayMusic(SOUNDTRACK_GAMEPLAY, GAMEPLAY_VOLUME);
+				StopMusic(SOUNDTRACK_MENU);
+			}
 		}
 		else
 		{
-			PlayMusic(SOUNDTRACK_MENU, DEFAULT_VOLUME);
-			StopMusic(SOUNDTRACK_GAMEPLAY);
+			if (lastLevel == 2)
+			{
+				PlayMusic(SOUNDTRACK_MENU, DEFAULT_VOLUME);
+				StopMusic(SOUNDTRACK_GAMEPLAY);
+			}
 		}
 			
 		break;
@@ -53,7 +59,7 @@ void AudioSystem::handleMessage(Msg *msg)
 	default:
 		break;
 	}
-
+	lastLevel = loadedLevel;
 }
 
 void AudioSystem::PlayMusic(string songName, float volume)
