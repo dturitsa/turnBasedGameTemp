@@ -75,16 +75,16 @@ void AISystem::handleMessage(Msg *msg)
 		for (AIObject* a : AIObjects) {
 			if (a->id == data[0]) {
 				toEraseA = a;
-				
+
 			}
 		}
 		AIObjects.erase(remove(AIObjects.begin(), AIObjects.end(), toEraseA), AIObjects.end());
 
 		for (WorldObject* w : aiData.worldObjects) {
 			if (w->id == data[0]) {
-				toEraseW = w;	
+				toEraseW = w;
 			}
-			
+
 		}
 		aiData.worldObjects.erase(remove(aiData.worldObjects.begin(), aiData.worldObjects.end(), toEraseW), aiData.worldObjects.end());
 		break;
@@ -92,7 +92,7 @@ void AISystem::handleMessage(Msg *msg)
 	default:
 		break;
 	}
-	
+
 }
 
 void AISystem::startSystemLoop() {
@@ -120,18 +120,22 @@ void AISystem::startSystemLoop() {
 			// Upper Left
 			w->c[0].x = w->pos.x - halfWidth;
 			w->c[0].y = w->pos.y + halfHeight;
+			w->c[0].rotateFromOrigin(w->pos.x, w->pos.y, w->orientation);
 
 			//Upper Right
 			w->c[1].x = w->pos.x + halfWidth;
 			w->c[1].y = w->pos.y + halfHeight;
+			w->c[1].rotateFromOrigin(w->pos.x, w->pos.y, w->orientation);
 
 			// Bottom Right
 			w->c[2].x = w->pos.x + halfWidth;
 			w->c[2].y = w->pos.y - halfHeight;
+			w->c[2].rotateFromOrigin(w->pos.x, w->pos.y, w->orientation);
 
 			// Bottom Left
 			w->c[3].x = w->pos.x - halfWidth;
 			w->c[3].y = w->pos.y - halfHeight;
+			w->c[3].rotateFromOrigin(w->pos.x, w->pos.y, w->orientation);
 		}
 
 		//loop through list of messages to send that were added by AI objects
