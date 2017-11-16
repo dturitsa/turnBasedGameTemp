@@ -160,6 +160,12 @@ void GameSystem::startSystemLoop() {
 			//loop through list of objects to destroy added by the gameobjects
 			for each (GameObject* g in objData.toDestroyVector) {
 				gameObjectRemoved(g);
+
+				// increase score
+				if (g->id != "playerShip") {
+
+				}
+
 				gameObjects.erase(remove(gameObjects.begin(), gameObjects.end(), g), gameObjects.end());
 			}
 			objData.toDestroyVector.clear();
