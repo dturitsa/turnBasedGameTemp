@@ -543,6 +543,18 @@ void RenderSystem::cameraToPlayer() {
 		if (obj.at(0) == "playerShip") {
 			cameraX = -atof(obj.at(2).c_str());
 			cameraY = -atof(obj.at(3).c_str());
+			if (cameraX >= maxCameraX) {
+				cameraX = maxCameraX;
+			}
+			if (cameraX <= minCameraX) {
+				cameraX = minCameraX;
+			}
+			if (cameraY >= maxCameraY) {
+				cameraY = maxCameraY;
+			}
+			if (cameraY <= minCameraY) {
+				cameraY = minCameraY;
+			}
 			break;
 		}
 	}
@@ -550,4 +562,8 @@ void RenderSystem::cameraToPlayer() {
 
 void RenderSystem::levelLoaded(Msg* m) {
 	loadedLevel = atoi(m->data.c_str());
+	if (loadedLevel != 2) { //Reset camera when not in game
+		cameraX = 0.0f;
+		cameraY = 0.0f;
+	}
 }
