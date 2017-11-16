@@ -37,6 +37,7 @@ public:
 		minCameraY = -330.0f, maxCameraY = 330.0f, cameraY = 0.0f;
 private:
 	bool running;
+	int animationCount;
 	GLuint vertexShader;
 	GLuint fragmentShader;
 	GLuint shaderProgram;
@@ -69,7 +70,7 @@ private:
 	vector<renderObj*> renderObjects;
 
 	void renderAllItems();
-	void draw(string ID, string path, float x, float y, float z, float rotation, float width, float height);
+	void draw(string ID, string path, float x, float y, float z, float rotation, float width, float height, int frames);
 	GLuint getTexture(string path);
 	void renderObject(string object);
 	void renderObject(renderObj* object);

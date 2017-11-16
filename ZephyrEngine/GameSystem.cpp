@@ -79,7 +79,8 @@ void GameSystem::createGameObject(GameObject* g) {
 		<< g->orientation << ','
 		<< g->width << ',' << g->length << ','
 		<< g->physicsEnabled << ','
-		<< g->getObjectType();
+		<< g->getObjectType() << ','
+		<< g->imageFrames;
 	//<< g->renderable;
 	// maybe add the rest of the variables into the oss as well, but can decide later depending on
 	// what physics needs
