@@ -48,6 +48,7 @@ void AIObject::update(){
 
 int AIObject::colAvoidanceBehaviour() {
 	vector2 cDir[4];
+	float x = pos.x;
 
 	for (WorldObject* w : aiData->worldObjects) {	
 
@@ -85,6 +86,7 @@ inline int AIObject::angleBetween(vector2 v1, vector2 v2) {
 int AIObject::seekBehaviour() {
 	int faceAngle = angleToTarget(this->pos, target->pos);
 	turnToFace(faceAngle);
+	
 
 	return faceAngle;
 }

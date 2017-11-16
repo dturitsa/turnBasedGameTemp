@@ -97,7 +97,7 @@ void ShipObj::onCollide(GameObject* otherObj) {
 
 //direction = "left",  "right", forward
 void ShipObj::shoot(string direction) {
-	if (counter >= 150) {
+	if (counter >= 20) {
 		//srand(time(NULL));
 		int shootDir;
 		int randomNum = std::rand();
