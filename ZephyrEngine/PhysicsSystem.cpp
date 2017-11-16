@@ -200,7 +200,7 @@ void PhysicsSystem::handleMessage(Msg *msg)
 	}
 	case LEVEL_LOADED:
 		if (data[0] == "2") {
-			Wind.direction == 90;
+			Wind.direction = 90;
 		}
 		break;
 	case PASS_WIND:
