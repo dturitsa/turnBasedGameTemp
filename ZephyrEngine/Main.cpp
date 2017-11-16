@@ -27,6 +27,9 @@ int main(int argc, char *argv[]) {
 	AISystem* ais = new AISystem(mbus);
 	mbus->addSystem(ais);
 
+	AudioSystem* aus = new AudioSystem(mbus);
+	mbus->addSystem(aus);
+
 	std::cout << "All systems created";
 
 	//////////////////////////////////////////////////////////////////
@@ -59,6 +62,7 @@ int main(int argc, char *argv[]) {
 	std::thread renderThread(startRenderSystem, rs);
 	std::thread ioThread(startIOSystem, ios);
 	std::thread aiThread(startAISystem, ais);
+	std::thread audThread(startAudioSystem, aus);
 	
 
 
@@ -86,7 +90,7 @@ int main(int argc, char *argv[]) {
 				ps->alive = false;
 				malive = false;
 				ais->alive = false;
-	
+				aus->alive = false;
 
 			}
 		}
@@ -100,6 +104,7 @@ int main(int argc, char *argv[]) {
 	rs->alive = false;
 	ps->alive = false;
 	ais->alive = false;
+	aus->alive = false;
 
 	//////////////////////////////////////////////////////////////////
 	//						Thread Joining							//
@@ -114,6 +119,7 @@ int main(int argc, char *argv[]) {
 	OutputDebugString("\nGS Ended\n");
 	aiThread.join();
 	OutputDebugString("\nAI Ended\n");
+	audThread.join();
 
 
 	return 1;
@@ -143,5 +149,9 @@ void startPhysicsSystem(PhysicsSystem* s) {
 }
 
 void startAISystem(AISystem* s) {
+	s->startSystemLoop();
+}
+
+void startAudioSystem(AudioSystem* s) {
 	s->startSystemLoop();
 }
