@@ -165,9 +165,9 @@ void GameSystem::startSystemLoop() {
 				// increase score
 				if (g->id != "playerShip") {
 					if (g->getObjectType() == "ShipObj") {
-						score++;
+						score++; 
 					}
-				}
+				} 
 
 				// end game
 				if (g->id == "playerShip") {
@@ -214,8 +214,6 @@ void GameSystem::startSystemLoop() {
 				m->data = osss.str();
 				msgBus->postMessage(m, this);
 				break;
-
-
 			}
 			break;
 		}
