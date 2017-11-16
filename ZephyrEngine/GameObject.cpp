@@ -18,6 +18,7 @@ GameObject::GameObject(map <string, string> paramsMap, ObjectData* _objData) {
 		length = stoi(paramsMap.find("length")->second);
 		physicsEnabled = stoi(paramsMap.find("physicsEnabled")->second);
 		windScale = stoi(paramsMap.find("windScale")->second);
+		imageFrames = stoi(paramsMap.find("imageFrames")->second);
 	}
 	catch (const exception& e) {
 		cout << e.what(); // information from length_error printed
@@ -34,6 +35,7 @@ string GameObject::toString() {
 	output += "\nlength: " + to_string(length) + ",";
 	output += "\nphysicsEnabled: " + to_string(physicsEnabled) + ",";
 	output += "\nwindScale: " + to_string(windScale) + ",";
+	output += "\nimageFrames: " + to_string(imageFrames) + ",";
 	return output;
 }
 

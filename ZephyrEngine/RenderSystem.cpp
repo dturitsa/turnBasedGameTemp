@@ -6,10 +6,11 @@ const GLchar *vertexShaderSource = "#version 330 core\n"
 "layout ( location = 1 ) in vec2 texCoord;\n"
 "out vec2 TexCoord;\n"
 "uniform mat4 transform[3];\n" //transform[0] = rotate, transform[1] = scale, transform[2] = translate
+"uniform vec4 SpriteFrame;\n"
 "void main()\n"
 "{\n"
 "gl_Position = transform[2] * transform[1] * transform[0] * vec4( position.x, position.y, position.z, 1.0 );\n"
-"TexCoord = vec2( texCoord.x, 1.0f - texCoord.y);\n"
+"TexCoord = SpriteFrame.xy + (vec2( texCoord.x, 1.0f - texCoord.y) * SpriteFrame.zw);\n"
 "}";
 
 //Fragment Shader
@@ -31,6 +32,7 @@ RenderSystem::RenderSystem(MessageBus* mbus) : System(mbus) {
 	window = SDL_CreateWindow("Okeanos - Made with Zephyr", RenderSystem::XSTART, RenderSystem::YSTART, RenderSystem::WIDTH, RenderSystem::HEIGHT, SDL_WINDOW_OPENGL);
 
 	SDL_GL_SwapWindow(window);
+	animationCount = 0.0f;
 }
 
 
@@ -125,7 +127,7 @@ void RenderSystem::init() {
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void RenderSystem::draw(string ID, string sprite, float x, float y, float z, float orientation, float width, float height) {
+void RenderSystem::draw(string ID, string sprite, float x, float y, float z, float orientation, float width, float height, int frames) {
 	//Bind transform to vertex shader
 	//Create a transform matrix and bind it to shader
 	float radRot = orientation * 3.1415927 / 180.0;
@@ -180,6 +182,18 @@ void RenderSystem::draw(string ID, string sprite, float x, float y, float z, flo
 	//glTranslatef(-xcenter, -ycenter, -zcenter); //move object to center
 	//DrawObject();
 	//glPopMatrix();
+	
+	//Used for animations; passed into vertex shader
+	//data needed for animation; x,y = offset; z,w = width + height of sprite
+	if (frames == 0) {
+		frames = 1;
+	}
+	float offset = (float)(animationCount % frames) + 1.0f;
+
+	GLfloat spriteFrame[4] = { (1.0f / (float)frames) * offset, 0.0f, 1.0f / (float)frames, 1.0f };
+	GLint ourSpriteFrame = glGetUniformLocation(shaderProgram, "SpriteFrame");
+	glUniform4fv(ourSpriteFrame, 1, spriteFrame);
+
 
 	//Bind texture to fragment shader
 	glActiveTexture(GL_TEXTURE0);
@@ -230,13 +244,14 @@ void RenderSystem::renderAllItems() {
 		//OutputDebugString("\n");
 		renderObject(*s);
 	}
+	animationCount++;
 }
 
 void RenderSystem::renderObject(string object) {
 	//object format: ID,png,x,y,z,orientation
 	string ID, sprite;
 	float x, y, z, orientation, w, h;
-
+	int frames = 1;
 	//Split object
 	vector<string> objectData = split(object, ',');
 
@@ -249,6 +264,7 @@ void RenderSystem::renderObject(string object) {
 	orientation = atof(objectData[5].c_str());
 	w = atof(objectData[6].c_str());
 	h = atof(objectData[7].c_str());
+	frames = atoi(objectData[10].c_str());
 
 	/*ID = object->ID;
 	sprite = object->sprite;
@@ -266,7 +282,7 @@ void RenderSystem::renderObject(string object) {
 		textures.insert(pair<string, GLuint>(sprite, getTexture(sprite)));
 	}
 	//Draw object
-	draw(ID, sprite, x, y, z, orientation,w,h);
+	draw(ID, sprite, x, y, z, orientation,w,h, frames);
 }
 GLuint RenderSystem::getTexture(string path) {
 	GLuint texture;
@@ -464,7 +480,11 @@ void RenderSystem::updateObjPosition(Msg* m) {
 			// replace this string's information with new information except the renderable
 			for (std::string ss : obj) {
 				if (position != 1) {
-					oss << dataVector.at(position) << ",";
+					if (position == 10) {
+						oss << obj.at(position) << ",";
+					} else {
+						oss << dataVector.at(position) << ",";
+					}
 				} else if (position == 1) {
 					oss << obj.at(1) << ",";
 				}
