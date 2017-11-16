@@ -13,7 +13,7 @@ enum MSG_TYPE {
 
 	// Physics System
 	UPDATE_OBJECT_POSITION, //id,renderable,x,y,z,orientation,width,length,physEnabled,type
-	DATA_RESPONSE,
+	DATA_RESPONSE, PASS_WIND,
 
 	GO_COLLISION,
 

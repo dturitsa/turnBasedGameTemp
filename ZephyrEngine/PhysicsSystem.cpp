@@ -198,6 +198,35 @@ void PhysicsSystem::handleMessage(Msg *msg)
 			
 		break;
 	}
+	case PASS_WIND:
+	{
+		if (data[0] == "CW") {
+			Wind.direction += (std::rand() % 10);
+		} else {
+			Wind.direction -= (std::rand() % 10);
+		}
+
+		Wind.direction = Physics.checkAngle(Wind.direction);
+
+		// update obj sprite
+		Msg* asdf = new Msg(UPDATE_OBJ_SPRITE, "");
+		std::ostringstream oss;
+		oss << "windmarker" << "," //id
+			<< "" << "," //renderable
+			<< "-175" << "," //x
+			<< "175" //y
+			<< ",2," // z
+			<< Wind.direction << "," //orientation
+			<< "20" << "," //width 
+			<< "20" << ","//height
+			<< "0,0"; //not sure if we need these
+
+		Msg* mm = new Msg(UPDATE_OBJECT_POSITION, "");
+		//mm->type = UPDATE_OBJECT_POSITION;
+		mm->data = oss.str();
+		msgBus->postMessage(mm, this);
+	}
+		break;
 	case CHANGE_MAST:
 		ID = data[0];
 		changeMast(ID, atoi(data[1].c_str())); //  just cast the data 

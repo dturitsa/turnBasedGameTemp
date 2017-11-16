@@ -115,6 +115,24 @@ void GameSystem::startSystemLoop() {
 
 		Msg* m = new Msg(EMPTY_MESSAGE, "");
 
+		std::srand(std::time(0)); // use current time as seed for random generator
+		int random_variable = std::rand();
+
+		if (random_variable % 50 == 0) {
+			// change the wind a bit
+			if (levelLoaded == 2) {
+				int ran2 = std::rand();
+				if (ran2 % 2 == 0) {
+					Msg* mmm = new Msg(PASS_WIND, "CW");
+					msgBus->postMessage(mmm, this);
+				} else {
+					Msg* mmm = new Msg(PASS_WIND, "CCW");
+					msgBus->postMessage(mmm, this);
+				}
+				
+			}
+		}
+
 		switch (levelLoaded) {
 		case -1: // First launch
 			// this means we've just started up the system. We should load the main menu
