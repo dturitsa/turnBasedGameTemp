@@ -60,7 +60,7 @@ void Cannonball::lateUpdate() {
 }
 
 void Cannonball::onCollide(GameObject* otherObj) {
-	if (counter > 15) {
+	if (counter > 21) {
 		objData->toDestroyVector.push_back(this);
 		//deathSprite = "explosion.png";
 		//counter = 107;
