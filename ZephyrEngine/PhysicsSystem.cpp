@@ -198,6 +198,11 @@ void PhysicsSystem::handleMessage(Msg *msg)
 			
 		break;
 	}
+	case LEVEL_LOADED:
+		if (data[0] == "2") {
+			Wind.direction == 90;
+		}
+		break;
 	case PASS_WIND:
 	{
 		if (data[0] == "CW") {
