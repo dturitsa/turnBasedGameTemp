@@ -188,9 +188,23 @@ void RenderSystem::draw(string ID, string sprite, float x, float y, float z, flo
 	if (frames == 0) {
 		frames = 1;
 	}
-	float offset = (float)(animationCount % frames) + 1.0f;
+	
+	int numberOfRows = 1;
+	float offset;
+	float yoffset = 0.0f;
+	if (frames <= 20) {
+		offset = (float) (animationCount % frames) + 1.0f;
+	} else {
 
-	GLfloat spriteFrame[4] = { (1.0f / (float)frames) * offset, 0.0f, 1.0f / (float)frames, 1.0f };
+		numberOfRows = ceil(frames / 20);
+		int currentRow = ceil(animationCount / 20);
+
+
+		offset = (float) (animationCount % 20) + 1.0f;
+		yoffset = (float) (currentRow % numberOfRows);
+	}
+
+	GLfloat spriteFrame[4] = { (1.0f / (float)frames) * offset, yoffset, 1.0f / (float)frames, 1.0f / numberOfRows };
 	GLint ourSpriteFrame = glGetUniformLocation(shaderProgram, "SpriteFrame");
 	glUniform4fv(ourSpriteFrame, 1, spriteFrame);
 

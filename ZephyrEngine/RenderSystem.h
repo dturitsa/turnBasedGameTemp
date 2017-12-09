@@ -30,7 +30,7 @@ public:
 	GLfloat GAMEWIDTH = 200.0f, GAMEHEIGHT = 200.0f, //Amount of sprites that can fit in X and Y respectively
 				MAX_X = 200.0f, MAX_Y = 200.0f; //Amount of "x" and "y" coordinates in our world (x2 for - values)
 	GLfloat aspectRatio;
-	const int timeFrame = 20;
+	const int timeFrame = 33;
 
 	float CAMERAPAN_X = 30.0f, CAMERAPAN_Y = 30.0f;
 	float minCameraX = -330.0f, maxCameraX = 330.0f, cameraX = 0.0f, 
