@@ -192,19 +192,26 @@ void RenderSystem::draw(string ID, string sprite, float x, float y, float z, flo
 	int numberOfRows = 1;
 	float offset;
 	float yoffset = 0.0f;
+	int xframes = frames;
+
+	float fheight = 1.0f;
+
 	if (frames <= 20) {
 		offset = (float) (animationCount % frames) + 1.0f;
 	} else {
-
+		xframes = 20;
 		numberOfRows = ceil(frames / 20);
 		int currentRow = ceil(animationCount / 20);
 
 
 		offset = (float) (animationCount % 20) + 1.0f;
-		yoffset = (float) (currentRow % numberOfRows);
+		yoffset = (float) ((currentRow + numberOfRows - 1) % numberOfRows);
+		fheight = 1.0f / (float) (numberOfRows);
 	}
 
-	GLfloat spriteFrame[4] = { (1.0f / (float)frames) * offset, yoffset, 1.0f / (float)frames, 1.0f / numberOfRows };
+	float finalYOffset = (1.0f / (float) numberOfRows) * yoffset;
+
+	GLfloat spriteFrame[4] = { (1.0f / (float) xframes) * offset, finalYOffset, 1.0f / (float)frames, fheight };
 	GLint ourSpriteFrame = glGetUniformLocation(shaderProgram, "SpriteFrame");
 	glUniform4fv(ourSpriteFrame, 1, spriteFrame);
 
