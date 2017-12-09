@@ -195,23 +195,89 @@ void RenderSystem::draw(string ID, string sprite, float x, float y, float z, flo
 	int xframes = frames;
 
 	float fheight = 1.0f;
+	int currentRow = 1;
+
+	int tempacount = animationCount;
 
 	if (frames <= 20) {
 		offset = (float) (animationCount % frames) + 1.0f;
 	} else {
-		xframes = 20;
-		numberOfRows = ceil(frames / 20);
-		int currentRow = ceil(animationCount / 20);
+		xframes = 20.0f;
+		numberOfRows = ceil(frames / 20.0f);
+		if (animationCount == 0) {
+			currentRow = 1;
+		} else {
+			if (animationCount > frames) {
+				tempacount = animationCount % frames;
+			}
+			currentRow = ceil(tempacount / 20);
+		}
 
+		// init flicker
+		if ((tempacount % frames) == 0) {
+			offset = 0;
+		} else {
+			offset = (float)(tempacount % 20);
+		}
 
-		offset = (float) (animationCount % 20) + 1.0f;
-		yoffset = (float) ((currentRow + numberOfRows - 1) % numberOfRows);
-		fheight = 1.0f / (float) (numberOfRows);
+		// 0 to 5
+		if (currentRow != 0) {
+			yoffset = (float)(currentRow - 1);// ((currentRow + numberOfRows - 1) % numberOfRows);
+		} else {
+			yoffset = 0.0f;
+		}
+		fheight = (float) (1.0f / ((float) (numberOfRows)));
 	}
 
 	float finalYOffset = (1.0f / (float) numberOfRows) * yoffset;
 
-	GLfloat spriteFrame[4] = { (1.0f / (float) xframes) * offset, finalYOffset, 1.0f / (float)frames, fheight };
+	if (frames > 20) {
+		OutputDebugString("OFfset: ");
+		std::ostringstream ss;
+		ss << finalYOffset << " " << yoffset << " " << animationCount << " " << tempacount << " " << currentRow << " " << numberOfRows << " " << offset;
+		OutputDebugString(ss.str().c_str());
+		OutputDebugString("\n");
+	}
+
+	// tempfix
+	if (ID == "aniWaves") {
+		fheight = 0.166666f;
+
+		if ((tempacount % frames) >= 0) {
+			if ((tempacount % frames) > 20) {
+				if ((tempacount % frames) > 40) {
+					if ((tempacount % frames) > 60) {
+						if ((tempacount % frames) > 80) {
+							if ((tempacount % frames) > 100) {
+								// row 6
+								finalYOffset = 0.83333f;
+							} else {
+								// row 5
+								finalYOffset = 0.66666f;
+							}
+						} else {
+							// row 4
+							finalYOffset = 0.5f;
+						}
+					} else {
+						// row 3
+						finalYOffset = 0.33333f;
+					}
+				} else {
+					// row 2
+					finalYOffset = 0.166666f;
+
+				}
+			} else {
+				// row 1
+				finalYOffset = 0.0f;
+			}
+		}
+	}
+
+	
+
+	GLfloat spriteFrame[4] = { (1.0f / (float) xframes) * offset, finalYOffset, 1.0f / (float)frames, (float) fheight };
 	GLint ourSpriteFrame = glGetUniformLocation(shaderProgram, "SpriteFrame");
 	glUniform4fv(ourSpriteFrame, 1, spriteFrame);
 
