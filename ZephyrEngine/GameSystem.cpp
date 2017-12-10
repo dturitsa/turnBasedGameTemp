@@ -280,12 +280,12 @@ void GameSystem::handleMessage(Msg *msg) {
 		case DOWN_ARROW_PRESSED:
 			// move the marker location and let rendering know?
 			markerPosition++;
-			if (markerPosition > 2) {
-				markerPosition = 2;
+			if (markerPosition > 3) {
+				markerPosition = 3;
 			}
 
 			mm->type = UPDATE_OBJ_SPRITE;
-			oss <<"obj3,1,Z6_Marker_P" << markerPosition << ".png,";
+			oss <<"obj3,1,MZ6_Marker_P" << markerPosition << ".png,";
 			mm->data = oss.str();
 			msgBus->postMessage(mm, this);
 			break;
@@ -295,18 +295,18 @@ void GameSystem::handleMessage(Msg *msg) {
 			if (markerPosition < 0) {
 				markerPosition = 0;
 			}
-			markerPosition = markerPosition % 3;
+			markerPosition = markerPosition % 4;
 
 			mm->type = UPDATE_OBJ_SPRITE;
-			oss << "obj3,1,Z6_Marker_P" << markerPosition << ".png,";
+			oss << "obj3,1,MZ6_Marker_P" << markerPosition << ".png,";
 			mm->data = oss.str();
 			msgBus->postMessage(mm, this);
 			break;
 		case SPACEBAR_PRESSED:
-			if (markerPosition == 2) {
+			if (markerPosition == 3) {
 				// Exit was selected, kill main
 				malive = false;
-			} else if (markerPosition == 1) {
+			} else if (markerPosition == 2) {
 				// Go to settings
 				removeAllGameObjects();
 				addGameObjects("settings_menu.txt");
@@ -314,7 +314,7 @@ void GameSystem::handleMessage(Msg *msg) {
 				markerPosition = 0;
 				Msg* m = new Msg(LEVEL_LOADED, "1");
 				msgBus->postMessage(m, this);
-			} else if (markerPosition == 0) {
+			} else if (markerPosition == 1) {
 				// start the game (or go to level select?)
 				// first, clear all objects
 				removeAllGameObjects();
@@ -325,14 +325,32 @@ void GameSystem::handleMessage(Msg *msg) {
 				Msg* m = new Msg(LEVEL_LOADED, "2");
 				msgBus->postMessage(m, this);
 				score = 0;
+			} else if (markerPosition == 0) {
+				// instructions page
+				removeAllGameObjects();
+				addGameObjects("instructions_menu.txt");
+				levelLoaded = 4;
+				markerPosition = 0;
+				Msg* m = new Msg(LEVEL_LOADED, "4");
+				msgBus->postMessage(m, this);
 			}
 			break;
 		default:
 			break;
 		}
 
-	}
-	else if (levelLoaded == 1) {
+	} else if (levelLoaded == 4) {
+		// instructions menu
+		// only one option; to go back to menu
+		if (msg->type == SPACEBAR_PRESSED) {
+			removeAllGameObjects();
+			addGameObjects("main_menu.txt");
+			levelLoaded = 0;
+			markerPosition = 0;
+			Msg* m = new Msg(LEVEL_LOADED, "0");
+			msgBus->postMessage(m, this);
+		}
+	} else if (levelLoaded == 1) {
 		// settings menu
 		switch (msg->type) {
 		case DOWN_ARROW_PRESSED:

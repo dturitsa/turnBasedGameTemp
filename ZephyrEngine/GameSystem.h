@@ -44,7 +44,8 @@ public:
 	// 0	= Main Menu
 	// 1	= Settings
 	// 2	= In Game
-	// 3	= Level select (if required)
+	// 3	= Game Over
+	// 4	= Instructions
 	int levelLoaded = -1;
 
 	int score = 0;
