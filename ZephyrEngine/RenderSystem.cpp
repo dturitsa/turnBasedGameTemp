@@ -210,14 +210,18 @@ void RenderSystem::draw(string ID, string sprite, float x, float y, float z, flo
 			if (animationCount > frames) {
 				tempacount = animationCount % frames;
 			}
-			currentRow = ceil(tempacount / 20);
+			currentRow = ceil(tempacount / 20.0f);
 		}
 
-		// init flicker
-		if ((tempacount % frames) == 0) {
+		// default
+		offset = (float) (tempacount % 20) - 1;
+		
+		if ((tempacount == 0)) {
 			offset = 0;
-		} else {
-			offset = (float)(tempacount % 20);
+		}
+
+		if (((tempacount % 20) == 0) && (tempacount != 0)) {
+			offset = 19;
 		}
 
 		// 0 to 5
@@ -232,48 +236,48 @@ void RenderSystem::draw(string ID, string sprite, float x, float y, float z, flo
 	float finalYOffset = (1.0f / (float) numberOfRows) * yoffset;
 
 	if (frames > 20) {
-		OutputDebugString("OFfset: ");
+		OutputDebugString("Offset: ");
 		std::ostringstream ss;
-		ss << finalYOffset << " " << yoffset << " " << animationCount << " " << tempacount << " " << currentRow << " " << numberOfRows << " " << offset;
+		ss << finalYOffset << "\t" << yoffset << "\t" << animationCount << "\t" << tempacount << "\t" << currentRow << "\t" << numberOfRows << "\t" << offset;
 		OutputDebugString(ss.str().c_str());
 		OutputDebugString("\n");
 	}
 
 	// tempfix
-	if (ID == "aniWaves") {
-		fheight = 0.166666f;
+	//if (ID == "aniWaves") {
+	//	fheight = 0.166666f;
 
-		if ((tempacount % frames) >= 0) {
-			if ((tempacount % frames) > 20) {
-				if ((tempacount % frames) > 40) {
-					if ((tempacount % frames) > 60) {
-						if ((tempacount % frames) > 80) {
-							if ((tempacount % frames) > 100) {
-								// row 6
-								finalYOffset = 0.83333f;
-							} else {
-								// row 5
-								finalYOffset = 0.66666f;
-							}
-						} else {
-							// row 4
-							finalYOffset = 0.5f;
-						}
-					} else {
-						// row 3
-						finalYOffset = 0.33333f;
-					}
-				} else {
-					// row 2
-					finalYOffset = 0.166666f;
+	//	if ((tempacount % frames) >= 0) {
+	//		if ((tempacount % frames) > 20) {
+	//			if ((tempacount % frames) > 40) {
+	//				if ((tempacount % frames) > 60) {
+	//					if ((tempacount % frames) > 80) {
+	//						if ((tempacount % frames) > 100) {
+	//							// row 6
+	//							finalYOffset = 0.83333f;
+	//						} else {
+	//							// row 5
+	//							finalYOffset = 0.66666f;
+	//						}
+	//					} else {
+	//						// row 4
+	//						finalYOffset = 0.5f;
+	//					}
+	//				} else {
+	//					// row 3
+	//					finalYOffset = 0.33333f;
+	//				}
+	//			} else {
+	//				// row 2
+	//				finalYOffset = 0.166666f;
 
-				}
-			} else {
-				// row 1
-				finalYOffset = 0.0f;
-			}
-		}
-	}
+	//			}
+	//		} else {
+	//			// row 1
+	//			finalYOffset = 0.0f;
+	//		}
+	//	}
+	//}
 
 	
 
