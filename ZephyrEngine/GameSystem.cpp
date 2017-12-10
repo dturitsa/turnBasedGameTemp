@@ -208,9 +208,15 @@ void GameSystem::startSystemLoop() {
 		if (random_variable % 15 == 0) {
 			// spawn a new enemy
 			if (levelLoaded == 2) {
-				// TODO
-				// modify to be actual player positon later
-				addNewEnemy(0,0);
+				for (GameObject* g : gameObjects) {
+					if (g->getObjectType() == "ShipObj") {
+						if (g->id == "playerShip") {
+							ShipObj* so = dynamic_cast<ShipObj*>(g);
+							addNewEnemy(so->x, so->y);
+							break;
+						}
+					}
+				}
 			}
 		}
 
