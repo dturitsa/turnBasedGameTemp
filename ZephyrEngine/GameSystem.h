@@ -30,6 +30,7 @@ public:
 	void startSystemLoop();
 	//void startTestLevel();
 	void addGameObjects(string fileName);
+	void addNewEnemy(int playerX, int playerY);
 	void saveToFIle(string fileName);
 	void createGameObject(GameObject* g);
 	void GameSystem::gameObjectRemoved(GameObject* g);

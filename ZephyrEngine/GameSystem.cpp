@@ -51,6 +51,77 @@ void GameSystem::addGameObjects(string fileName) {
 	}
 }
 
+void GameSystem::addNewEnemy(int playerX, int playerY) {
+
+	std::string data = openFileRemoveSpaces("enemyShip.txt");
+
+	GameObject* g; //new gameobject to be created
+
+	vector<string> splitObjData = split(data, ',');
+
+	std::map<std::string, std::string> gameObjDataMap;
+
+	// make sure the id is random for the boat
+	std::ostringstream ss;
+	ss << "id: enemy" << rand();
+	splitObjData[1] = ss.str();
+	 
+	// make the positions dependent on the player pos
+	int enemyx = playerX;
+
+	if (playerX > 0) {
+		enemyx -= 300;
+	} else {
+		enemyx += 300;
+	}
+		
+	std::ostringstream xss;
+	xss << "xPos: " << enemyx;
+	splitObjData[3] = xss.str();
+		
+	int enemyy = playerY;
+
+	if (playerY > 0) {
+		enemyy -= 300;
+	} else {
+		enemyy += 300;
+	}
+		
+	std::ostringstream yss;
+	yss << "yPos: " << enemyy;
+	splitObjData[4] = yss.str();
+
+	// spawn wtih random orientation
+	std::ostringstream oss;
+	oss << "orientation: " << (rand() % 360);
+	splitObjData[6] = oss.str();
+
+	//loop through elements of each GameObject and add them to the object parameter map
+	for (int i = 0; i < splitObjData.size(); i++) {
+		vector<string> keyValue = split(splitObjData[i], ':');
+		gameObjDataMap[keyValue[0]] = keyValue[1];
+	}
+
+	//gets the gameObject type
+	string gameObjectType = gameObjDataMap.find("gameObjectType")->second;
+	g = NULL;
+	//just hard coded else ifs for now... should probably make retreive available classes automatically <- Did some research, cpp doesn't support reflection (Hank)
+	if (gameObjectType.compare("ShipObj") == 0) {
+		g = new ShipObj(gameObjDataMap, &objData);
+	} else if (gameObjectType.compare("GameObject") == 0) {
+		g = new GameObject(gameObjDataMap, &objData);
+	} else if (gameObjectType.compare("FullscreenObj") == 0) {
+		g = new FullscreenObj(gameObjDataMap, &objData);
+	} else if (gameObjectType.compare("WindArrowObj") == 0) {
+		g = new WindArrowObj(gameObjDataMap, &objData);
+	}
+
+	if (g != NULL) {
+		createGameObject(g);
+	}
+	
+}
+
 void GameSystem::saveToFIle(string fileName) {
 	string output = "";
 	for (GameObject* obj : gameObjects) {
@@ -131,6 +202,15 @@ void GameSystem::startSystemLoop() {
 					msgBus->postMessage(mmm, this);
 				}
 				
+			}
+		}
+
+		if (random_variable % 15 == 0) {
+			// spawn a new enemy
+			if (levelLoaded == 2) {
+				// TODO
+				// modify to be actual player positon later
+				addNewEnemy(0,0);
 			}
 		}
 
