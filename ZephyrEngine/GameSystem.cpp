@@ -586,8 +586,8 @@ void GameSystem::handleMessage(Msg *msg) {
 				if (g->getObjectType() == "ShipObj") {
 					ShipObj* so = dynamic_cast<ShipObj*>(g);
 					so->rudder++;
-					if (so->sail > 4) {
-						so->sail = 4;
+					if (so->rudder > 4) {
+						so->rudder = 4;
 					}
 
 					mm->type = CHANGE_RUDDER;
