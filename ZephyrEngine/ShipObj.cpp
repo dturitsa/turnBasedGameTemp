@@ -85,6 +85,14 @@ void ShipObj::onCollide(GameObject* otherObj) {
 
 	health -= 7;
 		
+	if (id == "playerShip") {
+		// update the hud obj
+		std::ostringstream oss;
+		oss << ((float) health / 150) * 200;
+		Msg* m = new Msg(UPDATE_HP_BAR, oss.str());
+		objData->toPostVector.push_back(m);
+	}
+
 
 	if (health < 0) {
 		objData->toDestroyVector.push_back(this);
