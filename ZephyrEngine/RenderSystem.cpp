@@ -23,6 +23,32 @@ const GLchar *fragmentShaderSource = "#version 330 core\n"
 "color = texture(ourTexture1, TexCoord);\n"
 "}";
 
+//In Game Fragment Shader
+const GLchar *inGameFragmentShaderSource = "#version 330 core\n"
+"out vec4 color;\n"
+"in vec2 TexCoord;\n"
+"uniform sampler2D ourTexture1;\n"
+"uniform vec2 iResolution;\n"
+"void main()\n"
+"{\n"
+"float darkness = 1.1f;\n"
+"vec2 center = vec2(iResolution.x / 2, iResolution.y / 2);\n"
+"\n"
+"if(gl_FragCoord.x > center.x){\n"
+"darkness *= (iResolution.x - gl_FragCoord.x) / center.x;\n"
+"}\n"
+"if(gl_FragCoord.x < center.x){\n"
+"darkness *= gl_FragCoord.x / center.x;\n"
+"}\n"
+"if(gl_FragCoord.y > center.y){\n"
+"darkness *= (iResolution.y - gl_FragCoord.y) / center.y;\n"
+"}\n"
+"if(gl_FragCoord.y < center.y){\n"
+"darkness *= gl_FragCoord.y / center.y;\n"
+"}\n"
+"\n"
+"color = texture(ourTexture1, TexCoord) * vec4(darkness, darkness, darkness, 1.0f);\n"
+"}";
 
 RenderSystem::RenderSystem(MessageBus* mbus) : System(mbus) {
 	//Initialize SDL
@@ -99,8 +125,33 @@ void RenderSystem::init() {
 		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
 	}
 
-	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
+
+	//Set up in game fragment shader
+	inGameFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(inGameFragmentShader, 1, &inGameFragmentShaderSource, NULL);
+	glCompileShader(inGameFragmentShader);
+
+	glGetShaderiv(inGameFragmentShader, GL_COMPILE_STATUS, &success);
+	if (!success) {
+		OutputDebugString("DIDNT WORK");
+		glGetShaderInfoLog(inGameFragmentShader, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+	}
+	//Set up in game program
+	inGameShaderProgram = glCreateProgram();
+	glAttachShader(inGameShaderProgram, vertexShader);
+	glAttachShader(inGameShaderProgram, inGameFragmentShader);
+	glLinkProgram(inGameShaderProgram);
+
+	glGetProgramiv(inGameShaderProgram, GL_LINK_STATUS, &success);
+	if (!success) {
+		glGetProgramInfoLog(inGameShaderProgram, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+	}
+
+	glDeleteShader(vertexShader);
+	glDeleteShader(inGameFragmentShader);
 
 	//Set up VBOs, VAOs
 	glGenVertexArrays(1, &VAO);
@@ -173,7 +224,9 @@ void RenderSystem::draw(string ID, string sprite, float x, float y, float z, flo
 		};
 	}
 	GLint ourTransform = glGetUniformLocation(shaderProgram, "transform");
+	GLint ourInGameTransform = glGetUniformLocation(inGameShaderProgram, "transform");
 	glUniformMatrix4fv(ourTransform, 3, GL_FALSE, temp);
+	glUniformMatrix4fv(ourInGameTransform, 3, GL_FALSE, temp);
 	
 	glMatrixMode(ourTransform);
 	glPushMatrix();
@@ -284,6 +337,8 @@ void RenderSystem::draw(string ID, string sprite, float x, float y, float z, flo
 	GLfloat spriteFrame[4] = { (1.0f / (float) xframes) * offset, finalYOffset, 1.0f / (float)frames, (float) fheight };
 	GLint ourSpriteFrame = glGetUniformLocation(shaderProgram, "SpriteFrame");
 	glUniform4fv(ourSpriteFrame, 1, spriteFrame);
+	GLint ourInGameSpriteFrame = glGetUniformLocation(inGameShaderProgram, "SpriteFrame");
+	glUniform4fv(ourInGameSpriteFrame, 1, spriteFrame);
 
 
 	//Bind texture to fragment shader
@@ -291,9 +346,16 @@ void RenderSystem::draw(string ID, string sprite, float x, float y, float z, flo
 	glBindTexture(GL_TEXTURE_2D, textures.find(sprite)->second);
 	GLint ourTextureLocation = glGetUniformLocation(shaderProgram, "ourTexture1");
 	glUniform1i(ourTextureLocation, 0);
+	GLint ourInGameTextureLocation = glGetUniformLocation(inGameShaderProgram, "ourTexture1");
+	glUniform1i(ourInGameTextureLocation, 0);
+
+	//Bind resolution to fragment shader
+	GLint loc = glGetUniformLocation(inGameShaderProgram, "iResolution");
+	glUniform2f(loc, WIDTH, HEIGHT);
 
 	//Use shader
 	glUseProgram(shaderProgram);
+	//glUseProgram(inGameShaderProgram);
 
 	//Draw
 	glBindVertexArray(VAO);

@@ -40,7 +40,9 @@ private:
 	int animationCount;
 	GLuint vertexShader;
 	GLuint fragmentShader;
+	GLuint inGameFragmentShader;
 	GLuint shaderProgram;
+	GLuint inGameShaderProgram;
 	map<string, GLuint> textures;
 	SDL_Window *window;
 	SDL_GLContext context;
