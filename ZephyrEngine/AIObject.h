@@ -4,6 +4,7 @@
 #include <math.h>
 //#include "AISystem.h"
 #include "AIData.h"
+#include "AIDNA.h"
 #include "Vector2.h"
 
 //objects in the world that are of interest to the AI system
@@ -44,6 +45,7 @@ public:
 	int orientation;
 	Vector2 pos;
 	AIData* aiData;
+	AIDNA* dna;
 	WorldObject* target;
 
 };

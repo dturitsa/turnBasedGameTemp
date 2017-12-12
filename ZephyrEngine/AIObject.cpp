@@ -50,6 +50,8 @@ void AIObject::update() {
 			OutputDebugString(id.c_str());
 			OutputDebugString(" Set target to ");
 			OutputDebugString(target->id.c_str());
+			OutputDebugString("\nRaycastLength: ");
+			OutputDebugString(to_string(dna->raycastAngle).c_str());
 			OutputDebugString("\n");
 		}
 
@@ -60,7 +62,7 @@ void AIObject::update() {
 	if (colAvoidanceBehaviour() != 0)
 		collisionTimer = 0;
 
-	if (collisionTimer > 40 && target != NULL) {
+	if (collisionTimer > dna->avoidanceLockTime && target != NULL) {
 		int range = distanceToTarget(pos, target->pos);
 
 		if (range > 90) {
@@ -162,8 +164,8 @@ int AIObject::colAvoidanceBehaviour() {
 
 int AIObject::checkCollision() {
 	string collidedObject = "nothing";
-	float raycastLength = 100;
-	float raycastAngle = 10;
+	float raycastLength = dna->raycastLength;
+	float raycastAngle = dna->raycastAngle;
 	Vector2 leftRaycast(pos.x, pos.y + raycastLength);
 	Vector2 rightRaycast(pos.x, pos.y + raycastLength);
 	float leftAngle = checkAngle(orientation - raycastAngle);

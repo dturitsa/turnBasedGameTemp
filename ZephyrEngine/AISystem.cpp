@@ -34,6 +34,8 @@ void AISystem::handleMessage(Msg *msg)
 			a->pos.y = atof(data[3].c_str());
 			a->orientation = atof(data[5].c_str());
 			a->aiData = &aiData;
+			a->dna = new AIDNA();
+			a->dna->mutate(.5f);
 			AIObjects.push_back(a);
 		}
 

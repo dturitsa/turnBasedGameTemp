@@ -2,6 +2,7 @@
 #include "System.h"
 #include "AIObject.h"
 #include "AIData.h"
+#include "AIDNA.h"
 #include <iostream>
 #include <fstream>
 #include <chrono>
