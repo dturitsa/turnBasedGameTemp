@@ -407,7 +407,8 @@ void GameSystem::handleMessage(Msg *msg) {
 				removeAllGameObjects();
 
 				// then, load new objects
-				addGameObjects("Level_1.txt"); // TEMPORARY 
+				//addGameObjects("Level_1.txt");
+				addGameObjects("Level_1Simplified.txt");
 				levelLoaded = 2;
 				Msg* m = new Msg(LEVEL_LOADED, "2");
 				msgBus->postMessage(m, this);
