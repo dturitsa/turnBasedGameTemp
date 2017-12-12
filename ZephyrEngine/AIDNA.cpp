@@ -1,12 +1,18 @@
 #include "AIDNA.h"
 
 
-
+using namespace std;
 AIDNA::AIDNA()
 {
 	srand(time(NULL));
 }
 
+AIDNA::AIDNA(map <string, string> paramsMap) {
+	rating = stoi(paramsMap.find("rating")->second);
+	raycastLength = stoi(paramsMap.find("raycastLength")->second);
+	raycastAngle = stoi(paramsMap.find("raycastAngle")->second);
+	avoidanceLockTime = stoi(paramsMap.find("avoidanceLockTime")->second);
+}
 
 AIDNA::~AIDNA()
 {
@@ -39,3 +45,18 @@ void AIDNA::mutate(float mutationRate) {
 	rnd = mutationRate / 2 - rnd + 1;
 	avoidanceLockTime *= rnd;
 }
+
+float raycastLength = 100;
+float raycastAngle = 10;
+float avoidanceLockTime = 40;
+
+string AIDNA::toString() {
+	string output = "\nrating: " + to_string(rating) + ",";
+	output += "\nraycastLength: " + to_string(raycastLength) + ",";
+	output += "\nraycastAngle: " + to_string(raycastAngle) + ",";
+	output += "\navoidanceLockTime: " + to_string(avoidanceLockTime) + ",";
+
+	return output;
+}
+
+

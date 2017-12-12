@@ -1,12 +1,14 @@
 #pragma once
-#include <stdlib.h>     /* srand, rand */
-#include <time.h>       /* time */
-	
+#include <stdlib.h>    
+#include <time.h>      
+#include <string>	
+#include <map>
 
 class AIDNA
 {
 public:
 	AIDNA();
+	AIDNA(std::map <std::string, std::string>);
 	~AIDNA();
 	float raycastLength = 100;
 	float raycastAngle = 10;
@@ -22,6 +24,8 @@ public:
 
 	//randomizes the variable values in the object.
 	void mutate(float mutationRate);
+
+	std::string toString();
 
 };
 

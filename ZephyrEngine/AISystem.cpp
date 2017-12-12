@@ -5,11 +5,13 @@ using namespace std;
 AISystem::AISystem(MessageBus* mbus) : System(mbus) {
 	aiData = *(new AIData());
 
-	for (int i = 0; i < 5; i++) {
-		AIDNA* d = new AIDNA();
-		d->mutate(.5);
-		dnaVector.push_back(d);
-	}
+	//create randomized dnaData
+	//for (int i = 0; i < 5; i++) {
+	//	AIDNA* d = new AIDNA();
+	//	d->mutate(.5);
+	//	dnaVector.push_back(d);
+	//}
+	loadDnaFromFile();
 }
 
 void AISystem::handleMessage(Msg *msg)
@@ -128,6 +130,7 @@ void AISystem::startSystemLoop() {
 			Sleep(currentGameTime - thisTime);
 		}
 		currentGameTime = thisTime + timeFrame;
+		frameCount++;
 
 		handleMsgQ();
 
@@ -135,6 +138,10 @@ void AISystem::startSystemLoop() {
 		for (AIObject* a : AIObjects) {
 			a->update();
 		}
+		OutputDebugString("\nCurrentGameTime: ");
+		OutputDebugString(to_string(currentGameTime).c_str());
+		OutputDebugString("\n");
+
 
 		for (WorldObject* w : aiData.worldObjects) {
 			float halfWidth = w->width / 2;
@@ -165,6 +172,42 @@ void AISystem::startSystemLoop() {
 			msgBus->postMessage(m, this);
 		}
 		aiData.toPostVector.clear();
+
+		if (frameCount % 100 == 0) {
+			saveDnaToFile();
+		}
+	}
+}
+
+void AISystem::saveDnaToFile() {
+	//string saveData = to_string(frameCount);
+	string output = "";
+	for (AIDNA* dna : dnaVector) {
+		output += dna->toString();
+		output.pop_back();//remove the trailing ','
+		output += ";\n";
+	}
+	writeToFile("dnaData.txt", output);
+}
+
+void AISystem::loadDnaFromFile() {
+	std::string data = openFileRemoveSpaces("dnaData.txt");
+
+	vector<string> splitDataVector = split(data, ';');//split gameobjects by
+
+	//AIDNA* dna; //new dna object to be created
+
+	for (int j = 0; j < splitDataVector.size(); j++) {
+		//AIDNA*  dna;
+		vector<string> splitObjData = split(splitDataVector[j], ',');
+
+		map<string, string> dnaDataMap;
+		//loop through elements of each dna object and add them to the object parameter map
+		for (int i = 0; i < splitObjData.size(); i++) {
+			vector<string> keyValue = split(splitObjData[i], ':');
+			dnaDataMap[keyValue[0]] = keyValue[1];
+		}
+		dnaVector.push_back(new AIDNA(dnaDataMap));
 	}
 }
 

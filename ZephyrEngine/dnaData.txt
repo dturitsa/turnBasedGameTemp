@@ -1,0 +1,50 @@
+
+rating: 0,
+raycastLength: 100.000000,
+raycastAngle: 10.000000,
+avoidanceLockTime: 40.000000;
+
+rating: 0,
+raycastLength: 100.000000,
+raycastAngle: 10.000000,
+avoidanceLockTime: 40.000000;
+
+rating: 0,
+raycastLength: 100.000000,
+raycastAngle: 10.000000,
+avoidanceLockTime: 40.000000;
+
+rating: 0,
+raycastLength: 100.000000,
+raycastAngle: 10.000000,
+avoidanceLockTime: 40.000000;
+
+rating: 0,
+raycastLength: 100.000000,
+raycastAngle: 10.000000,
+avoidanceLockTime: 40.000000;
+
+rating: 0,
+raycastLength: 100.000000,
+raycastAngle: 10.000000,
+avoidanceLockTime: 40.000000;
+
+rating: 0,
+raycastLength: 100.000000,
+raycastAngle: 10.000000,
+avoidanceLockTime: 40.000000;
+
+rating: 0,
+raycastLength: 100.000000,
+raycastAngle: 10.000000,
+avoidanceLockTime: 40.000000;
+
+rating: 0,
+raycastLength: 100.000000,
+raycastAngle: 10.000000,
+avoidanceLockTime: 40.000000;
+
+rating: 0,
+raycastLength: 100.000000,
+raycastAngle: 10.000000,
+avoidanceLockTime: 40.000000;
