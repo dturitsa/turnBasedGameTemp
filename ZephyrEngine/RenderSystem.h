@@ -91,6 +91,7 @@ private:
 	void panUp();
 	void panDown();
 	void cameraToPlayer();
+	void positionUpdated();
 
 	void levelLoaded(Msg*m);
 };

@@ -549,26 +549,37 @@ void RenderSystem::handleMessage(Msg *msg) {
 	case UP_ARROW_PRESSED:
 		if (loadedLevel == 2) {
 			panUp();
+			positionUpdated();
 		}
 		break;
 	case DOWN_ARROW_PRESSED: 
 		if (loadedLevel == 2) {
 			panDown();
+			positionUpdated();
 		}
 		break;
 	case RIGHT_ARROW_PRESSED:
 		if (loadedLevel == 2) {
 			panRight();
+			positionUpdated();
 		}
 		break;
 	case LEFT_ARROW_PRESSED:
 		if (loadedLevel == 2) {
 			panLeft();
+			positionUpdated();
 		}
 		break;
 	default:
 		break;
 	}
+}
+void RenderSystem::positionUpdated() {
+	Msg* m = new Msg(CAMERA_OFFSET, "");
+	std::ostringstream oss;
+	oss << to_string(cameraX) << "," << to_string(cameraX);
+	m->data = oss.str();
+	msgBus->postMessage(m, this);
 }
 
 void RenderSystem::removeObjectFromRenderList(Msg* m) {

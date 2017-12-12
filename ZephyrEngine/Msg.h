@@ -29,7 +29,10 @@ enum MSG_TYPE {
 
 	//AI system
 	SCORED_HIT, //the object scored a hit on an enemy (used in AI learning) shooterId,shotObjectID, projectileID
-	SHOOT_CANNON //id,direction
+	SHOOT_CANNON, //id,direction
+
+	//Render System
+	CAMERA_OFFSET //the position of the camera in world space :   xposition,yposition
 };
 
 class Msg {
