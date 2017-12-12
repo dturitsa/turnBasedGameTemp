@@ -39,7 +39,7 @@ public:
 	int colAvoidanceBehaviour();
 	float checkAngle(float angle);
 	float checkIntersection(Vector2 a, Vector2 b, Vector2 c, Vector2 d);
-	int checkCollision();
+	float checkCollision();
 	inline int signedOrientation(int unsignedOrientation);
 	inline int angleBetween(Vector2 v1, Vector2 v2);
 	void scoredHit(std::string hitObjectId, std::string projectileId); //object hit something

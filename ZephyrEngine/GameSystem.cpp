@@ -213,7 +213,7 @@ void GameSystem::startSystemLoop() {
 			}
 		}
 		enemySpawnCooldownCounter++;
-		if (levelLoaded == 2 && enemySpawnCooldownCounter > 900 && random_variable % 300 == 0) {
+		if (levelLoaded == 2 && enemySpawnCooldownCounter > 600 && random_variable % 300 == 0) {
 			enemySpawnCooldownCounter = 0;
 			// spawn a new enemy
 			for (GameObject* g : gameObjects) {

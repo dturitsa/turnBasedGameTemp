@@ -39,33 +39,22 @@ void AIObject::update() {
 
 		//set target to player
 		for (WorldObject* w : aiData->worldObjects) {
-			////set target to player
-			//if (w->id == "playerShip") {
-			//	target = w;
-			//}
-
-			//set target to closest AI object (for AI training)
-			float enemyDist = sqrt(pow(w->pos.x - pos.x, 2) + pow(w->pos.y - pos.y, 2));
-			if (enemyDist < closestEnemyDist && (w->id.find("enemy") != string::npos) && w->id != id) {
-				closestEnemy = w;
-				closestEnemyDist = enemyDist;
+			//set target to player
+			if (w->id == "playerShip") {
+				target = w;
 			}
+
+			////set target to closest AI object (for AI training)
+			//float enemyDist = sqrt(pow(w->pos.x - pos.x, 2) + pow(w->pos.y - pos.y, 2));
+			//if (enemyDist < closestEnemyDist && (w->id.find("enemy") != string::npos) && w->id != id) {
+			//	closestEnemy = w;
+			//	closestEnemyDist = enemyDist;
+			//}
+			//if (closestEnemy != target) {
+			//	target = closestEnemy;
+			//}
 		}
-		if (closestEnemy != target) {
-			target = closestEnemy;
-			OutputDebugString("\n");
-			OutputDebugString(id.c_str());
-			OutputDebugString(" Set target to ");
-			OutputDebugString(target->id.c_str());
-			OutputDebugString("\nRaycastLength: ");
-			OutputDebugString(to_string(dna->raycastAngle).c_str());
-			OutputDebugString("\n");
-		}
 
-
-		//set target to closest "enemy"
-
-	//}
 	if (colAvoidanceBehaviour() != 0)
 		collisionTimer = 0;
 
@@ -169,7 +158,7 @@ int AIObject::colAvoidanceBehaviour() {
 	return collisionDistance;
 }
 
-int AIObject::checkCollision() {
+float AIObject::checkCollision() {
 	string collidedObject = "nothing";
 	float raycastLength = dna->raycastLength;
 	float raycastAngle = dna->raycastAngle;
