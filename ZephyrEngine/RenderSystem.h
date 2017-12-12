@@ -40,7 +40,9 @@ private:
 	int animationCount;
 	GLuint vertexShader;
 	GLuint fragmentShader;
+	GLuint inGameFragmentShader;
 	GLuint shaderProgram;
+	GLuint inGameShaderProgram;
 	map<string, GLuint> textures;
 	SDL_Window *window;
 	SDL_GLContext context;
@@ -70,7 +72,7 @@ private:
 	vector<renderObj*> renderObjects;
 
 	void renderAllItems();
-	void draw(string ID, string path, float x, float y, float z, float rotation, float width, float height, int frames);
+	void draw(string ID, string path, float x, float y, float z, float rotation, float width, float height, int frames, bool fso);
 	GLuint getTexture(string path);
 	void renderObject(string object);
 	void renderObject(renderObj* object);

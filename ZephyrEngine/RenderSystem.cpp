@@ -23,6 +23,31 @@ const GLchar *fragmentShaderSource = "#version 330 core\n"
 "color = texture(ourTexture1, TexCoord);\n"
 "}";
 
+//In Game Fragment Shader
+const GLchar *inGameFragmentShaderSource = "#version 330 core\n"
+"out vec4 color;\n"
+"in vec2 TexCoord;\n"
+"uniform sampler2D ourTexture1;\n"
+"uniform vec2 iResolution;\n"
+"void main()\n"
+"{\n"
+"float darkness = 1.0f;\n"
+"vec2 center = vec2(iResolution.x / 2, iResolution.y / 2);\n"
+"if(gl_FragCoord.x > center.x){\n"
+"darkness *= (iResolution.x - gl_FragCoord.x) / center.x;\n"
+"}\n"
+"if(gl_FragCoord.x < center.x){\n"
+"darkness *= gl_FragCoord.x / center.x;\n"
+"}\n"
+"if(gl_FragCoord.y > center.y){\n"
+"darkness *= (iResolution.y - gl_FragCoord.y) / center.y;\n"
+"}\n"
+"if(gl_FragCoord.y < center.y){\n"
+"darkness *= gl_FragCoord.y / center.y;\n"
+"}\n"
+"\n"
+"color = texture(ourTexture1, TexCoord) * vec4(darkness, darkness, darkness, 1.0f);\n"
+"}";
 
 RenderSystem::RenderSystem(MessageBus* mbus) : System(mbus) {
 	//Initialize SDL
@@ -99,8 +124,33 @@ void RenderSystem::init() {
 		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
 	}
 
-	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
+
+	//Set up in game fragment shader
+	inGameFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(inGameFragmentShader, 1, &inGameFragmentShaderSource, NULL);
+	glCompileShader(inGameFragmentShader);
+
+	glGetShaderiv(inGameFragmentShader, GL_COMPILE_STATUS, &success);
+	if (!success) {
+		OutputDebugString("DIDNT WORK");
+		glGetShaderInfoLog(inGameFragmentShader, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+	}
+	//Set up in game program
+	inGameShaderProgram = glCreateProgram();
+	glAttachShader(inGameShaderProgram, vertexShader);
+	glAttachShader(inGameShaderProgram, inGameFragmentShader);
+	glLinkProgram(inGameShaderProgram);
+
+	glGetProgramiv(inGameShaderProgram, GL_LINK_STATUS, &success);
+	if (!success) {
+		glGetProgramInfoLog(inGameShaderProgram, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+	}
+
+	glDeleteShader(vertexShader);
+	glDeleteShader(inGameFragmentShader);
 
 	//Set up VBOs, VAOs
 	glGenVertexArrays(1, &VAO);
@@ -127,11 +177,18 @@ void RenderSystem::init() {
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void RenderSystem::draw(string ID, string sprite, float x, float y, float z, float orientation, float width, float height, int frames) {
+void RenderSystem::draw(string ID, string sprite, float x, float y, float z, float orientation, float width, float height, int frames, bool fso) {
 	//Bind transform to vertex shader
 	//Create a transform matrix and bind it to shader
 	float radRot = orientation * 3.1415927 / 180.0;
 
+	//Use shader
+	if (fso) { // if it's a full screen object use normal shader
+		glUseProgram(shaderProgram);
+	}
+	else { // if it's in game object use other shader
+		glUseProgram(inGameShaderProgram);
+	}
 	GLfloat* temp = new GLfloat[80]{
 		
 
@@ -193,16 +250,14 @@ void RenderSystem::draw(string ID, string sprite, float x, float y, float z, flo
 
 		};
 	}
-	GLint ourTransform = glGetUniformLocation(shaderProgram, "transform");
-	glUniformMatrix4fv(ourTransform, 3, GL_FALSE, temp);
-	
-	glMatrixMode(ourTransform);
-	glPushMatrix();
-	//glTranslatef(xcenter, ycenter, zcenter); // move back to focus of gluLookAt
-	glRotatef(45,0,0,0); //  rotate around center
-	//glTranslatef(-xcenter, -ycenter, -zcenter); //move object to center
-	//DrawObject();
-	//glPopMatrix();
+	if (fso) {
+		GLint ourTransform = glGetUniformLocation(shaderProgram, "transform");
+		glUniformMatrix4fv(ourTransform, 3, GL_FALSE, temp);
+	}
+	else {
+		GLint ourInGameTransform = glGetUniformLocation(inGameShaderProgram, "transform");
+		glUniformMatrix4fv(ourInGameTransform, 3, GL_FALSE, temp);
+	}
 	
 	//Used for animations; passed into vertex shader
 	//data needed for animation; x,y = offset; z,w = width + height of sprite
@@ -264,57 +319,31 @@ void RenderSystem::draw(string ID, string sprite, float x, float y, float z, flo
 		OutputDebugString("\n");
 	}
 
-	// tempfix
-	//if (ID == "aniWaves") {
-	//	fheight = 0.166666f;
-
-	//	if ((tempacount % frames) >= 0) {
-	//		if ((tempacount % frames) > 20) {
-	//			if ((tempacount % frames) > 40) {
-	//				if ((tempacount % frames) > 60) {
-	//					if ((tempacount % frames) > 80) {
-	//						if ((tempacount % frames) > 100) {
-	//							// row 6
-	//							finalYOffset = 0.83333f;
-	//						} else {
-	//							// row 5
-	//							finalYOffset = 0.66666f;
-	//						}
-	//					} else {
-	//						// row 4
-	//						finalYOffset = 0.5f;
-	//					}
-	//				} else {
-	//					// row 3
-	//					finalYOffset = 0.33333f;
-	//				}
-	//			} else {
-	//				// row 2
-	//				finalYOffset = 0.166666f;
-
-	//			}
-	//		} else {
-	//			// row 1
-	//			finalYOffset = 0.0f;
-	//		}
-	//	}
-	//}
-
-	
-
 	GLfloat spriteFrame[4] = { (1.0f / (float) xframes) * offset, finalYOffset, 1.0f / (float)frames, (float) fheight };
-	GLint ourSpriteFrame = glGetUniformLocation(shaderProgram, "SpriteFrame");
-	glUniform4fv(ourSpriteFrame, 1, spriteFrame);
-
+	if (fso) {
+		GLint ourSpriteFrame = glGetUniformLocation(shaderProgram, "SpriteFrame");
+		glUniform4fv(ourSpriteFrame, 1, spriteFrame);
+	}
+	else {
+		GLint ourInGameSpriteFrame = glGetUniformLocation(inGameShaderProgram, "SpriteFrame");
+		glUniform4fv(ourInGameSpriteFrame, 1, spriteFrame);
+	}
 
 	//Bind texture to fragment shader
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, textures.find(sprite)->second);
-	GLint ourTextureLocation = glGetUniformLocation(shaderProgram, "ourTexture1");
-	glUniform1i(ourTextureLocation, 0);
+	if (fso) {
+		GLint ourTextureLocation = glGetUniformLocation(shaderProgram, "ourTexture1");
+		glUniform1i(ourTextureLocation, 0);
+	}
+	else {
+		GLint ourInGameTextureLocation = glGetUniformLocation(inGameShaderProgram, "ourTexture1");
+		glUniform1i(ourInGameTextureLocation, 0);
+	}
 
-	//Use shader
-	glUseProgram(shaderProgram);
+	//Bind resolution to fragment shader
+	GLint loc = glGetUniformLocation(inGameShaderProgram, "iResolution");
+	glUniform2f(loc, WIDTH, HEIGHT);
 
 	//Draw
 	glBindVertexArray(VAO);
@@ -349,11 +378,7 @@ float RenderSystem::getScaleY(float y) {
 	return scale;
 }
 void RenderSystem::renderAllItems() {
-	//RENDER MENU SCREEN
 	for (string* s : gameObjectsToRender) {
-		//std::vector<std::string> data = split(s, ',');
-		//OutputDebugString(s->c_str());
-		//OutputDebugString("\n");
 		renderObject(*s);
 	}
 	animationCount++;
@@ -364,6 +389,7 @@ void RenderSystem::renderObject(string object) {
 	string ID, sprite;
 	float x, y, z, orientation, w, h;
 	int frames = 1;
+	bool fso;
 	//Split object
 	vector<string> objectData = split(object, ',');
 
@@ -377,7 +403,18 @@ void RenderSystem::renderObject(string object) {
 	w = atof(objectData[6].c_str());
 	h = atof(objectData[7].c_str());
 	frames = atoi(objectData[10].c_str());
-
+	if (objectData[9].compare("FullscreenObj") == 0) {
+		fso = true;
+	}
+	else if (objectData[9].compare("WindArrowObj") == 0) {
+		fso = true;
+	} 
+	else {
+		fso = false;
+	}
+	if (ID.compare("windmarker") == 0) {
+		fso = true;
+	}
 	/*ID = object->ID;
 	sprite = object->sprite;
 	x = object->x;
@@ -394,7 +431,7 @@ void RenderSystem::renderObject(string object) {
 		textures.insert(pair<string, GLuint>(sprite, getTexture(sprite)));
 	}
 	//Draw object
-	draw(ID, sprite, x, y, z, orientation,w,h, frames);
+	draw(ID, sprite, x, y, z, orientation,w,h, frames, fso);
 }
 GLuint RenderSystem::getTexture(string path) {
 	GLuint texture;
@@ -442,17 +479,6 @@ void RenderSystem::startSystemLoop() {
 
 		handleMsgQ();
 
-		////Display Thread ID for Debugging
-		//std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
-		//OutputDebugString("Render Loop on thread: ");
-		//OutputDebugString(s.c_str());
-		//OutputDebugString("\n");
-
-		//string str = to_string(renderCount);
-		//OutputDebugString(str.c_str());
-	//OutputDebugString("\n");
-	//	renderCount++;
-
 		//lastTime = thisTime;
 
 		//mtx.lock();
@@ -462,11 +488,7 @@ void RenderSystem::startSystemLoop() {
 		//Render all objects
 		renderCount++;
 		string st = to_string(renderCount);
-	//	OutputDebugString(st.c_str());
-		//OutputDebugString("\n");
-		//mtx.lock();
 		renderAllItems();
-	//	mtx.unlock();
 		//Update openGL window
 		SDL_GL_SwapWindow(window);
 		//mtx.unlock();
@@ -558,20 +580,6 @@ void RenderSystem::removeObjectFromRenderList(Msg* m) {
 			return;
 		}
 	}
-	/*
-	for (auto s : gameObjectsToRender) {
-		std::vector<std::string> obj = split(*s, ',');
-		// found the obj
-		if (obj.front() == m->data) {
-			// remove the object
-			gameObjectsToRender.erase(s);
-			return;
-		}
-	}
-	
-	gameObjectsToRender.push_back(&m->data);
-	*/
-	
 }
 
 void RenderSystem::addObjectToRenderList(Msg* m) {
