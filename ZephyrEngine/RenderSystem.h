@@ -82,6 +82,7 @@ private:
 	void removeObjectFromRenderList(Msg* m);
 	void updateObjPosition(Msg* m);
 	void updateObjSprite(Msg*m);
+	void updateHealthHUD(Msg*m);
 
 	void panLeft();
 	void panRight();

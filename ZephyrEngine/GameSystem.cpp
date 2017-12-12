@@ -210,7 +210,8 @@ void GameSystem::startSystemLoop() {
 			}
 		}
 
-		if (random_variable % 20 == 0) {
+		if (random_variable % 105 == 0) {
+
 			// spawn a new enemy
 			if (levelLoaded == 2) {
 				for (GameObject* g : gameObjects) {

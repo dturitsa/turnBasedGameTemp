@@ -172,6 +172,27 @@ void RenderSystem::draw(string ID, string sprite, float x, float y, float z, flo
 
 		};
 	}
+	if (ID == "hpbo" || ID == "hpba") {
+		temp = new GLfloat[80]{
+
+
+			1, 0, 0, 0, //Rotate 
+			0, 1, 0, 0,
+			0, 0, 1, 0,
+			0, 0, 0, 1,
+
+			getScaleX(width), 0, 0, 0, //Scale
+			0, getScaleY(height), 0, 0,
+			0, 0, 1, 0,
+			0, 0, 0, 1,
+
+			1, 0, 0, 0, //Translate
+			0, 1, 0, 0,
+			0, 0, 1, 0,
+			(x / MAX_X), (y / MAX_Y), 0, 1 //should add z posiiton at tome point
+
+		};
+	}
 	GLint ourTransform = glGetUniformLocation(shaderProgram, "transform");
 	glUniformMatrix4fv(ourTransform, 3, GL_FALSE, temp);
 	
@@ -491,7 +512,9 @@ void RenderSystem::handleMessage(Msg *msg) {
 	case UPDATE_OBJ_SPRITE:
 		updateObjSprite(msg);
 		break;
-
+	case UPDATE_HP_BAR:
+		updateHealthHUD(msg);
+		break;
 	case LEVEL_LOADED:
 		levelLoaded(msg);
 		break;
@@ -613,6 +636,38 @@ void RenderSystem::updateObjSprite(Msg* m) {
 				}
 
 				position++;				
+			}
+
+			// replace with data
+			*s = oss.str();
+			return;
+		}
+
+	}
+}
+
+void RenderSystem::updateHealthHUD(Msg* m) {
+	std::string d = m->data;
+
+	std::ostringstream oss;
+
+	for (std::string* s : gameObjectsToRender) {
+		std::vector<std::string> obj = split(*s, ',');
+
+		// found the health bar
+		if (obj.front() == "hpba") {
+
+			int position = 0; // width is position 6 (i think)
+							  // copy everything except the width
+			for (std::string ss : obj) {
+				if (position != 6) {
+					oss << ss << ",";
+				} else {
+					// replace width
+					oss << d << ",";
+				}
+
+				position++;
 			}
 
 			// replace with data
