@@ -135,10 +135,15 @@ void GameSystem::saveToFIle(string fileName) {
 // This function adds a created game object to the main list, and posts a message to the render
 // and physics systems so that they can add it to their list as well
 void GameSystem::createGameObject(GameObject* g) {
+	//check if object id already exists
 	for (GameObject* obj : gameObjects) {
 		if (g->id == obj->id) {
-			//g->id.append(to_string(rand()));
-			OutputDebugString("error id found");
+			//randomize id and try again
+			//g->id.append(to_string(rand() % 24));
+			//createGameObject(g);
+			OutputDebugString("error id: ");
+			OutputDebugString(g->id.c_str());
+			OutputDebugString(" found\n");
 			return;
 		}
 	}
@@ -205,7 +210,7 @@ void GameSystem::startSystemLoop() {
 			}
 		}
 
-		if (random_variable % 15 == 0) {
+		if (random_variable % 20 == 0) {
 			// spawn a new enemy
 			if (levelLoaded == 2) {
 				for (GameObject* g : gameObjects) {

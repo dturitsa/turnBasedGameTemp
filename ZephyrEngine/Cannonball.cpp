@@ -60,17 +60,19 @@ void Cannonball::lateUpdate() {
 }
 
 void Cannonball::onCollide(GameObject* otherObj) {
-	if (counter > 21) {
+	if (counter > 21 && otherObj != parentObject) {
 		objData->toDestroyVector.push_back(this);
 		//deathSprite = "explosion.png";
-		//counter = 107;
+		counter = 100;
+
+		OutputDebugString(id.c_str());
+		OutputDebugString(" COLLIDED WITH ");
+		OutputDebugString(otherObj->id.c_str());
+		OutputDebugString("\n");
 	}
 
-	if (otherObj != parentObject) {
-	}
-	//OutputDebugString(id.c_str());
-	//OutputDebugString(" COLLIDED WITH ");
-	//OutputDebugString(otherObj->id.c_str());
-	//OutputDebugString("\n");
+
+
+
 	
 }

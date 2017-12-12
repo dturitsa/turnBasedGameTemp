@@ -27,8 +27,7 @@ void AISystem::handleMessage(Msg *msg)
 		//there should probably be an AI enabled flag. just checking id's for now
 		// Hank: Better way to check for enemies, now dynamically spawned enemies get AI too!
 		if (data[0].find("enemy") != std::string::npos) {
-		
-		//if (data[0] == "enemy1" || data[0] == "enemy2") {
+
 			AIObject* a = new AIObject();
 			a->id = data[0];
 			a->pos.x = atof(data[2].c_str());

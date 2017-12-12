@@ -25,13 +25,38 @@ void AIObject::update() {
 
 	collisionTimer++;
 	//set the target
-	if (target == NULL) {
+	//if (target == NULL) {
+
+		WorldObject* closestEnemy = aiData->worldObjects[0];
+		float closestEnemyDist = 999999;
+
+		//set target to player
 		for (WorldObject* w : aiData->worldObjects) {
-			if (w->id == "playerShip") {
-				target = w;
+			////set target to player
+			//if (w->id == "playerShip") {
+			//	target = w;
+			//}
+
+			//set target to closest AI object (for AI training)
+			float enemyDist = sqrt(pow(w->pos.x - pos.x, 2) + pow(w->pos.y - pos.y, 2));
+			if (enemyDist < closestEnemyDist && (w->id.find("enemy") != string::npos) && w->id != id) {
+				closestEnemy = w;
+				closestEnemyDist = enemyDist;
 			}
 		}
-	}
+		if (closestEnemy != target) {
+			target = closestEnemy;
+			OutputDebugString("\n");
+			OutputDebugString(id.c_str());
+			OutputDebugString(" Set target to ");
+			OutputDebugString(target->id.c_str());
+			OutputDebugString("\n");
+		}
+
+
+		//set target to closest "enemy"
+
+	//}
 	if (colAvoidanceBehaviour() != 0)
 		collisionTimer = 0;
 
