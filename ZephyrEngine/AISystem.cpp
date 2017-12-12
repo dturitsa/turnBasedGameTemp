@@ -17,9 +17,6 @@ AISystem::AISystem(MessageBus* mbus) : System(mbus) {
 void AISystem::handleMessage(Msg *msg)
 {
 	System::handleMessage(msg);
-	//OutputDebugString("Updating AI object: ");
-	//OutputDebugString(data[0].c_str());
-	//OutputDebugString("\n");
 
 	vector<std::string> data;
 
@@ -110,7 +107,6 @@ void AISystem::handleMessage(Msg *msg)
 				toEraseA = a;
 				toEraseA->dna->inUse--;
 				toEraseA->dna->rating -= 500;
-				OutputDebugString("\n\nDEATH PENALTY\n\n");
 			}
 		}
 		

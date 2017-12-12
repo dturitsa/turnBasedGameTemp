@@ -138,12 +138,6 @@ void GameSystem::createGameObject(GameObject* g) {
 	//check if object id already exists
 	for (GameObject* obj : gameObjects) {
 		if (g->id == obj->id) {
-			//randomize id and try again
-			//g->id.append(to_string(rand() % 24));
-			//createGameObject(g);
-			OutputDebugString("error id: ");
-			OutputDebugString(g->id.c_str());
-			OutputDebugString(" found\n");
 			return;
 		}
 	}
@@ -525,8 +519,6 @@ void GameSystem::handleMessage(Msg *msg) {
 			
 			vector<string> data = split(msg->data, ',');
 			for (GameObject* g : gameObjects) {
-				//OutputDebugString(g->id.c_str());
-				OutputDebugString("\n\nSHOOT MESSAGE RECEIVED\n\n");
 				if (g->id == data[0]) {
 					ShipObj* so = dynamic_cast<ShipObj*>(g);
 					
@@ -675,9 +667,6 @@ void GameSystem::handleMessage(Msg *msg) {
 				//OutputDebugString(g->id.c_str());
 
 				if (g->id == data[0]) {
-					//OutputDebugString(data[0].c_str());
-					//OutputDebugString("\n");
-
 					g->x = atof(data[2].c_str());
 					g->y = atof(data[3].c_str());
 					g->orientation = atof(data[5].c_str());

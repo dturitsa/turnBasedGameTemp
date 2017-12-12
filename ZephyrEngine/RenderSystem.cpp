@@ -312,11 +312,11 @@ void RenderSystem::draw(string ID, string sprite, float x, float y, float z, flo
 	float finalYOffset = (1.0f / (float) numberOfRows) * yoffset;
 
 	if (frames > 20) {
-		OutputDebugString("Offset: ");
+		//OutputDebugString("Offset: ");
 		std::ostringstream ss;
 		ss << finalYOffset << "\t" << yoffset << "\t" << animationCount << "\t" << tempacount << "\t" << currentRow << "\t" << numberOfRows << "\t" << offset;
-		OutputDebugString(ss.str().c_str());
-		OutputDebugString("\n");
+		//OutputDebugString(ss.str().c_str());
+		//OutputDebugString("\n");
 	}
 
 	GLfloat spriteFrame[4] = { (1.0f / (float) xframes) * offset, finalYOffset, 1.0f / (float)frames, (float) fheight };

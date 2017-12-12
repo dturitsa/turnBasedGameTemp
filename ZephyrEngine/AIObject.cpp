@@ -145,8 +145,6 @@ float AIObject::colAvoidanceBehaviour() {
 	if (collisionDistance > 0) {
 		msgData = id + ",0,Boat_S2.png";
 		aiData->toPostVector.push_back(new Msg(CHANGE_RUDDER, msgData));
-		/*OutputDebugString("AVOIDING COLLISION");
-		OutputDebugString("\n");*/
 	}
 	else if (collisionDistance < 0) {
 		msgData = id + ",4,Boat_S2.png";
@@ -196,15 +194,12 @@ float AIObject::checkCollision() {
 				collidedObject = w->id;
 			}
 		}
-		//OutputDebugString("\n");
 	}
 
 	if (leftColDistance == 9999)
 		leftColDistance = 0;
 	if (rightColDistance == 9999)
 		rightColDistance = 0;
-
-	//OutputDebugString(collidedObject.c_str());
 
 	if (leftColDistance != 0 && leftColDistance < rightColDistance)
 		return -leftColDistance;
@@ -323,17 +318,14 @@ void AIObject::scoredHit(std::string hitObjectId, std::string projectileId) {
 	if (hitObjectId == target->id) {
 		if (projectileId != id) {
 			dna->rating += 100; //ponts for an attack with a cannonball
-			OutputDebugString("\nHit targetr with cannonball\n");
 		}
 		else {
 			dna->rating += 50; //points for a ramming attack
-			OutputDebugString("\nHit targer with ram\n");
 		}
 			
 	}
 	else if (projectileId != id) {
 		dna->rating -= 100; //ramming into something that isn't the target
-		OutputDebugString("\nrammed non target\n");
 	}
 	
 }
