@@ -4,11 +4,11 @@
 using namespace std;
 AIDNA::AIDNA()
 {
-	srand(time(0));
+	
 }
 
 AIDNA::AIDNA(map <string, string> paramsMap) {
-	rating = stof(paramsMap.find("rating")->second);
+	rating = stoi(paramsMap.find("rating")->second);
 	raycastLength = stof(paramsMap.find("raycastLength")->second);
 	raycastAngle = stof(paramsMap.find("raycastAngle")->second);
 	avoidanceLockTime = stof(paramsMap.find("avoidanceLockTime")->second);

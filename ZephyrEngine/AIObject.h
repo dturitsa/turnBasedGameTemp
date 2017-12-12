@@ -36,7 +36,7 @@ public:
 	void turnToFace(int newOrientation);
 	int seekBehaviour();
 	int engageBehaviour();
-	int colAvoidanceBehaviour();
+	float colAvoidanceBehaviour();
 	float checkAngle(float angle);
 	float checkIntersection(Vector2 a, Vector2 b, Vector2 c, Vector2 d);
 	float checkCollision();
@@ -50,6 +50,7 @@ public:
 	AIData* aiData;
 	AIDNA* dna;
 	WorldObject* target;
+	int cannonCooldownCounter = 0;
 
 };
 

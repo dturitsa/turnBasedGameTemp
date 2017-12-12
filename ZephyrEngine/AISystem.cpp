@@ -38,9 +38,9 @@ void AISystem::handleMessage(Msg *msg)
 
 			AIObject* a = new AIObject();
 			a->id = data[0];
-			a->pos.x = atof(data[2].c_str());
-			a->pos.y = atof(data[3].c_str());
-			a->orientation = atof(data[5].c_str());
+			a->pos.x = stof(data[2]);
+			a->pos.y = stof(data[3]);
+			a->orientation = stoi(data[5]);
 			a->aiData = &aiData;
 			
 			//a->dna->mutate(.5f);
@@ -63,9 +63,9 @@ void AISystem::handleMessage(Msg *msg)
 		if (atof(data[8].c_str()) == 1 && data[9] != "Cannonball") {
 			WorldObject* w = new WorldObject();
 			w->id = data[0];
-			w->pos.x = atof(data[2].c_str());
-			w->pos.y = atof(data[3].c_str());
-			w->orientation = atof(data[5].c_str());
+			w->pos.x = stof(data[2]);
+			w->pos.y = stof(data[3]);
+			w->orientation = stoi(data[5]);
 			aiData.worldObjects.push_back(w);
 		}
 		break;
@@ -75,19 +75,19 @@ void AISystem::handleMessage(Msg *msg)
 
 		for (AIObject* a : AIObjects) {
 			if (a->id == data[0]) {
-				a->pos.x = atof(data[2].c_str());
-				a->pos.y = atof(data[3].c_str());
-				a->orientation = atof(data[5].c_str());
+				a->pos.x = stof(data[2]);
+				a->pos.y = stof(data[3]);
+				a->orientation = stoi(data[5]);
 			}
 		}
 
 		for (WorldObject* w : aiData.worldObjects) {
 			if (w->id == data[0]) {
-				w->pos.x = atof(data[2].c_str());
-				w->pos.y = atof(data[3].c_str());
-				w->orientation = atof(data[5].c_str());
-				w->width = atof(data[6].c_str());
-				w->height = atof(data[7].c_str());
+				w->pos.x = stof(data[2]);
+				w->pos.y = stof(data[3]);
+				w->orientation = stoi(data[5]);
+				w->width = stoi(data[6]);
+				w->height = stoi(data[7]);
 			}
 		}
 		break;
@@ -153,27 +153,27 @@ void AISystem::startSystemLoop() {
 
 
 		for (WorldObject* w : aiData.worldObjects) {
-			float halfWidth = w->width / 2;
-			float halfHeight = w->height / 2;
+			float halfWidth = w->width / 2.0f;
+			float halfHeight = w->height / 2.0f;
 			// Upper Left
 			w->c[0].x = w->pos.x - halfWidth;
 			w->c[0].y = w->pos.y + halfHeight;
-			w->c[0].rotateFromOrigin(w->pos.x, w->pos.y, w->orientation);
+			w->c[0].rotateFromOrigin((float)w->pos.x, (float)w->pos.y, (float)w->orientation);
 
 			//Upper Right
 			w->c[1].x = w->pos.x + halfWidth;
 			w->c[1].y = w->pos.y + halfHeight;
-			w->c[1].rotateFromOrigin(w->pos.x, w->pos.y, w->orientation);
+			w->c[1].rotateFromOrigin((float)w->pos.x, (float)w->pos.y, (float)w->orientation);
 
 			// Bottom Right
 			w->c[2].x = w->pos.x + halfWidth;
 			w->c[2].y = w->pos.y - halfHeight;
-			w->c[2].rotateFromOrigin(w->pos.x, w->pos.y, w->orientation);
+			w->c[2].rotateFromOrigin((float)w->pos.x, (float)w->pos.y, (float)w->orientation);
 
 			// Bottom Left
 			w->c[3].x = w->pos.x - halfWidth;
 			w->c[3].y = w->pos.y - halfHeight;
-			w->c[3].rotateFromOrigin(w->pos.x, w->pos.y, w->orientation);
+			w->c[3].rotateFromOrigin((float)w->pos.x, (float)w->pos.y, (float)w->orientation);
 		}
 
 		//loop through list of messages to send that were added by AI objects
@@ -248,13 +248,13 @@ void AISystem::loadDnaFromFile() {
 
 	//AIDNA* dna; //new dna object to be created
 
-	for (int j = 0; j < splitDataVector.size(); j++) {
+	for (unsigned int j = 0; j < splitDataVector.size(); j++) {
 		//AIDNA*  dna;
 		vector<string> splitObjData = split(splitDataVector[j], ',');
 
 		map<string, string> dnaDataMap;
 		//loop through elements of each dna object and add them to the object parameter map
-		for (int i = 0; i < splitObjData.size(); i++) {
+		for (unsigned int i = 0; i < splitObjData.size(); i++) {
 			vector<string> keyValue = split(splitObjData[i], ':');
 			dnaDataMap[keyValue[0]] = keyValue[1];
 		}

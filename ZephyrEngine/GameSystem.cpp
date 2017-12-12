@@ -521,6 +521,20 @@ void GameSystem::handleMessage(Msg *msg) {
 				}
 			}
 			break;
+		case SHOOT_CANNON: {
+			
+			vector<string> data = split(msg->data, ',');
+			for (GameObject* g : gameObjects) {
+				//OutputDebugString(g->id.c_str());
+				OutputDebugString("\n\nSHOOT MESSAGE RECEIVED\n\n");
+				if (g->id == data[0]) {
+					ShipObj* so = dynamic_cast<ShipObj*>(g);
+					
+					so->shoot(data[1]);
+				}
+			}
+			break;
+		}
 		case GO_COLLISION: {
 			vector<string> data = split(msg->data, ',');
 

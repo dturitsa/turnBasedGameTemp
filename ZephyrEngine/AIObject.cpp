@@ -15,6 +15,7 @@ AIObject::~AIObject()
 
 void AIObject::update() {
 	timeAlive++;
+	cannonCooldownCounter++;
 
 	if (timeAlive % 10) {
 		dna->rating += 5; //points for staying alive
@@ -66,6 +67,7 @@ void AIObject::update() {
 		}
 		else if (range < dna->engageDistance) {
 			engageBehaviour();
+
 		}
 	}
 }
@@ -134,7 +136,7 @@ float AIObject::checkIntersection(Vector2 a, Vector2 b, Vector2 c, Vector2 d) {
 	return 0;
 }
 
-int AIObject::colAvoidanceBehaviour() {
+float AIObject::colAvoidanceBehaviour() {
 	float collisionDistance = checkCollision();
 
 
@@ -214,7 +216,7 @@ float AIObject::checkCollision() {
 inline int AIObject::angleBetween(Vector2 v1, Vector2 v2) {
 	float dot = v1.x*v2.x + v1.y*v2.y;     // dot product between[x1, y1] and [x2, y2]
 	float det = v1.x*v2.y - v1.y*v2.x;     // determinant
-	return atan2(det, dot);
+	return (int)atan2(det, dot);
 }
 
 
@@ -236,14 +238,22 @@ int AIObject::engageBehaviour() {
 	ownDir = signedOrientation(ownDir);
 	faceAngle = signedOrientation(faceAngle);
 
+	//send message to fire cannon
+	string msgData; 
+	
 	if ((ownDir - 90 - faceAngle) < (ownDir + 90 - faceAngle)) {
 		faceAngle -= 90;
-
+		msgData = id + ",right";
 	}
 	else {
 		faceAngle -= 90;
-
+		msgData = id + ",left";
 	}
+	if (cannonCooldownCounter > 20) {
+		aiData->toPostVector.push_back(new Msg(SHOOT_CANNON, msgData));
+		cannonCooldownCounter = 0;
+	}
+	
 
 	turnToFace(faceAngle);
 
@@ -265,7 +275,7 @@ int AIObject::distanceToTarget(Vector2 origin, Vector2 destination) {
 	targetDir.x = destination.x - origin.x;
 	targetDir.y = destination.y - origin.y;
 
-	int magnitude = sqrt(pow(targetDir.x, 2) + pow(targetDir.y, 2));
+	int magnitude = (int)sqrt(pow(targetDir.x, 2) + pow(targetDir.y, 2));
 
 	return magnitude;
 }
@@ -277,7 +287,7 @@ int AIObject::angleToTarget(Vector2 origin, Vector2 destination) {
 	targetDir.x = destination.x - origin.x;
 	targetDir.y = destination.y - origin.y;
 
-	int outputAngle = atan2(targetDir.x, targetDir.y) * 180 / 3.1415;
+	int outputAngle = (int)(atan2(targetDir.x, targetDir.y) * 180.0 / 3.1415);
 	//if (outputAngle < 0) {
 	//	outputAngle += 360;
 	//}

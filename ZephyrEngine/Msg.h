@@ -28,7 +28,8 @@ enum MSG_TYPE {
 	AUDIO_MUTE, CHANGE_SOUNDTRACK,
 
 	//AI system
-	SCORED_HIT //the object scored a hit on an enemy (used in AI learning) shooterId,shotObjectID, projectileID
+	SCORED_HIT, //the object scored a hit on an enemy (used in AI learning) shooterId,shotObjectID, projectileID
+	SHOOT_CANNON //id,direction
 };
 
 class Msg {

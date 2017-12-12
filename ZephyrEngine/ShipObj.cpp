@@ -63,16 +63,18 @@ void ShipObj::earlyUpdate() {
 
 }
 void ShipObj::midUpdate() {
-	counter++;
+	
 	reloadCounter++;
-	if (counter == 100 && id != "playerShip") {
-		shoot("right");
-	}
-	else if (counter == 200 && id != "playerShip") {
-		shoot("left");
-		counter = 0;
 
-	}
+	////auto fire
+	//counter++;
+	//if (counter == 100 && id != "playerShip") {
+	//	shoot("right");
+	//}
+	//else if (counter == 200 && id != "playerShip") {
+	//	shoot("left");
+	//	counter = 0;
+	//}
 		
 }
 void ShipObj::lateUpdate() {
@@ -112,7 +114,7 @@ void ShipObj::onCollide(GameObject* otherObj) {
 
 //direction = "left",  "right", forward
 void ShipObj::shoot(string direction) {
-
+	
 	if (reloadCounter >= 50) {
 		//srand(time(NULL));
 		int shootDir;
