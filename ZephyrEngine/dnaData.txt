@@ -1,82 +1,82 @@
 
-rating: 751,
+rating: 1261,
 raycastLength: 210.493225,
 raycastAngle: 6.564226,
 avoidanceLockTime: 16.105488,
 seekDistance: 90.000000,
 engageDistance: 80.000000;
 
-rating: -644,
+rating: 1161,
 raycastLength: 223.345932,
 raycastAngle: 6.460305,
 avoidanceLockTime: 15.532258,
 seekDistance: 90.000000,
 engageDistance: 80.000000;
 
-rating: -639,
+rating: -1219,
 raycastLength: 262.984833,
 raycastAngle: 6.355532,
 avoidanceLockTime: 18.575230,
 seekDistance: 90.000000,
 engageDistance: 80.000000;
 
-rating: -784,
+rating: -1499,
+raycastLength: 212.611526,
+raycastAngle: 7.055586,
+avoidanceLockTime: 12.916903,
+seekDistance: 90.000000,
+engageDistance: 80.000000;
+
+rating: -1359,
 raycastLength: 244.792252,
 raycastAngle: 5.386133,
 avoidanceLockTime: 14.410374,
 seekDistance: 90.000000,
 engageDistance: 80.000000;
 
-rating: -729,
+rating: -1074,
 raycastLength: 261.539459,
 raycastAngle: 7.905288,
 avoidanceLockTime: 17.197020,
 seekDistance: 90.000000,
 engageDistance: 80.000000;
 
-rating: -494,
+rating: -894,
 raycastLength: 159.077621,
 raycastAngle: 6.742470,
 avoidanceLockTime: 19.172913,
 seekDistance: 90.000000,
 engageDistance: 80.000000;
 
-rating: 751,
-raycastLength: 223.345932,
-raycastAngle: 6.460305,
-avoidanceLockTime: 15.532258,
-seekDistance: 90.000000,
-engageDistance: 80.000000;
-
-rating: 361,
+rating: 1091,
 raycastLength: 262.984833,
 raycastAngle: 6.355532,
 avoidanceLockTime: 18.575230,
 seekDistance: 76.106674,
 engageDistance: 76.206673;
 
-rating: 81,
+rating: -254,
 raycastLength: 212.611526,
 raycastAngle: 7.055586,
 avoidanceLockTime: 12.916903,
 seekDistance: 75.472198,
 engageDistance: 70.135811;
 
-rating: 221,
+rating: 971,
 raycastLength: 244.792252,
 raycastAngle: 5.386133,
 avoidanceLockTime: 14.410374,
 seekDistance: 89.390923,
 engageDistance: 87.840202;
 
-rating: 506,
+rating: 736,
 raycastLength: 261.539459,
 raycastAngle: 7.905288,
 avoidanceLockTime: 17.197020,
 seekDistance: 105.870918,
 engageDistance: 93.364059;
 
-rating: 686,
+rating: 1196,
 raycastLength: 159.077621,
 raycastAngle: 6.742470,
 avoidanceLockTime: 19.172913,
