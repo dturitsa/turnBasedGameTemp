@@ -30,6 +30,8 @@ public:
 	int angleToTarget(Vector2 origin, Vector2 target);
 	int distanceToTarget(Vector2 origin, Vector2 target);
 	int collisionTimer;
+	int timeAlive = 0;
+
 
 	void turnToFace(int newOrientation);
 	int seekBehaviour();
@@ -40,6 +42,7 @@ public:
 	int checkCollision();
 	inline int signedOrientation(int unsignedOrientation);
 	inline int angleBetween(Vector2 v1, Vector2 v2);
+	void scoredHit(std::string hitObjectId, std::string projectileId); //object hit something
 
 	std::string id;
 	int orientation;

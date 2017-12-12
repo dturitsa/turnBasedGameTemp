@@ -10,9 +10,16 @@ AIObject::AIObject()
 
 AIObject::~AIObject()
 {
+
 }
 
 void AIObject::update() {
+	timeAlive++;
+
+	if (timeAlive % 10) {
+		dna->rating += 5; //points for staying alive
+	}
+
 	//set mast
 	string msgData = id + ",2,Boat_S2.png";
 	aiData->toPostVector.push_back(new Msg(CHANGE_MAST, msgData));
@@ -65,10 +72,10 @@ void AIObject::update() {
 	if (collisionTimer > dna->avoidanceLockTime && target != NULL) {
 		int range = distanceToTarget(pos, target->pos);
 
-		if (range > 90) {
+		if (range > dna->seekDistance) {
 			seekBehaviour();
 		}
-		else if (range < 80) {
+		else if (range < dna->engageDistance) {
 			engageBehaviour();
 		}
 	}
@@ -147,8 +154,8 @@ int AIObject::colAvoidanceBehaviour() {
 	if (collisionDistance > 0) {
 		msgData = id + ",0,Boat_S2.png";
 		aiData->toPostVector.push_back(new Msg(CHANGE_RUDDER, msgData));
-		OutputDebugString("AVOIDING COLLISION");
-		OutputDebugString("\n");
+		/*OutputDebugString("AVOIDING COLLISION");
+		OutputDebugString("\n");*/
 	}
 	else if (collisionDistance < 0) {
 		msgData = id + ",4,Boat_S2.png";
@@ -310,4 +317,24 @@ void AIObject::turnToFace(int newDir) {
 		msgData = id + ",2,Boat_S2.png";
 		aiData->toPostVector.push_back(new Msg(CHANGE_RUDDER, msgData));
 	}
+}
+
+//AI object hit something, udpate dna rating
+void AIObject::scoredHit(std::string hitObjectId, std::string projectileId) {
+	if (hitObjectId == target->id) {
+		if (projectileId != id) {
+			dna->rating += 100; //ponts for an attack with a cannonball
+			OutputDebugString("\nHit targetr with cannonball\n");
+		}
+		else {
+			dna->rating += 50; //points for a ramming attack
+			OutputDebugString("\nHit targer with ram\n");
+		}
+			
+	}
+	else if (projectileId != id) {
+		dna->rating -= 100; //ramming into something that isn't the target
+		OutputDebugString("\nrammed non target\n");
+	}
+	
 }

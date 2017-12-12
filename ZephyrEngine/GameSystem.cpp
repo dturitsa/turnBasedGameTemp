@@ -170,6 +170,8 @@ void GameSystem::startSystemLoop() {
 	//clocks for limiting gameloop speed
 	clock_t thisTime = clock();
 
+	int enemySpawnCooldownCounter = 0;
+
 	int currentGameTime = 0;
 	while (alive) {
 		thisTime = clock();
@@ -192,10 +194,11 @@ void GameSystem::startSystemLoop() {
 
 		Msg* m = new Msg(EMPTY_MESSAGE, "");
 
-		std::srand(std::time(0)); // use current time as seed for random generator
+		//we probably shouldn't be seeding every frame, makes the values less random - Denis
+		//std::srand(std::time(0)); // use current time as seed for random generator
 		int random_variable = std::rand();
 
-		if (random_variable % 50 == 0) {
+		if (random_variable % 500 == 0) {
 			// change the wind a bit
 			if (levelLoaded == 2) {
 				int ran2 = std::rand();
@@ -209,18 +212,16 @@ void GameSystem::startSystemLoop() {
 				
 			}
 		}
-
-		if (random_variable % 105 == 0) {
-
+		enemySpawnCooldownCounter++;
+		if (levelLoaded == 2 && enemySpawnCooldownCounter > 900 && random_variable % 300 == 0) {
+			enemySpawnCooldownCounter = 0;
 			// spawn a new enemy
-			if (levelLoaded == 2) {
-				for (GameObject* g : gameObjects) {
-					if (g->getObjectType() == "ShipObj") {
-						if (g->id == "playerShip") {
-							ShipObj* so = dynamic_cast<ShipObj*>(g);
-							addNewEnemy(so->x, so->y);
-							break;
-						}
+			for (GameObject* g : gameObjects) {
+				if (g->getObjectType() == "ShipObj") {
+					if (g->id == "playerShip") {
+						ShipObj* so = dynamic_cast<ShipObj*>(g);
+						addNewEnemy(so->x, so->y);
+						break;
 					}
 				}
 			}

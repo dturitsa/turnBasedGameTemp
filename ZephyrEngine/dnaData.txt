@@ -1,50 +1,84 @@
 
-rating: 0,
-raycastLength: 100.000000,
-raycastAngle: 10.000000,
-avoidanceLockTime: 40.000000;
+rating: 353,
+raycastLength: 146.000000,
+raycastAngle: 8.000000,
+avoidanceLockTime: 14.000000,
+seekDistance: 90.000000,
+engageDistance: 80.000000;
 
-rating: 0,
-raycastLength: 100.000000,
-raycastAngle: 10.000000,
-avoidanceLockTime: 40.000000;
+rating: -842,
+raycastLength: 167.000000,
+raycastAngle: 7.000000,
+avoidanceLockTime: 11.000000,
+seekDistance: 90.000000,
+engageDistance: 80.000000;
 
-rating: 0,
-raycastLength: 100.000000,
-raycastAngle: 10.000000,
-avoidanceLockTime: 40.000000;
+rating: -992,
+raycastLength: 166.000000,
+raycastAngle: 7.000000,
+avoidanceLockTime: 16.000000,
+seekDistance: 90.000000,
+engageDistance: 80.000000;
 
-rating: 0,
-raycastLength: 100.000000,
-raycastAngle: 10.000000,
-avoidanceLockTime: 40.000000;
+rating: -522,
+raycastLength: 166.000000,
+raycastAngle: 8.000000,
+avoidanceLockTime: 17.000000,
+seekDistance: 90.000000,
+engageDistance: 80.000000;
 
-rating: 0,
-raycastLength: 100.000000,
-raycastAngle: 10.000000,
-avoidanceLockTime: 40.000000;
+rating: -742,
+raycastLength: 166.000000,
+raycastAngle: 8.000000,
+avoidanceLockTime: 13.000000,
+seekDistance: 90.000000,
+engageDistance: 80.000000;
 
-rating: 0,
-raycastLength: 100.000000,
-raycastAngle: 10.000000,
-avoidanceLockTime: 40.000000;
+rating: -962,
+raycastLength: 166.000000,
+raycastAngle: 8.000000,
+avoidanceLockTime: 11.000000,
+seekDistance: 90.000000,
+engageDistance: 80.000000;
 
-rating: 0,
-raycastLength: 100.000000,
-raycastAngle: 10.000000,
-avoidanceLockTime: 40.000000;
+rating: -57,
+raycastLength: 166.000000,
+raycastAngle: 8.000000,
+avoidanceLockTime: 16.000000,
+seekDistance: 90.000000,
+engageDistance: 80.000000;
 
-rating: 0,
-raycastLength: 100.000000,
-raycastAngle: 10.000000,
-avoidanceLockTime: 40.000000;
+rating: 1138,
+raycastLength: 164.494507,
+raycastAngle: 8.081851,
+avoidanceLockTime: 15.395536,
+seekDistance: 90.600838,
+engageDistance: 65.787529;
 
-rating: 0,
-raycastLength: 100.000000,
-raycastAngle: 10.000000,
-avoidanceLockTime: 40.000000;
+rating: 73,
+raycastLength: 164.449951,
+raycastAngle: 8.209418,
+avoidanceLockTime: 13.498291,
+seekDistance: 72.324524,
+engageDistance: 70.242012;
 
-rating: 0,
-raycastLength: 100.000000,
-raycastAngle: 10.000000,
-avoidanceLockTime: 40.000000;
+rating: 523,
+raycastLength: 164.407623,
+raycastAngle: 8.337108,
+avoidanceLockTime: 11.601047,
+seekDistance: 99.049583,
+engageDistance: 74.695274;
+
+rating: 1018,
+raycastLength: 185.183701,
+raycastAngle: 8.551280,
+avoidanceLockTime: 18.369093,
+seekDistance: 81.312508,
+engageDistance: 65.088333;
+
+rating: 1068,
+raycastLength: 185.133499,
+raycastAngle: 8.680276,
+avoidanceLockTime: 16.282728,
+seekDistance: 108.215981,
+engageDistance: 68.750450;

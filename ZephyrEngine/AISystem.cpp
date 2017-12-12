@@ -48,14 +48,14 @@ void AISystem::handleMessage(Msg *msg)
 			AIDNA* bestDna = dnaVector[0];
 			int bestRating = -999999;
 			for (AIDNA* dna : dnaVector) {
-				if (dna->rating > bestRating) {
+				if (dna->rating > bestRating && dna->inUse < 1) {
 					bestRating = dna->rating;
 					bestDna = dna;
 				}
 			}
 
 			a->dna = bestDna;
-			
+			bestDna->inUse++;
 			AIObjects.push_back(a);
 		}
 
@@ -92,6 +92,15 @@ void AISystem::handleMessage(Msg *msg)
 		}
 		break;
 	}
+	case SCORED_HIT: {
+		for (AIObject* a : AIObjects) {
+			if (a->id == data[0]) {
+				a->scoredHit(data[1], data[2]);
+					continue;
+			}
+		}
+		break;
+	}
 	case GO_REMOVED: {
 		AIObject* toEraseA;
 		WorldObject* toEraseW;
@@ -99,9 +108,12 @@ void AISystem::handleMessage(Msg *msg)
 		for (AIObject* a : AIObjects) {
 			if (a->id == data[0]) {
 				toEraseA = a;
-
+				toEraseA->dna->inUse--;
+				toEraseA->dna->rating -= 500;
+				OutputDebugString("\n\nDEATH PENALTY\n\n");
 			}
 		}
+		
 		AIObjects.erase(remove(AIObjects.begin(), AIObjects.end(), toEraseA), AIObjects.end());
 
 		for (WorldObject* w : aiData.worldObjects) {
@@ -138,9 +150,6 @@ void AISystem::startSystemLoop() {
 		for (AIObject* a : AIObjects) {
 			a->update();
 		}
-		OutputDebugString("\nCurrentGameTime: ");
-		OutputDebugString(to_string(currentGameTime).c_str());
-		OutputDebugString("\n");
 
 
 		for (WorldObject* w : aiData.worldObjects) {
@@ -173,7 +182,49 @@ void AISystem::startSystemLoop() {
 		}
 		aiData.toPostVector.clear();
 
+		//update dna data for learning. this is spread accross several frames to avoid framerate drops
+
+		//create children for successful dna combinations, and kill unsuccessful ones
 		if (frameCount % 100 == 0) {
+			
+			int bestRating = -999999;
+			int worstRating = 999999;
+			AIDNA* bestDna = dnaVector[0];
+			AIDNA* worstDna = dnaVector[0];
+			for (AIDNA* dna : dnaVector) {
+				if (dna->rating > bestRating) {
+					bestRating = dna->rating;
+					bestDna = dna;
+				}
+				if (dna->rating < worstRating && dna->inUse < 1) {
+					worstRating = dna->rating;
+					worstDna = dna;
+				}
+			}
+			// create a child of the best rated dna combination in the group
+			dnaVector.push_back(bestDna->asexualReproduction(.5));
+
+			//kill the worst rated dna combination
+			dnaVector.erase(remove(dnaVector.begin(), dnaVector.end(), worstDna), dnaVector.end());
+
+		}
+
+		//compensates for dna rating drift.
+		else if (frameCount % 102 == 0) {
+			int averageRating = 0;
+
+			for (AIDNA* dna : dnaVector) {
+				averageRating += dna->rating;
+			}
+			averageRating /= dnaVector.size();
+
+			for (AIDNA* dna : dnaVector) {
+				dna->rating -= averageRating;
+			}
+		}
+
+		//save the updated dna configurations to file
+		else if (frameCount % 103 == 0) {
 			saveDnaToFile();
 		}
 	}

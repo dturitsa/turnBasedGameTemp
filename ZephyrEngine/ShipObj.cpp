@@ -86,9 +86,9 @@ void ShipObj::onCollide(GameObject* otherObj) {
 	}
 		
 	//make player invulnerable 
-	//if (id == "playerShip") {
-	//	return;	
-	//}
+	if (id == "playerShip") {
+		return;	
+	}
 
 	health -= 7;
 		
@@ -112,9 +112,9 @@ void ShipObj::onCollide(GameObject* otherObj) {
 
 //direction = "left",  "right", forward
 void ShipObj::shoot(string direction) {
-	OutputDebugString("Shooting ");
+	/*OutputDebugString("Shooting ");
 	OutputDebugString(direction.c_str());
-	OutputDebugString("\n");
+	OutputDebugString("\n");*/
 	if (reloadCounter >= 20) {
 		//srand(time(NULL));
 		int shootDir;
