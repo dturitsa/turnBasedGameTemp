@@ -12,6 +12,8 @@ public:
 	float raycastAngle = 10;
 	float avoidanceLockTime = 40;
 
+	int rating = 0;
+
 	//returns a copy of itself with mutated  values
 	AIDNA* asexualReproduction(float mutationRate);
 

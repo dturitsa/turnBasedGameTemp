@@ -4,6 +4,12 @@ using namespace std;
 
 AISystem::AISystem(MessageBus* mbus) : System(mbus) {
 	aiData = *(new AIData());
+
+	for (int i = 0; i < 5; i++) {
+		AIDNA* d = new AIDNA();
+		d->mutate(.5);
+		dnaVector.push_back(d);
+	}
 }
 
 void AISystem::handleMessage(Msg *msg)
@@ -34,8 +40,20 @@ void AISystem::handleMessage(Msg *msg)
 			a->pos.y = atof(data[3].c_str());
 			a->orientation = atof(data[5].c_str());
 			a->aiData = &aiData;
-			a->dna = new AIDNA();
-			a->dna->mutate(.5f);
+			
+			//a->dna->mutate(.5f);
+
+			AIDNA* bestDna = dnaVector[0];
+			int bestRating = -999999;
+			for (AIDNA* dna : dnaVector) {
+				if (dna->rating > bestRating) {
+					bestRating = dna->rating;
+					bestDna = dna;
+				}
+			}
+
+			a->dna = bestDna;
+			
 			AIObjects.push_back(a);
 		}
 

@@ -25,5 +25,6 @@ public:
 	AIData aiData;
 
 	std::vector<AIObject*> AIObjects;
+	std::vector<AIDNA*> dnaVector;
 };
 
