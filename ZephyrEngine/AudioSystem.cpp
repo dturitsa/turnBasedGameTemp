@@ -19,6 +19,7 @@ void AudioSystem::startSystemLoop()
 			Sleep(currentGameTime - thisTime);
 		}
 
+		Audio.Update();
 		currentGameTime = thisTime + timeFrame;
 		handleMsgQ();
 	}
