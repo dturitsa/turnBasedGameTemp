@@ -1,84 +1,84 @@
 
-rating: -357913923,
-raycastLength: 185.961807,
-raycastAngle: 5.465965,
-avoidanceLockTime: 14.430526,
+rating: 10037,
+raycastLength: 227.894470,
+raycastAngle: 5.009243,
+avoidanceLockTime: 14.220428,
 seekDistance: 90.000000,
 engageDistance: 80.000000;
 
-rating: -357916243,
-raycastLength: 219.217514,
-raycastAngle: 5.569598,
-avoidanceLockTime: 16.340202,
-seekDistance: 73.699226,
-engageDistance: 73.799225;
-
-rating: -357913993,
-raycastLength: 159.959106,
-raycastAngle: 4.526765,
-avoidanceLockTime: 10.846015,
-seekDistance: 67.513733,
-engageDistance: 67.613731;
-
-rating: -357911743,
-raycastLength: 195.963074,
-raycastAngle: 6.104901,
-avoidanceLockTime: 15.893198,
-seekDistance: 74.693520,
-engageDistance: 74.793518;
-
-rating: -357913923,
-raycastLength: 197.503906,
-raycastAngle: 6.579317,
-avoidanceLockTime: 13.151939,
-seekDistance: 109.970322,
-engageDistance: 99.648430;
-
-rating: -357913923,
-raycastLength: 147.022308,
-raycastAngle: 6.078461,
-avoidanceLockTime: 16.069138,
-seekDistance: 86.044121,
-engageDistance: 72.352669;
-
-rating: -357913923,
-raycastLength: 154.570435,
-raycastAngle: 4.846963,
-avoidanceLockTime: 14.539194,
-seekDistance: 103.258842,
-engageDistance: 70.250557;
-
-rating: -357913923,
-raycastLength: 188.894501,
-raycastAngle: 5.580857,
-avoidanceLockTime: 11.189746,
-seekDistance: 79.000290,
-engageDistance: 79.100288;
-
-rating: -357913923,
-raycastLength: 176.752243,
-raycastAngle: 5.779615,
-avoidanceLockTime: 12.734883,
+rating: 21237,
+raycastLength: 216.608231,
+raycastAngle: 5.296686,
+avoidanceLockTime: 12.549473,
 seekDistance: 85.096512,
 engageDistance: 77.103798;
 
-rating: -357913923,
-raycastLength: 198.854630,
-raycastAngle: 6.418259,
-avoidanceLockTime: 16.413969,
+rating: 19932,
+raycastLength: 243.694504,
+raycastAngle: 5.881966,
+avoidanceLockTime: 16.174994,
 seekDistance: 93.368103,
 engageDistance: 67.884758;
 
-rating: -357913923,
-raycastLength: 184.371323,
-raycastAngle: 4.126831,
-avoidanceLockTime: 12.615536,
+rating: 18582,
+raycastLength: 225.945343,
+raycastAngle: 3.782004,
+avoidanceLockTime: 12.431863,
 seekDistance: 96.949753,
 engageDistance: 93.240753;
 
-rating: -357913923,
-raycastLength: 171.335205,
-raycastAngle: 5.488109,
-avoidanceLockTime: 17.579702,
+rating: 17232,
+raycastLength: 209.969696,
+raycastAngle: 5.029537,
+avoidanceLockTime: 17.323755,
 seekDistance: 81.010849,
 engageDistance: 79.807732;
+
+rating: -357915767,
+raycastLength: 268.061340,
+raycastAngle: 3.883207,
+avoidanceLockTime: 16.768904,
+seekDistance: 71.769691,
+engageDistance: 71.869690;
+
+rating: -357913967,
+raycastLength: 250.336502,
+raycastAngle: 5.193189,
+avoidanceLockTime: 17.275150,
+seekDistance: 69.002426,
+engageDistance: 69.102425;
+
+rating: 12167,
+raycastLength: 267.407562,
+raycastAngle: 4.064363,
+avoidanceLockTime: 11.933212,
+seekDistance: 86.307793,
+engageDistance: 86.407791;
+
+rating: 909917,
+raycastLength: 264.597748,
+raycastAngle: 4.214792,
+avoidanceLockTime: 14.396301,
+seekDistance: 105.500122,
+engageDistance: 79.843132;
+
+rating: 8377,
+raycastLength: 201.456772,
+raycastAngle: 5.245702,
+avoidanceLockTime: 15.787661,
+seekDistance: 86.906563,
+engageDistance: 72.710350;
+
+rating: 10037,
+raycastLength: 198.740845,
+raycastAngle: 4.453429,
+avoidanceLockTime: 14.396084,
+seekDistance: 106.964096,
+engageDistance: 85.287636;
+
+rating: 10037,
+raycastLength: 189.758469,
+raycastAngle: 6.173651,
+avoidanceLockTime: 14.099455,
+seekDistance: 82.665710,
+engageDistance: 82.765709;
