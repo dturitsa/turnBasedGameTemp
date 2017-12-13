@@ -49,6 +49,9 @@ const GLchar *inGameFragmentShaderSource = "#version 330 core\n"
 "color = texture(ourTexture1, TexCoord) * vec4(darkness, darkness, darkness, 1.0f);\n"
 "}";
 
+/*
+	RenderSystem Constructor.
+*/
 RenderSystem::RenderSystem(MessageBus* mbus) : System(mbus) {
 	//Initialize SDL
 	SDL_Init(SDL_INIT_EVERYTHING);
@@ -57,13 +60,18 @@ RenderSystem::RenderSystem(MessageBus* mbus) : System(mbus) {
 	window = SDL_CreateWindow("Okeanos - Made with Zephyr", RenderSystem::XSTART, RenderSystem::YSTART, RenderSystem::WIDTH, RenderSystem::HEIGHT, SDL_WINDOW_OPENGL);
 
 	SDL_GL_SwapWindow(window);
-	animationCount = 0.0f;
+	animationCount = 0;
 }
 
-
+/*
+	RenderSystem destructor.
+*/
 RenderSystem::~RenderSystem() {
 }
 
+/*
+	Initialize RenderSystem.
+*/
 void RenderSystem::init() {
 
 	//Setup window and context
@@ -177,10 +185,13 @@ void RenderSystem::init() {
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
+/*
+	Draw the object on the screen.
+*/
 void RenderSystem::draw(string ID, string sprite, float x, float y, float z, float orientation, float width, float height, int frames, bool fso) {
 	//Bind transform to vertex shader
 	//Create a transform matrix and bind it to shader
-	float radRot = orientation * 3.1415927 / 180.0;
+	float radRot = orientation * 3.1415927f / 180.0f;
 
 	//Use shader
 	if (fso) { // if it's a full screen object use normal shader
@@ -278,15 +289,15 @@ void RenderSystem::draw(string ID, string sprite, float x, float y, float z, flo
 	if (frames <= 20) {
 		offset = (float) (animationCount % frames) + 1.0f;
 	} else {
-		xframes = 20.0f;
-		numberOfRows = ceil(frames / 20.0f);
+		xframes = 20;
+		numberOfRows = (int)(ceil(frames / 20.0f));
 		if (animationCount == 0) {
 			currentRow = 1;
 		} else {
 			if (animationCount > frames) {
 				tempacount = animationCount % frames;
 			}
-			currentRow = ceil(tempacount / 20.0f);
+			currentRow = (int)(ceil(tempacount / 20.0f));
 		}
 
 		// default
@@ -343,7 +354,7 @@ void RenderSystem::draw(string ID, string sprite, float x, float y, float z, flo
 
 	//Bind resolution to fragment shader
 	GLint loc = glGetUniformLocation(inGameShaderProgram, "iResolution");
-	glUniform2f(loc, WIDTH, HEIGHT);
+	glUniform2f(loc, (GLfloat)WIDTH, (GLfloat)HEIGHT);
 
 	//Draw
 	glBindVertexArray(VAO);
@@ -353,30 +364,45 @@ void RenderSystem::draw(string ID, string sprite, float x, float y, float z, flo
 	delete(temp);
 }
 
+/*
+	Translate in the X.
+*/
 float RenderSystem::transX(float x) {
 	x += cameraX;
 	x *= 1 / MAX_X;
 	return x;
 }
 
+/*
+	Translate in the Y.
+*/
 float RenderSystem::transY(float y) {
 	y += cameraY;
 	y *= 1 / MAX_Y;
 	return y;
 }
-//Scale X based on world scale
+
+/*	
+	Get Scale X based on world scale
+*/
 float RenderSystem::getScaleX(float x) {
 	//Scale sprite down to 1/GAMEWIDTH and apply scale x Default to 1
 	float scale = (1 / (GAMEWIDTH / 2.0f)) * ((x == 0) ? 1.0f : x);
 	return scale;
 }
 
-//Scale Y based on world scale
+/*
+	Get Scale Y based on world scale
+*/
 float RenderSystem::getScaleY(float y) {
 	//Scale sprite down to 1/GAMEHEIGHT and apply scale y Default 1
 	float scale = (1 / (GAMEHEIGHT / 2.0f)) * ((y == 0) ? 1.0f : y);
 	return scale;
 }
+
+/*
+	Render all the objects in the list.
+*/
 void RenderSystem::renderAllItems() {
 	for (string* s : gameObjectsToRender) {
 		renderObject(*s);
@@ -384,6 +410,9 @@ void RenderSystem::renderAllItems() {
 	animationCount++;
 }
 
+/*
+	Render the object given.
+*/
 void RenderSystem::renderObject(string object) {
 	//object format: ID,png,x,y,z,orientation
 	string ID, sprite;
@@ -396,12 +425,12 @@ void RenderSystem::renderObject(string object) {
 	//Parse object data
 	ID = objectData[0];
 	sprite = objectData[1];
-	x = atof(objectData[2].c_str());
-	y = atof(objectData[3].c_str());
-	z = atof(objectData[4].c_str());
-	orientation = atof(objectData[5].c_str());
-	w = atof(objectData[6].c_str());
-	h = atof(objectData[7].c_str());
+	x = (float)(atof(objectData[2].c_str()));
+	y = (float)(atof(objectData[3].c_str()));
+	z = (float)(atof(objectData[4].c_str()));
+	orientation = (float)(atof(objectData[5].c_str()));
+	w = (float)(atof(objectData[6].c_str()));
+	h = (float)(atof(objectData[7].c_str()));
 	frames = atoi(objectData[10].c_str());
 	if (objectData[9].compare("FullscreenObj") == 0) {
 		fso = true;
@@ -415,14 +444,6 @@ void RenderSystem::renderObject(string object) {
 	if (ID.compare("windmarker") == 0) {
 		fso = true;
 	}
-	/*ID = object->ID;
-	sprite = object->sprite;
-	x = object->x;
-	y = object->y;
-	z = object->z;
-	orientation = object->orientation;
-	w = object->w;
-	h = object->h;*/
 
 	//Load texture into memory if it is not already 
 	//(probably not the right way to do it)
@@ -433,6 +454,10 @@ void RenderSystem::renderObject(string object) {
 	//Draw object
 	draw(ID, sprite, x, y, z, orientation,w,h, frames, fso);
 }
+
+/*
+	Get the texture from the image path.
+*/
 GLuint RenderSystem::getTexture(string path) {
 	GLuint texture;
 	glGenTextures(1, &texture);
@@ -460,12 +485,15 @@ GLuint RenderSystem::getTexture(string path) {
 	return texture;
 }
 
+/*
+	Start of the system.
+*/
 void RenderSystem::startSystemLoop() {
 	init();
 	running = true;
 	clock_t thisTime = clock();
 	//clock_t lastTime = thisTime;
-	SDL_Event windowEvent;
+	//SDL_Event windowEvent;
 
 	int renderCount = 0;
 
@@ -496,6 +524,9 @@ void RenderSystem::startSystemLoop() {
 	}
 }
 
+/*
+	Shutdown of system.
+*/
 void RenderSystem::stopSystemLoop() {
 	SDL_GL_DeleteContext(context);
 	SDL_DestroyWindow(window);
@@ -503,6 +534,10 @@ void RenderSystem::stopSystemLoop() {
 	running = false;
 
 }
+
+/*
+	RenderSystem handle messages from the message bus.
+*/
 void RenderSystem::handleMessage(Msg *msg) {
 	std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
 
@@ -574,6 +609,10 @@ void RenderSystem::handleMessage(Msg *msg) {
 		break;
 	}
 }
+
+/*
+	Send message that the camera was panned.
+*/
 void RenderSystem::positionUpdated() {
 	Msg* m = new Msg(CAMERA_OFFSET, "");
 	std::ostringstream oss;
@@ -582,6 +621,9 @@ void RenderSystem::positionUpdated() {
 	msgBus->postMessage(m, this);
 }
 
+/*
+	Remove object from the list of objects to render.
+*/
 void RenderSystem::removeObjectFromRenderList(Msg* m) {
 	for (vector<string*>::iterator it = gameObjectsToRender.begin(); it != gameObjectsToRender.end(); it++){
 		std::vector<std::string> obj = split(**it, ',');
@@ -593,12 +635,18 @@ void RenderSystem::removeObjectFromRenderList(Msg* m) {
 	}
 }
 
+/*
+	Add object to the list of objects to render.
+*/
 void RenderSystem::addObjectToRenderList(Msg* m) {
 	//mtx.lock();
 	gameObjectsToRender.push_back(&m->data);
 //	mtx.unlock();
 }
 
+/*
+	Update the position of an object given in the message.
+*/
 void RenderSystem::updateObjPosition(Msg* m) {
 	std::vector<std::string> dataVector = split(m->data, ',');
 
@@ -631,8 +679,11 @@ void RenderSystem::updateObjPosition(Msg* m) {
 	}
 }
 
-// id, [dont read], renderable name
+/*
+	Update the sprite of an object
+*/
 void RenderSystem::updateObjSprite(Msg* m) {
+	// id, [dont read], renderable name
 	std::vector<std::string> dataVector = split(m->data, ',');
 
 	std::ostringstream oss;
@@ -665,6 +716,9 @@ void RenderSystem::updateObjSprite(Msg* m) {
 	}
 }
 
+/*
+	Update the health bar on the HUD.
+*/
 void RenderSystem::updateHealthHUD(Msg* m) {
 	std::string d = m->data;
 
@@ -697,37 +751,52 @@ void RenderSystem::updateHealthHUD(Msg* m) {
 	}
 }
 
+/*
+	Pan the camera left.
+*/
 void RenderSystem::panLeft() {
 	if (cameraX + CAMERAPAN_X <= maxCameraX) {
 		cameraX += CAMERAPAN_X;
 	}
 }
 
+/*
+	Pan the camera right.
+*/
 void RenderSystem::panRight() {
 	if (cameraX - CAMERAPAN_X >= minCameraX) {
 		cameraX -= CAMERAPAN_X;
 	}
 }
 
+/*
+	Pan the camera up.
+*/
 void RenderSystem::panUp() {
 	if (cameraY - CAMERAPAN_Y >= minCameraY) {
 		cameraY -= CAMERAPAN_Y;
 	}
 }
 
+/*
+	Pan the camera down.
+*/
 void RenderSystem::panDown() {
 	if (cameraY + CAMERAPAN_Y <= maxCameraY) {
 		cameraY += CAMERAPAN_Y;
 	}
 }
 
+/*
+	Center the camera on the player.
+*/
 void RenderSystem::cameraToPlayer() {
 	for (string* s : gameObjectsToRender) {
 		vector<string> obj = split(*s, ',');
 
 		if (obj.at(0) == "playerShip") {
-			cameraX = -atof(obj.at(2).c_str());
-			cameraY = -atof(obj.at(3).c_str());
+			cameraX = (float)(-atof(obj.at(2).c_str()));
+			cameraY = (float)(-atof(obj.at(3).c_str()));
 			if (cameraX >= maxCameraX) {
 				cameraX = maxCameraX;
 			}
@@ -745,6 +814,9 @@ void RenderSystem::cameraToPlayer() {
 	}
 }
 
+/*
+	Handle message when the level is loaded.
+*/
 void RenderSystem::levelLoaded(Msg* m) {
 	loadedLevel = atoi(m->data.c_str());
 	if (loadedLevel != 2) { //Reset camera when not in game
