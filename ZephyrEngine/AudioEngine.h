@@ -7,6 +7,7 @@
 #include <math.h>
 #include <iostream>
 #include <time.h>
+#include <windows.h>
 
 using namespace std;
 
@@ -47,7 +48,7 @@ public:
 
 	void LoadSound(const string &strSoundName, bool b3d, bool bLooping, bool bStream);
 	void UnLoadSound(const string &strSoundName);
-	void Set3dListenerAndOrientation(const Vector3 &vPosition = Vector3{ 0, 0, 0 }, float fVolumedB = 5.0f);
+	void SetListenerLocation(const Vector3 &vPosition);
 	int PlayAudio(const string &strSoundName, const Vector3 &vPosition = Vector3{ 0, 0, 0 }, float fVolumedB = 5.0f);
 	void SetChannel3dPosition(int nChannelId, const Vector3 &vPosition);
 	void SetChannelvolume(int nChannelId, float fVolumedB);
