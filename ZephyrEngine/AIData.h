@@ -17,3 +17,4 @@ public:
 	//ObjectData();
 	//	~ObjectData();
 };
+

@@ -21,5 +21,6 @@ public:
 	int health = 100;
 
 	int counter = 0;
+	int reloadCounter = 0;
 };
 

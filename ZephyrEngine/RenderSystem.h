@@ -26,12 +26,14 @@ public:
 
 	int loadedLevel = 0;
 
+	//Window constants
 	GLint XSTART = 100, YSTART = 100, WIDTH = 1000, HEIGHT = 800; //Constants for drawing the window
 	GLfloat GAMEWIDTH = 200.0f, GAMEHEIGHT = 200.0f, //Amount of sprites that can fit in X and Y respectively
 				MAX_X = 200.0f, MAX_Y = 200.0f; //Amount of "x" and "y" coordinates in our world (x2 for - values)
 	GLfloat aspectRatio;
-	const int timeFrame = 20;
+	const int timeFrame = 33;
 
+	//Camera constants
 	float CAMERAPAN_X = 30.0f, CAMERAPAN_Y = 30.0f;
 	float minCameraX = -330.0f, maxCameraX = 330.0f, cameraX = 0.0f, 
 		minCameraY = -330.0f, maxCameraY = 330.0f, cameraY = 0.0f;
@@ -40,7 +42,9 @@ private:
 	int animationCount;
 	GLuint vertexShader;
 	GLuint fragmentShader;
+	GLuint inGameFragmentShader;
 	GLuint shaderProgram;
+	GLuint inGameShaderProgram;
 	map<string, GLuint> textures;
 	SDL_Window *window;
 	SDL_GLContext context;
@@ -70,7 +74,7 @@ private:
 	vector<renderObj*> renderObjects;
 
 	void renderAllItems();
-	void draw(string ID, string path, float x, float y, float z, float rotation, float width, float height, int frames);
+	void draw(string ID, string path, float x, float y, float z, float rotation, float width, float height, int frames, bool fso);
 	GLuint getTexture(string path);
 	void renderObject(string object);
 	void renderObject(renderObj* object);
@@ -82,12 +86,14 @@ private:
 	void removeObjectFromRenderList(Msg* m);
 	void updateObjPosition(Msg* m);
 	void updateObjSprite(Msg*m);
+	void updateHealthHUD(Msg*m);
 
 	void panLeft();
 	void panRight();
 	void panUp();
 	void panDown();
 	void cameraToPlayer();
+	void positionUpdated();
 
 	void levelLoaded(Msg*m);
 };

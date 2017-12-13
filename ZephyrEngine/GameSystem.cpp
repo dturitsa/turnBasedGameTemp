@@ -51,6 +51,77 @@ void GameSystem::addGameObjects(string fileName) {
 	}
 }
 
+void GameSystem::addNewEnemy(int playerX, int playerY) {
+
+	std::string data = openFileRemoveSpaces("enemyShip.txt");
+
+	GameObject* g; //new gameobject to be created
+
+	vector<string> splitObjData = split(data, ',');
+
+	std::map<std::string, std::string> gameObjDataMap;
+
+	// make sure the id is random for the boat
+	std::ostringstream ss;
+	ss << "id: enemy" << rand();
+	splitObjData[1] = ss.str();
+	 
+	// make the positions dependent on the player pos
+	int enemyx = playerX;
+
+	if (playerX > 0) {
+		enemyx -= 300;
+	} else {
+		enemyx += 300;
+	}
+		
+	std::ostringstream xss;
+	xss << "xPos: " << enemyx;
+	splitObjData[3] = xss.str();
+		
+	int enemyy = playerY;
+
+	if (playerY > 0) {
+		enemyy -= 300;
+	} else {
+		enemyy += 300;
+	}
+		
+	std::ostringstream yss;
+	yss << "yPos: " << enemyy;
+	splitObjData[4] = yss.str();
+
+	// spawn wtih random orientation
+	std::ostringstream oss;
+	oss << "orientation: " << (rand() % 360);
+	splitObjData[6] = oss.str();
+
+	//loop through elements of each GameObject and add them to the object parameter map
+	for (int i = 0; i < splitObjData.size(); i++) {
+		vector<string> keyValue = split(splitObjData[i], ':');
+		gameObjDataMap[keyValue[0]] = keyValue[1];
+	}
+
+	//gets the gameObject type
+	string gameObjectType = gameObjDataMap.find("gameObjectType")->second;
+	g = NULL;
+	//just hard coded else ifs for now... should probably make retreive available classes automatically <- Did some research, cpp doesn't support reflection (Hank)
+	if (gameObjectType.compare("ShipObj") == 0) {
+		g = new ShipObj(gameObjDataMap, &objData);
+	} else if (gameObjectType.compare("GameObject") == 0) {
+		g = new GameObject(gameObjDataMap, &objData);
+	} else if (gameObjectType.compare("FullscreenObj") == 0) {
+		g = new FullscreenObj(gameObjDataMap, &objData);
+	} else if (gameObjectType.compare("WindArrowObj") == 0) {
+		g = new WindArrowObj(gameObjDataMap, &objData);
+	}
+
+	if (g != NULL) {
+		createGameObject(g);
+	}
+	
+}
+
 void GameSystem::saveToFIle(string fileName) {
 	string output = "";
 	for (GameObject* obj : gameObjects) {
@@ -64,10 +135,9 @@ void GameSystem::saveToFIle(string fileName) {
 // This function adds a created game object to the main list, and posts a message to the render
 // and physics systems so that they can add it to their list as well
 void GameSystem::createGameObject(GameObject* g) {
+	//check if object id already exists
 	for (GameObject* obj : gameObjects) {
 		if (g->id == obj->id) {
-			//g->id.append(to_string(rand()));
-			OutputDebugString("error id found");
 			return;
 		}
 	}
@@ -94,6 +164,8 @@ void GameSystem::startSystemLoop() {
 	//clocks for limiting gameloop speed
 	clock_t thisTime = clock();
 
+	int enemySpawnCooldownCounter = 0;
+
 	int currentGameTime = 0;
 	while (alive) {
 		thisTime = clock();
@@ -116,10 +188,11 @@ void GameSystem::startSystemLoop() {
 
 		Msg* m = new Msg(EMPTY_MESSAGE, "");
 
-		std::srand(std::time(0)); // use current time as seed for random generator
+		//we probably shouldn't be seeding every frame, makes the values less random - Denis
+		//std::srand(std::time(0)); // use current time as seed for random generator
 		int random_variable = std::rand();
 
-		if (random_variable % 50 == 0) {
+		if (random_variable % 500 == 0) {
 			// change the wind a bit
 			if (levelLoaded == 2) {
 				int ran2 = std::rand();
@@ -131,6 +204,20 @@ void GameSystem::startSystemLoop() {
 					msgBus->postMessage(mmm, this);
 				}
 				
+			}
+		}
+		enemySpawnCooldownCounter++;
+		if (levelLoaded == 2 && enemySpawnCooldownCounter > 600 && random_variable % 300 == 0) {
+			enemySpawnCooldownCounter = 0;
+			// spawn a new enemy
+			for (GameObject* g : gameObjects) {
+				if (g->getObjectType() == "ShipObj") {
+					if (g->id == "playerShip") {
+						ShipObj* so = dynamic_cast<ShipObj*>(g);
+						addNewEnemy(so->x, so->y);
+						break;
+					}
+				}
 			}
 		}
 
@@ -280,12 +367,12 @@ void GameSystem::handleMessage(Msg *msg) {
 		case DOWN_ARROW_PRESSED:
 			// move the marker location and let rendering know?
 			markerPosition++;
-			if (markerPosition > 2) {
-				markerPosition = 2;
+			if (markerPosition > 3) {
+				markerPosition = 3;
 			}
 
 			mm->type = UPDATE_OBJ_SPRITE;
-			oss <<"obj3,1,Z6_Marker_P" << markerPosition << ".png,";
+			oss <<"obj3,1,MZ6_Marker_P" << markerPosition << ".png,";
 			mm->data = oss.str();
 			msgBus->postMessage(mm, this);
 			break;
@@ -295,18 +382,18 @@ void GameSystem::handleMessage(Msg *msg) {
 			if (markerPosition < 0) {
 				markerPosition = 0;
 			}
-			markerPosition = markerPosition % 3;
+			markerPosition = markerPosition % 4;
 
 			mm->type = UPDATE_OBJ_SPRITE;
-			oss << "obj3,1,Z6_Marker_P" << markerPosition << ".png,";
+			oss << "obj3,1,MZ6_Marker_P" << markerPosition << ".png,";
 			mm->data = oss.str();
 			msgBus->postMessage(mm, this);
 			break;
 		case SPACEBAR_PRESSED:
-			if (markerPosition == 2) {
+			if (markerPosition == 3) {
 				// Exit was selected, kill main
 				malive = false;
-			} else if (markerPosition == 1) {
+			} else if (markerPosition == 2) {
 				// Go to settings
 				removeAllGameObjects();
 				addGameObjects("settings_menu.txt");
@@ -314,25 +401,44 @@ void GameSystem::handleMessage(Msg *msg) {
 				markerPosition = 0;
 				Msg* m = new Msg(LEVEL_LOADED, "1");
 				msgBus->postMessage(m, this);
-			} else if (markerPosition == 0) {
+			} else if (markerPosition == 1) {
 				// start the game (or go to level select?)
 				// first, clear all objects
 				removeAllGameObjects();
 
 				// then, load new objects
-				addGameObjects("Alpha_Level_1.txt"); // TEMPORARY 
+				//addGameObjects("Level_1.txt");
+				addGameObjects("Level_1Simplified.txt");
 				levelLoaded = 2;
 				Msg* m = new Msg(LEVEL_LOADED, "2");
 				msgBus->postMessage(m, this);
 				score = 0;
+			} else if (markerPosition == 0) {
+				// instructions page
+				removeAllGameObjects();
+				addGameObjects("instructions_menu.txt");
+				levelLoaded = 4;
+				markerPosition = 0;
+				Msg* m = new Msg(LEVEL_LOADED, "4");
+				msgBus->postMessage(m, this);
 			}
 			break;
 		default:
 			break;
 		}
 
-	}
-	else if (levelLoaded == 1) {
+	} else if (levelLoaded == 4) {
+		// instructions menu
+		// only one option; to go back to menu
+		if (msg->type == SPACEBAR_PRESSED) {
+			removeAllGameObjects();
+			addGameObjects("main_menu.txt");
+			levelLoaded = 0;
+			markerPosition = 0;
+			Msg* m = new Msg(LEVEL_LOADED, "0");
+			msgBus->postMessage(m, this);
+		}
+	} else if (levelLoaded == 1) {
 		// settings menu
 		switch (msg->type) {
 		case DOWN_ARROW_PRESSED:
@@ -410,6 +516,18 @@ void GameSystem::handleMessage(Msg *msg) {
 				}
 			}
 			break;
+		case SHOOT_CANNON: {
+			
+			vector<string> data = split(msg->data, ',');
+			for (GameObject* g : gameObjects) {
+				if (g->id == data[0]) {
+					ShipObj* so = dynamic_cast<ShipObj*>(g);
+					
+					so->shoot(data[1]);
+				}
+			}
+			break;
+		}
 		case GO_COLLISION: {
 			vector<string> data = split(msg->data, ',');
 
@@ -488,8 +606,8 @@ void GameSystem::handleMessage(Msg *msg) {
 				if (g->getObjectType() == "ShipObj") {
 					ShipObj* so = dynamic_cast<ShipObj*>(g);
 					so->rudder++;
-					if (so->sail > 4) {
-						so->sail = 4;
+					if (so->rudder > 4) {
+						so->rudder = 4;
 					}
 
 					mm->type = CHANGE_RUDDER;
@@ -550,9 +668,6 @@ void GameSystem::handleMessage(Msg *msg) {
 				//OutputDebugString(g->id.c_str());
 
 				if (g->id == data[0]) {
-					//OutputDebugString(data[0].c_str());
-					//OutputDebugString("\n");
-
 					g->x = atof(data[2].c_str());
 					g->y = atof(data[3].c_str());
 					g->orientation = atof(data[5].c_str());

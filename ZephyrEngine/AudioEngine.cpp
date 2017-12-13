@@ -10,6 +10,7 @@ AudioManager::AudioManager()
 
 void AudioManager::Update()
 {
+	
 	vector<ChannelMap::iterator> finishedChannels;
 	for (auto it = ChannelObjects.begin(), itEnd = ChannelObjects.end(); it != itEnd; ++it)
 	{
@@ -23,6 +24,7 @@ void AudioManager::Update()
 	for (auto& it : finishedChannels)
 	{
 		ChannelObjects.erase(it);
+		
 	}
 	AudioEngine::FmodError(mpSystem->update());
 }
@@ -59,6 +61,7 @@ AudioEngine::~AudioEngine()
 
 void AudioEngine::Update()
 {
+	
 	audioManager->Update();
 }
 //TEST
@@ -99,9 +102,11 @@ void AudioEngine::UnLoadSound(const string &strSoundName)
 	AudioEngine::FmodError(tFoundIt->second->release());
 	audioManager->SoundObjects.erase(tFoundIt);
 }
-void AudioEngine::Set3dListenerAndOrientation(const Vector3 &vPosition, float fVolumedB)
+void AudioEngine::SetListenerLocation(const Vector3 &vPosition)
 {
-	//audioManager->mpSystem->set3DListenerAttributes()
+	FMOD_VECTOR fmvPos;
+	fmvPos = VectorToFmod(vPosition);
+	audioManager->mpSystem->set3DListenerAttributes(0, &fmvPos, 0, 0, 0);
 }
 int AudioEngine::PlayAudio(const string &strSoundName, const Vector3 &vPosition, float fVolumedB)
 {
@@ -116,7 +121,21 @@ int AudioEngine::PlayAudio(const string &strSoundName, const Vector3 &vPosition,
 			return nChannelId;
 		}
 	}
+
 	FMOD::Channel* pChannel = nullptr;
+
+	//for (auto it = audioManager->ChannelObjects.begin(), itEnd = audioManager->ChannelObjects.end(); it != itEnd; ++it)
+	//{
+	//	bool bIsPlaying = false;
+	//	it->second->isPlaying(&bIsPlaying);
+	//	if (!bIsPlaying)
+	//	{
+	//		pChannel = it->second;
+	//	}
+	//}
+
+
+	
 	AudioEngine::FmodError(audioManager->mpSystem->playSound(tFoundIt->second, nullptr, true, &pChannel));
 	if (pChannel)
 	{

@@ -63,14 +63,19 @@ void ShipObj::earlyUpdate() {
 
 }
 void ShipObj::midUpdate() {
-	counter++;
-	if (counter == 150 && id != "playerShip") {
-		shoot("left");
-	}
-	else if (counter == 200 && id != "playerShip") {
-		shoot("right");
-		counter = 0;
-	}
+	
+	reloadCounter++;
+
+	////auto fire
+	//counter++;
+	//if (counter == 100 && id != "playerShip") {
+	//	shoot("right");
+	//}
+	//else if (counter == 200 && id != "playerShip") {
+	//	shoot("left");
+	//	counter = 0;
+	//}
+		
 }
 void ShipObj::lateUpdate() {
 
@@ -82,11 +87,28 @@ void ShipObj::onCollide(GameObject* otherObj) {
 		return;
 	}
 		
+	//make player invulnerable (for AI training and debugging)
+	//if (id == "playerShip") {
+	//	return;	
+	//}
 
 	health -= 7;
 		
+	if (id == "playerShip") {
+		// update the hud obj
+		std::ostringstream oss;
+		oss << ((float) health / 150) * 200;
+		Msg* m = new Msg(UPDATE_HP_BAR, oss.str());
+		objData->toPostVector.push_back(m);
+	}
 
+	
 	if (health < 0) {
+		std::ostringstream oss;
+		oss << id << "," << x << "," << y;
+		Msg* m = new Msg(SHIP_SANK, oss.str());
+		objData->toPostVector.push_back(m);
+		
 		objData->toDestroyVector.push_back(this);
 	}
 	//OutputDebugString(id.c_str());
@@ -97,10 +119,10 @@ void ShipObj::onCollide(GameObject* otherObj) {
 
 //direction = "left",  "right", forward
 void ShipObj::shoot(string direction) {
-	if (counter >= 20) {
+	
+	if (reloadCounter >= 50) {
 		//srand(time(NULL));
 		int shootDir;
-		int randomNum = std::rand();
 		if (direction == "right") {
 			shootDir = orientation + 90;
 		} else if (direction == "left") {
@@ -109,10 +131,10 @@ void ShipObj::shoot(string direction) {
 			shootDir = orientation;
 		}
 
-		Cannonball* c = new Cannonball(to_string(randomNum), "cannon_ball.png", x, y, shootDir, 5, 5, objData);
+		Cannonball* c = new Cannonball(to_string(rand()), "cannon_ball.png", x, y, shootDir, 5, 5, objData);
 		c->parentObject = this;
 		objData->toCreateVector.push_back(c);
 
-		counter = 0;
+		reloadCounter = 0;
 	}
 }

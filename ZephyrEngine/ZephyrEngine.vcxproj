@@ -130,6 +130,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AIData.h" />
+    <ClInclude Include="AIDNA.h" />
     <ClInclude Include="AIObject.h" />
     <ClInclude Include="AISystem.h" />
     <ClInclude Include="AudioEngine.h" />
@@ -158,6 +159,7 @@
     <ClInclude Include="WindArrowObj.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AIDNA.cpp" />
     <ClCompile Include="AIObject.cpp" />
     <ClCompile Include="AISystem.cpp" />
     <ClCompile Include="AudioEngine.cpp" />

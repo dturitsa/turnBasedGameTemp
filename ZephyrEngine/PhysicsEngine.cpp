@@ -78,24 +78,81 @@ void PhysicsEngine::getCorners(PhysicsObject o, Vector2(&box)[4]) {
 	float cosAngle = cos(o.rotation * PI / 180);
 	float halfWidth = o.width / 2;
 	float halfHeight = o.height / 2;
+	float result = 0;
 	// [0] = Upper Left
-	box[0].x = o.position.x - halfWidth;
-	box[0].y = o.position.y + halfHeight;
+	//box[0].x = o.position.x - halfWidth;
+	__asm {
+		fld o.position.x;
+		fld halfWidth;
+		fsub;
+		fstp result;
+	}
+	box[0].x = result;
+	//box[0].y = o.position.y + halfHeight;
+	__asm {
+		fld o.position.y;
+		fld halfHeight;
+		fadd;
+		fstp result;
+	}
+	box[0].y = result;
 	box[0].rotateFromOrigin(o.position.x, o.position.y, checkAngle(o.rotation));
 
 	// [1] = Upper Right
-	box[1].x = o.position.x + halfWidth;
-	box[1].y = o.position.y + halfHeight;
+	//box[1].x = o.position.x + halfWidth;
+	__asm {
+		fld o.position.x;
+		fld halfWidth;
+		fadd;
+		fstp result;
+	}
+	box[1].x = result;
+	//box[1].y = o.position.y + halfHeight;
+	__asm {
+		fld o.position.y;
+		fld halfHeight;
+		fadd;
+		fstp result;
+	}
+	box[1].y = result;
 	box[1].rotateFromOrigin(o.position.x, o.position.y, checkAngle(o.rotation));
 
 	// [2] = Bottom Right
-	box[2].x = o.position.x + halfWidth;
-	box[2].y = o.position.y - halfHeight;
+	//box[2].x = o.position.x + halfWidth;
+	__asm {
+		fld o.position.x;
+		fld halfWidth;
+		fadd;
+		fstp result;
+	}
+	box[2].x = result;
+	//box[2].y = o.position.y - halfHeight;
+	__asm {
+		fld o.position.y;
+		fld halfHeight;
+		fsub;
+		fstp result;
+	}
+	box[2].y = result;
 	box[2].rotateFromOrigin(o.position.x, o.position.y, checkAngle(o.rotation));
 
 	// [3] = Bottom Left
-	box[3].x = o.position.x - halfWidth;
-	box[3].y = o.position.y - halfHeight;
+	//box[3].x = o.position.x - halfWidth;
+	__asm {
+		fld o.position.x;
+		fld halfWidth;
+		fsub;
+		fstp result;
+	}
+	box[3].x = result;
+	//box[3].y = o.position.y - halfHeight;
+	__asm {
+		fld o.position.y;
+		fld halfHeight;
+		fsub;
+		fstp result;
+	}
+	box[3].y = result;
 	box[3].rotateFromOrigin(o.position.x, o.position.y, checkAngle(o.rotation));
 }
 

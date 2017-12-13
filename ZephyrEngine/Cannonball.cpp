@@ -30,27 +30,21 @@ string Cannonball::getObjectType() {
 	return "Cannonball";
 }
 
-
 void Cannonball::earlyUpdate() {
-
 }
-void Cannonball::midUpdate() {
-	//OutputDebugString("Cannon miduptdate");
-	//OutputDebugString("\n");
-	counter++;
-	
 
-	if (counter > 90 && counter < 110) {
+void Cannonball::midUpdate() {
+	counter++;
+
+	if (counter > 120 && counter < 135) {
 		std::ostringstream oss;
 		oss << id << "," << "1" << "," << deathSprite;
 		//Msg* m = new Msg(UPDATE_OBJ_SPRITE, oss.str());
 		objData->toPostVector.push_back(new Msg(UPDATE_OBJ_SPRITE, oss.str()));
-		//objData->toPostVector.push_back(new Msg(CHANGE_MAST, "shipwreck,0,Boat_S2.png"));
-		
+		//objData->toPostVector.push_back(new Msg(CHANGE_MAST, "shipwreck,0,Boat_S2.png"));	
 	}
-	
 
-	if (counter > 110) {
+	if (counter > 135) {
 		objData->toDestroyVector.push_back(this);
 	}
 
@@ -60,17 +54,17 @@ void Cannonball::lateUpdate() {
 }
 
 void Cannonball::onCollide(GameObject* otherObj) {
-	if (counter > 21) {
+	if (counter > 21 && otherObj != parentObject && otherObj->getObjectType() != "Cannonball") {
 		objData->toDestroyVector.push_back(this);
-		//deathSprite = "explosion.png";
-		//counter = 107;
-	}
 
-	if (otherObj != parentObject) {
+		//deathSprite = "explosion.png";
+		counter = 100;
+
+		//send message to alert AI that it scored a hit
+		if (parentObject->id.find("enemy") != string::npos || id.find("enemy") != string::npos) {
+			ostringstream oss;
+			oss << parentObject->id << "," << otherObj->id << "," << id;
+			objData->toPostVector.push_back(new Msg(SCORED_HIT, oss.str()));
+		}
 	}
-	//OutputDebugString(id.c_str());
-	//OutputDebugString(" COLLIDED WITH ");
-	//OutputDebugString(otherObj->id.c_str());
-	//OutputDebugString("\n");
-	
 }

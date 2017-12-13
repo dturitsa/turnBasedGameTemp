@@ -10,9 +10,17 @@ AIObject::AIObject()
 
 AIObject::~AIObject()
 {
+
 }
 
 void AIObject::update() {
+	timeAlive++;
+	cannonCooldownCounter++;
+
+	if (timeAlive % 10) {
+		dna->rating += 5; //points for staying alive
+	}
+
 	//set mast
 	string msgData = id + ",2,Boat_S2.png";
 	aiData->toPostVector.push_back(new Msg(CHANGE_MAST, msgData));
@@ -25,24 +33,41 @@ void AIObject::update() {
 
 	collisionTimer++;
 	//set the target
-	if (target == NULL) {
+	//if (target == NULL) {
+
+		WorldObject* closestEnemy = aiData->worldObjects[0];
+		float closestEnemyDist = 999999;
+
+		//set target to player
 		for (WorldObject* w : aiData->worldObjects) {
+			//set target to player
 			if (w->id == "playerShip") {
 				target = w;
 			}
+
+			////set target to closest AI object (for AI training)
+			//float enemyDist = sqrt(pow(w->pos.x - pos.x, 2) + pow(w->pos.y - pos.y, 2));
+			//if (enemyDist < closestEnemyDist && (w->id.find("enemy") != string::npos) && w->id != id) {
+			//	closestEnemy = w;
+			//	closestEnemyDist = enemyDist;
+			//}
+			//if (closestEnemy != target) {
+			//	target = closestEnemy;
+			//}
 		}
-	}
+
 	if (colAvoidanceBehaviour() != 0)
 		collisionTimer = 0;
 
-	if (collisionTimer > 40 && target != NULL) {
+	if (collisionTimer > dna->avoidanceLockTime && target != NULL) {
 		int range = distanceToTarget(pos, target->pos);
 
-		if (range > 90) {
+		if (range > dna->seekDistance) {
 			seekBehaviour();
 		}
-		else if (range < 80) {
+		else if (range < dna->engageDistance) {
 			engageBehaviour();
+
 		}
 	}
 }
@@ -111,7 +136,7 @@ float AIObject::checkIntersection(Vector2 a, Vector2 b, Vector2 c, Vector2 d) {
 	return 0;
 }
 
-int AIObject::colAvoidanceBehaviour() {
+float AIObject::colAvoidanceBehaviour() {
 	float collisionDistance = checkCollision();
 
 
@@ -120,8 +145,6 @@ int AIObject::colAvoidanceBehaviour() {
 	if (collisionDistance > 0) {
 		msgData = id + ",0,Boat_S2.png";
 		aiData->toPostVector.push_back(new Msg(CHANGE_RUDDER, msgData));
-		OutputDebugString("AVOIDING COLLISION");
-		OutputDebugString("\n");
 	}
 	else if (collisionDistance < 0) {
 		msgData = id + ",4,Boat_S2.png";
@@ -135,10 +158,10 @@ int AIObject::colAvoidanceBehaviour() {
 	return collisionDistance;
 }
 
-int AIObject::checkCollision() {
+float AIObject::checkCollision() {
 	string collidedObject = "nothing";
-	float raycastLength = 100;
-	float raycastAngle = 10;
+	float raycastLength = dna->raycastLength;
+	float raycastAngle = dna->raycastAngle;
 	Vector2 leftRaycast(pos.x, pos.y + raycastLength);
 	Vector2 rightRaycast(pos.x, pos.y + raycastLength);
 	float leftAngle = checkAngle(orientation - raycastAngle);
@@ -171,15 +194,12 @@ int AIObject::checkCollision() {
 				collidedObject = w->id;
 			}
 		}
-		//OutputDebugString("\n");
 	}
 
 	if (leftColDistance == 9999)
 		leftColDistance = 0;
 	if (rightColDistance == 9999)
 		rightColDistance = 0;
-
-	//OutputDebugString(collidedObject.c_str());
 
 	if (leftColDistance != 0 && leftColDistance < rightColDistance)
 		return -leftColDistance;
@@ -191,7 +211,7 @@ int AIObject::checkCollision() {
 inline int AIObject::angleBetween(Vector2 v1, Vector2 v2) {
 	float dot = v1.x*v2.x + v1.y*v2.y;     // dot product between[x1, y1] and [x2, y2]
 	float det = v1.x*v2.y - v1.y*v2.x;     // determinant
-	return atan2(det, dot);
+	return (int)atan2(det, dot);
 }
 
 
@@ -213,14 +233,22 @@ int AIObject::engageBehaviour() {
 	ownDir = signedOrientation(ownDir);
 	faceAngle = signedOrientation(faceAngle);
 
+	//send message to fire cannon
+	string msgData; 
+	
 	if ((ownDir - 90 - faceAngle) < (ownDir + 90 - faceAngle)) {
 		faceAngle -= 90;
-
+		msgData = id + ",right";
 	}
 	else {
 		faceAngle -= 90;
-
+		msgData = id + ",left";
 	}
+	if (cannonCooldownCounter > 20) {
+		aiData->toPostVector.push_back(new Msg(SHOOT_CANNON, msgData));
+		cannonCooldownCounter = 0;
+	}
+	
 
 	turnToFace(faceAngle);
 
@@ -242,7 +270,7 @@ int AIObject::distanceToTarget(Vector2 origin, Vector2 destination) {
 	targetDir.x = destination.x - origin.x;
 	targetDir.y = destination.y - origin.y;
 
-	int magnitude = sqrt(pow(targetDir.x, 2) + pow(targetDir.y, 2));
+	int magnitude = (int)sqrt(pow(targetDir.x, 2) + pow(targetDir.y, 2));
 
 	return magnitude;
 }
@@ -254,7 +282,7 @@ int AIObject::angleToTarget(Vector2 origin, Vector2 destination) {
 	targetDir.x = destination.x - origin.x;
 	targetDir.y = destination.y - origin.y;
 
-	int outputAngle = atan2(targetDir.x, targetDir.y) * 180 / 3.1415;
+	int outputAngle = (int)(atan2(targetDir.x, targetDir.y) * 180.0 / 3.1415);
 	//if (outputAngle < 0) {
 	//	outputAngle += 360;
 	//}
@@ -283,4 +311,21 @@ void AIObject::turnToFace(int newDir) {
 		msgData = id + ",2,Boat_S2.png";
 		aiData->toPostVector.push_back(new Msg(CHANGE_RUDDER, msgData));
 	}
+}
+
+//AI object hit something, udpate dna rating
+void AIObject::scoredHit(std::string hitObjectId, std::string projectileId) {
+	if (hitObjectId == target->id) {
+		if (projectileId != id) {
+			dna->rating += 100; //ponts for an attack with a cannonball
+		}
+		else {
+			dna->rating += 50; //points for a ramming attack
+		}
+			
+	}
+	else if (projectileId != id) {
+		dna->rating -= 100; //ramming into something that isn't the target
+	}
+	
 }
