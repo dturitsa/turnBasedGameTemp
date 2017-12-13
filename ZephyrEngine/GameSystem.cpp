@@ -192,7 +192,7 @@ void GameSystem::startSystemLoop() {
 		//std::srand(std::time(0)); // use current time as seed for random generator
 		int random_variable = std::rand();
 
-		if (random_variable % 500 == 0) {
+		if (random_variable % 200 == 0) {
 			// change the wind a bit
 			if (levelLoaded == 2) {
 				int ran2 = std::rand();
@@ -207,7 +207,7 @@ void GameSystem::startSystemLoop() {
 			}
 		}
 		enemySpawnCooldownCounter++;
-		if (levelLoaded == 2 && enemySpawnCooldownCounter > 600 && random_variable % 300 == 0) {
+		if (levelLoaded == 2 && enemySpawnCooldownCounter > 900 && random_variable % 600 == 0) {
 			enemySpawnCooldownCounter = 0;
 			// spawn a new enemy
 			for (GameObject* g : gameObjects) {
