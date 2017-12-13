@@ -99,9 +99,11 @@ void AudioEngine::UnLoadSound(const string &strSoundName)
 	AudioEngine::FmodError(tFoundIt->second->release());
 	audioManager->SoundObjects.erase(tFoundIt);
 }
-void AudioEngine::Set3dListenerAndOrientation(const Vector3 &vPosition, float fVolumedB)
+void AudioEngine::SetListenerLocation(const Vector3 &vPosition)
 {
-	//audioManager->mpSystem->set3DListenerAttributes()
+	FMOD_VECTOR fmvPos;
+	fmvPos = VectorToFmod(vPosition);
+	audioManager->mpSystem->set3DListenerAttributes(0, &fmvPos, 0, 0, 0);
 }
 int AudioEngine::PlayAudio(const string &strSoundName, const Vector3 &vPosition, float fVolumedB)
 {

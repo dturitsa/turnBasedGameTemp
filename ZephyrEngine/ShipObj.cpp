@@ -104,6 +104,11 @@ void ShipObj::onCollide(GameObject* otherObj) {
 
 	
 	if (health < 0) {
+		std::ostringstream oss;
+		oss << id << "," << x << "," << y;
+		Msg* m = new Msg(SHIP_SANK, oss.str());
+		objData->toPostVector.push_back(m);
+		
 		objData->toDestroyVector.push_back(this);
 	}
 	//OutputDebugString(id.c_str());
