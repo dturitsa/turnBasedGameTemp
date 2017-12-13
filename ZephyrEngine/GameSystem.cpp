@@ -722,7 +722,7 @@ void GameSystem::handleMessage(Msg *msg) {
 				removeAllGameObjects();
 
 				// then, load new objects
-				addGameObjects("Alpha_Level_1.txt"); // TEMPORARY 
+				addGameObjects("Level_1Simplified.txt"); // TEMPORARY 
 				levelLoaded = 2;
 				Msg* m = new Msg(LEVEL_LOADED, "2");
 				msgBus->postMessage(m, this);
