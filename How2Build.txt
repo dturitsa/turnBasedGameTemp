@@ -1,0 +1,4 @@
+To be able to build the game copy the contents of the RequiredDlls 
+folder into the Debug folder
+
+Tested in Debug x86 mode on Visual Studio 2017
