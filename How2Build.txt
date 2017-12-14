@@ -1,4 +1,22 @@
 To be able to build the game copy the contents of the RequiredDlls 
-folder into the Debug folder
+folder into the same folder as the. exe
 
 Tested in Debug x86 mode on Visual Studio 2017
+
+
+
+
+Controls
+
+Menu
+	navigate menu: arrow keys
+	select item: <space>
+
+
+Ingame
+	set rudder: <a>, <d>
+	set sails: <w>, <s>
+	fire cannon <q>, <e>
+	move camera: arrow keys
+	center camera on player: <space>
+	

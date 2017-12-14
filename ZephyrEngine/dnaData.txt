@@ -1,4 +1,3 @@
-
 rating: 10037,
 raycastLength: 227.894470,
 raycastAngle: 5.009243,
@@ -34,51 +33,37 @@ avoidanceLockTime: 17.323755,
 seekDistance: 81.010849,
 engageDistance: 79.807732;
 
-rating: -357915767,
-raycastLength: 268.061340,
-raycastAngle: 3.883207,
-avoidanceLockTime: 16.768904,
-seekDistance: 71.769691,
-engageDistance: 71.869690;
-
-rating: -357913967,
-raycastLength: 250.336502,
-raycastAngle: 5.193189,
-avoidanceLockTime: 17.275150,
-seekDistance: 69.002426,
-engageDistance: 69.102425;
-
-rating: 12167,
-raycastLength: 267.407562,
-raycastAngle: 4.064363,
-avoidanceLockTime: 11.933212,
-seekDistance: 86.307793,
-engageDistance: 86.407791;
-
-rating: 909917,
-raycastLength: 264.597748,
-raycastAngle: 4.214792,
-avoidanceLockTime: 14.396301,
-seekDistance: 105.500122,
-engageDistance: 79.843132;
-
-rating: 8377,
-raycastLength: 201.456772,
-raycastAngle: 5.245702,
-avoidanceLockTime: 15.787661,
-seekDistance: 86.906563,
-engageDistance: 72.710350;
-
 rating: 10037,
-raycastLength: 198.740845,
-raycastAngle: 4.453429,
-avoidanceLockTime: 14.396084,
-seekDistance: 106.964096,
-engageDistance: 85.287636;
+raycastLength: 227.894470,
+raycastAngle: 5.009243,
+avoidanceLockTime: 14.220428,
+seekDistance: 90.000000,
+engageDistance: 80.000000;
 
-rating: 10037,
-raycastLength: 189.758469,
-raycastAngle: 6.173651,
-avoidanceLockTime: 14.099455,
-seekDistance: 82.665710,
-engageDistance: 82.765709;
+rating: 21237,
+raycastLength: 216.608231,
+raycastAngle: 5.296686,
+avoidanceLockTime: 12.549473,
+seekDistance: 85.096512,
+engageDistance: 77.103798;
+
+rating: 19932,
+raycastLength: 243.694504,
+raycastAngle: 5.881966,
+avoidanceLockTime: 16.174994,
+seekDistance: 93.368103,
+engageDistance: 67.884758;
+
+rating: 18582,
+raycastLength: 225.945343,
+raycastAngle: 3.782004,
+avoidanceLockTime: 12.431863,
+seekDistance: 96.949753,
+engageDistance: 93.240753;
+
+rating: 17232,
+raycastLength: 209.969696,
+raycastAngle: 5.029537,
+avoidanceLockTime: 17.323755,
+seekDistance: 81.010849,
+engageDistance: 79.807732;
