@@ -4,8 +4,6 @@
 #include "FullscreenObj.h"
 #include "Cannonball.h"
 #include "ShipObj.h"
-#include "WindArrowObj.h"
-
 #include <iostream>
 #include <fstream>
 #include <chrono>

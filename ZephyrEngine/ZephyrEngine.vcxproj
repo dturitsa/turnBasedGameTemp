@@ -131,7 +131,6 @@
   <ItemGroup>
     <ClInclude Include="AudioEngine.h" />
     <ClInclude Include="AudioSystem.h" />
-    <ClInclude Include="Axis.h" />
     <ClInclude Include="Cannonball.h" />
     <ClInclude Include="FullscreenObj.h" />
     <ClInclude Include="GameObject.h" />
@@ -141,19 +140,15 @@
     <ClInclude Include="MessageBus.h" />
     <ClInclude Include="Msg.h" />
     <ClInclude Include="ObjectData.h" />
-    <ClInclude Include="PhysicsEngine.h" />
-    <ClInclude Include="PhysicsHeader.h" />
     <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="ShipObj.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="Vector2.h" />
-    <ClInclude Include="WindArrowObj.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioEngine.cpp" />
     <ClCompile Include="AudioSystem.cpp" />
-    <ClCompile Include="Axis.cpp" />
     <ClCompile Include="Cannonball.cpp" />
     <ClCompile Include="FullscreenObj.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -166,7 +161,6 @@
     <ClCompile Include="ShipObj.cpp" />
     <ClCompile Include="System.cpp" />
     <ClCompile Include="Vector2.cpp" />
-    <ClCompile Include="WindArrowObj.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="fragmentShader.txt" />

@@ -1,5 +1,16 @@
 #pragma once
-#include "PhysicsHeader.h"
+#include <iostream>
+#include <iterator>
+#include <list>
+#include <map>
+#include <math.h>
+#include <stdio.h>
+#include <string>
+#include <time.h>
+#include <cstddef>
+#include <mutex>
+
+#define PI 3.14159265358979323846
 
 class Vector2
 {

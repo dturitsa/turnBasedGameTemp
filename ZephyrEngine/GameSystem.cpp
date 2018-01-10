@@ -41,9 +41,6 @@ void GameSystem::addGameObjects(string fileName) {
 		else if (gameObjectType.compare("FullscreenObj") == 0) {
 			g = new FullscreenObj(gameObjDataMap, &objData);
 		}
-		else if (gameObjectType.compare("WindArrowObj") == 0) {
-			g = new WindArrowObj(gameObjDataMap, &objData);
-		}
 
 		if (g != NULL) {
 			createGameObject(g);
@@ -112,9 +109,7 @@ void GameSystem::addNewEnemy(int playerX, int playerY) {
 		g = new GameObject(gameObjDataMap, &objData);
 	} else if (gameObjectType.compare("FullscreenObj") == 0) {
 		g = new FullscreenObj(gameObjDataMap, &objData);
-	} else if (gameObjectType.compare("WindArrowObj") == 0) {
-		g = new WindArrowObj(gameObjDataMap, &objData);
-	}
+	} 
 
 	if (g != NULL) {
 		createGameObject(g);

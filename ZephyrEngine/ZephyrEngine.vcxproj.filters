@@ -45,16 +45,7 @@
     <ClInclude Include="ShipObj.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PhysicsHeader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Vector2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysicsEngine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Axis.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FullscreenObj.h">
@@ -64,9 +55,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ObjectData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WindArrowObj.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AudioEngine.h">
@@ -107,9 +95,6 @@
     <ClCompile Include="Vector2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Axis.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FullscreenObj.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -120,9 +105,6 @@
       <Filter>Source Files</Filter>
     </Text>
     <ClCompile Include="Cannonball.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WindArrowObj.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AudioEngine.cpp">
