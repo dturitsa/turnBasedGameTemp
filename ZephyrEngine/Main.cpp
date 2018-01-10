@@ -21,9 +21,6 @@ int main(int argc, char *argv[]) {
 	GameSystem* gs = new GameSystem(mbus);
 	mbus->addSystem(gs);
 
-	PhysicsSystem* ps = new PhysicsSystem(mbus);
-	mbus->addSystem(ps);
-
 	AudioSystem* aus = new AudioSystem(mbus);
 	mbus->addSystem(aus);
 
@@ -55,7 +52,6 @@ int main(int argc, char *argv[]) {
 	//				Start Core System Threads     					//
 	//////////////////////////////////////////////////////////////////
 	std::thread gameSystemThread(startGameSystem, gs);
-	std::thread physicsThread(startPhysicsSystem, ps);
 	std::thread renderThread(startRenderSystem, rs);
 	std::thread ioThread(startIOSystem, ios);
 	std::thread audThread(startAudioSystem, aus);
@@ -83,7 +79,6 @@ int main(int argc, char *argv[]) {
 				ios->alive = false;
 				gs->alive = false;
 				rs->alive = false;
-				ps->alive = false;
 				malive = false;
 				aus->alive = false;
 
@@ -97,7 +92,6 @@ int main(int argc, char *argv[]) {
 	ios->alive = false;
 	gs->alive = false;
 	rs->alive = false;
-	ps->alive = false;
 	aus->alive = false;
 
 	//////////////////////////////////////////////////////////////////
@@ -105,8 +99,6 @@ int main(int argc, char *argv[]) {
 	//////////////////////////////////////////////////////////////////
 	ioThread.join();
 	OutputDebugString("\nIO Ended\n");
-	physicsThread.join();
-	OutputDebugString("\nPS Ended\n");
 	renderThread.join();
 	OutputDebugString("\nRT Ended\n");
 	gameSystemThread.join();
@@ -133,10 +125,6 @@ void startRenderSystem(RenderSystem* s) {
 }
 
 void startGameSystem(GameSystem* s) {
-	s->startSystemLoop();
-}
-
-void startPhysicsSystem(PhysicsSystem* s) {
 	s->startSystemLoop();
 }
 
