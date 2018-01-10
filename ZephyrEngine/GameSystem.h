@@ -49,9 +49,12 @@ public:
 
 	int score = 0;
 private:
+	//handler functions for the scenes in the game
 	void mainMenuHandler(Msg * msg);
+	void settingsMenuHandler(Msg * msg);
+	void instructionMenuHandler(Msg * msg);
 	void lvl1Handler(Msg * msg);
-	
+	void gameOverMenuHandler(Msg * msg);
 
 	// The position of the marker, goes from 0 to 2, 0 being the top
 	int markerPosition = 0;
