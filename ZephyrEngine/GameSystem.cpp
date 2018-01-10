@@ -48,75 +48,6 @@ void GameSystem::addGameObjects(string fileName) {
 	}
 }
 
-void GameSystem::addNewEnemy(int playerX, int playerY) {
-
-	std::string data = openFileRemoveSpaces("enemyShip.txt");
-
-	GameObject* g; //new gameobject to be created
-
-	vector<string> splitObjData = split(data, ',');
-
-	std::map<std::string, std::string> gameObjDataMap;
-
-	// make sure the id is random for the boat
-	std::ostringstream ss;
-	ss << "id: enemy" << rand();
-	splitObjData[1] = ss.str();
-	 
-	// make the positions dependent on the player pos
-	int enemyx = playerX;
-
-	if (playerX > 0) {
-		enemyx -= 300;
-	} else {
-		enemyx += 300;
-	}
-		
-	std::ostringstream xss;
-	xss << "xPos: " << enemyx;
-	splitObjData[3] = xss.str();
-		
-	int enemyy = playerY;
-
-	if (playerY > 0) {
-		enemyy -= 300;
-	} else {
-		enemyy += 300;
-	}
-		
-	std::ostringstream yss;
-	yss << "yPos: " << enemyy;
-	splitObjData[4] = yss.str();
-
-	// spawn wtih random orientation
-	std::ostringstream oss;
-	oss << "orientation: " << (rand() % 360);
-	splitObjData[6] = oss.str();
-
-	//loop through elements of each GameObject and add them to the object parameter map
-	for (int i = 0; i < splitObjData.size(); i++) {
-		vector<string> keyValue = split(splitObjData[i], ':');
-		gameObjDataMap[keyValue[0]] = keyValue[1];
-	}
-
-	//gets the gameObject type
-	string gameObjectType = gameObjDataMap.find("gameObjectType")->second;
-	g = NULL;
-	//just hard coded else ifs for now... should probably make retreive available classes automatically <- Did some research, cpp doesn't support reflection (Hank)
-	if (gameObjectType.compare("ShipObj") == 0) {
-		g = new ShipObj(gameObjDataMap, &objData);
-	} else if (gameObjectType.compare("GameObject") == 0) {
-		g = new GameObject(gameObjDataMap, &objData);
-	} else if (gameObjectType.compare("FullscreenObj") == 0) {
-		g = new FullscreenObj(gameObjDataMap, &objData);
-	} 
-
-	if (g != NULL) {
-		createGameObject(g);
-	}
-	
-}
-
 void GameSystem::saveToFIle(string fileName) {
 	string output = "";
 	for (GameObject* obj : gameObjects) {
@@ -182,39 +113,6 @@ void GameSystem::startSystemLoop() {
 		/////////////////////////////////////////////////////////////////////
 
 		Msg* m = new Msg(EMPTY_MESSAGE, "");
-
-		//we probably shouldn't be seeding every frame, makes the values less random - Denis
-		//std::srand(std::time(0)); // use current time as seed for random generator
-		int random_variable = std::rand();
-
-		if (random_variable % 500 == 0) {
-			// change the wind a bit
-			if (levelLoaded == 2) {
-				int ran2 = std::rand();
-				if (ran2 % 2 == 0) {
-					Msg* mmm = new Msg(PASS_WIND, "CW");
-					msgBus->postMessage(mmm, this);
-				} else {
-					Msg* mmm = new Msg(PASS_WIND, "CCW");
-					msgBus->postMessage(mmm, this);
-				}
-				
-			}
-		}
-		enemySpawnCooldownCounter++;
-		if (levelLoaded == 2 && enemySpawnCooldownCounter > 600 && random_variable % 300 == 0) {
-			enemySpawnCooldownCounter = 0;
-			// spawn a new enemy
-			for (GameObject* g : gameObjects) {
-				if (g->getObjectType() == "ShipObj") {
-					if (g->id == "playerShip") {
-						ShipObj* so = dynamic_cast<ShipObj*>(g);
-						addNewEnemy(so->x, so->y);
-						break;
-					}
-				}
-			}
-		}
 
 		switch (levelLoaded) {
 		case -1: // First launch
@@ -417,7 +315,7 @@ void GameSystem::mainMenuHandler(Msg * msg) {
 
 			// then, load new objects
 			//addGameObjects("Level_1.txt");
-			addGameObjects("Level_1Simplified.txt");
+			addGameObjects("prototype_level.txt");
 			levelLoaded = 2;
 			Msg* m = new Msg(LEVEL_LOADED, "2");
 			msgBus->postMessage(m, this);
@@ -450,6 +348,7 @@ void GameSystem::instructionMenuHandler(Msg * msg) {
 		msgBus->postMessage(m, this);
 	}
 }
+
 //the settings menu message handler
 void GameSystem::settingsMenuHandler(Msg * msg) {
 	std::ostringstream oss;
@@ -514,185 +413,211 @@ void GameSystem::lvl1Handler(Msg * msg) {
 	Msg* mm = new Msg(EMPTY_MESSAGE, "");
 	GameObject* g;
 
-
-	switch (msg->type) {
-	case TEST_KEY_PRESSED:
-		for (GameObject* g : gameObjects) {
-			if (g->id == "shipwreck") {
-				Msg* m = new Msg(CHANGE_MAST, "shipwreck,2,Boat_S2.png");
-				msgBus->postMessage(m, this);
-
-				Msg* m2 = new Msg(CHANGE_RUDDER, "shipwreck,1");
-				msgBus->postMessage(m2, this);
-			}
+	GameObject* reticle = nullptr;
+	for (GameObject* g : gameObjects) {
+		if (g->id == "reticle") {
+			reticle = g;
 		}
-		break;
-	case SHOOT_CANNON: {
-
-		vector<string> data = split(msg->data, ',');
-		for (GameObject* g : gameObjects) {
-			if (g->id == data[0]) {
-				ShipObj* so = dynamic_cast<ShipObj*>(g);
-
-				so->shoot(data[1]);
-			}
-		}
-		break;
 	}
-	case GO_COLLISION: {
-		vector<string> data = split(msg->data, ',');
 
-		for (GameObject* g : gameObjects) {
-			//OutputDebugString(g->id.c_str());
-			if (g->id == data[0]) {
-				for (GameObject* o : gameObjects) {
-					if (o->id == data[1]) {
-						g->onCollide(o);
-						break;
+		switch (msg->type) {
+		case DOWN_ARROW_PRESSED: 
+			reticle->y -= 10;
+			sendUpdatePosMessage(reticle);
+			break;
+
+		case UP_ARROW_PRESSED:
+			reticle->y += 10;
+			sendUpdatePosMessage(reticle);
+			break;
+
+		case LEFT_ARROW_PRESSED:
+			reticle->x -= 10;
+			sendUpdatePosMessage(reticle);
+			break;
+
+		case RIGHT_ARROW_PRESSED:
+			reticle->x += 10;
+			sendUpdatePosMessage(reticle);
+			break;
+
+		case TEST_KEY_PRESSED:
+			for (GameObject* g : gameObjects) {
+				if (g->id == "shipwreck") {
+					Msg* m = new Msg(CHANGE_MAST, "shipwreck,2,Boat_S2.png");
+					msgBus->postMessage(m, this);
+
+					Msg* m2 = new Msg(CHANGE_RUDDER, "shipwreck,1");
+					msgBus->postMessage(m2, this);
+				}
+			}
+			break;
+		case SHOOT_CANNON: {
+
+			vector<string> data = split(msg->data, ',');
+			for (GameObject* g : gameObjects) {
+				if (g->id == data[0]) {
+					ShipObj* so = dynamic_cast<ShipObj*>(g);
+
+					so->shoot(data[1]);
+				}
+			}
+			break;
+		}
+		case GO_COLLISION: {
+			vector<string> data = split(msg->data, ',');
+
+			for (GameObject* g : gameObjects) {
+				//OutputDebugString(g->id.c_str());
+				if (g->id == data[0]) {
+					for (GameObject* o : gameObjects) {
+						if (o->id == data[1]) {
+							g->onCollide(o);
+							break;
+						}
 					}
 				}
+
+			}
+			break;
+		}
+		case KEY_W_PRESSED:
+			// increase mast
+			// find the ship obj, and when you find it, increase mast
+			for (GameObject* g : gameObjects) {
+				if (g->getObjectType() == "ShipObj") {
+					ShipObj* so = dynamic_cast<ShipObj*>(g);
+					so->sail++;
+					if (so->sail > 2) {
+						so->sail = 2;
+					}
+
+
+					// change sail image
+					std::ostringstream tOss;
+					tOss << "Boat_S" << so->sail << ".png";
+					so->renderable = tOss.str();
+
+					mm->type = CHANGE_MAST;
+					oss << so->id << "," << so->sail << "," << so->renderable;
+					mm->data = oss.str();
+					msgBus->postMessage(mm, this);
+
+					Msg* mm2 = new Msg(UPDATE_OBJ_SPRITE, oss.str());
+					msgBus->postMessage(mm2, this);
+
+					break;
+				}
+			}
+			break;
+		case KEY_S_PRESSED:
+			// decrease mast
+			for (GameObject* g : gameObjects) {
+				if (g->getObjectType() == "ShipObj") {
+					ShipObj* so = dynamic_cast<ShipObj*>(g);
+					so->sail--;
+					if (so->sail < 0) {
+						so->sail = 0;
+					}
+
+					// change sail image
+					std::ostringstream tOss;
+					tOss << "Boat_S" << so->sail << ".png";
+					so->renderable = tOss.str();
+
+					mm->type = CHANGE_MAST;
+					oss << so->id << "," << so->sail << "," << so->renderable;
+					mm->data = oss.str();
+					msgBus->postMessage(mm, this);
+
+					Msg* mm2 = new Msg(UPDATE_OBJ_SPRITE, oss.str());
+					msgBus->postMessage(mm2, this);
+					break;
+				}
+			}
+			break;
+		case KEY_D_PRESSED:
+			// change rudder to right
+			for (GameObject* g : gameObjects) {
+				if (g->getObjectType() == "ShipObj") {
+					ShipObj* so = dynamic_cast<ShipObj*>(g);
+					so->rudder++;
+					if (so->rudder > 4) {
+						so->rudder = 4;
+					}
+
+					mm->type = CHANGE_RUDDER;
+					oss << so->id << "," << so->rudder;
+					mm->data = oss.str();
+					msgBus->postMessage(mm, this);
+					break;
+				}
+			}
+			break;
+		case KEY_A_PRESSED:
+			// change rudder left
+			for (GameObject* g : gameObjects) {
+				if (g->getObjectType() == "ShipObj") {
+					ShipObj* so = dynamic_cast<ShipObj*>(g);
+					so->rudder--;
+					if (so->rudder < 0) {
+						so->rudder = 0;
+					}
+
+					mm->type = CHANGE_RUDDER;
+					oss << so->id << "," << so->rudder;
+					mm->data = oss.str();
+					msgBus->postMessage(mm, this);
+					break;
+				}
+			}
+			break;
+		case KEY_E_PRESSED: {
+			// fire a cannon ball to the right. 
+
+			for (GameObject* g : gameObjects) {
+				if (g->id == "playerShip") {
+					ShipObj* so = dynamic_cast<ShipObj*>(g);
+					so->shoot("right");
+					break;
+				}
 			}
 
+			break;
 		}
-		break;
-	}
-	case KEY_W_PRESSED:
-		// increase mast
-		// find the ship obj, and when you find it, increase mast
-		for (GameObject* g : gameObjects) {
-			if (g->getObjectType() == "ShipObj") {
-				ShipObj* so = dynamic_cast<ShipObj*>(g);
-				so->sail++;
-				if (so->sail > 2) {
-					so->sail = 2;
+		case KEY_Q_PRESSED: {
+			// fire a cannon ball to the left.
+			for (GameObject* g : gameObjects) {
+				if (g->id == "playerShip") {
+					ShipObj* so = dynamic_cast<ShipObj*>(g);
+					so->shoot("left");
+					break;
+				}
+			}
+			break;
+		}
+		case UPDATE_OBJECT_POSITION: {
+
+			vector<string> data = split(msg->data, ',');
+
+			for (GameObject* g : gameObjects) {
+				//OutputDebugString(g->id.c_str());
+
+				if (g->id == data[0]) {
+					g->x = atof(data[2].c_str());
+					g->y = atof(data[3].c_str());
+					g->orientation = atof(data[5].c_str());
 				}
 
-
-				// change sail image
-				std::ostringstream tOss;
-				tOss << "Boat_S" << so->sail << ".png";
-				so->renderable = tOss.str();
-
-				mm->type = CHANGE_MAST;
-				oss << so->id << "," << so->sail << "," << so->renderable;
-				mm->data = oss.str();
-				msgBus->postMessage(mm, this);
-
-				Msg* mm2 = new Msg(UPDATE_OBJ_SPRITE, oss.str());
-				msgBus->postMessage(mm2, this);
-
-				break;
 			}
+			break;
 		}
-		break;
-	case KEY_S_PRESSED:
-		// decrease mast
-		for (GameObject* g : gameObjects) {
-			if (g->getObjectType() == "ShipObj") {
-				ShipObj* so = dynamic_cast<ShipObj*>(g);
-				so->sail--;
-				if (so->sail < 0) {
-					so->sail = 0;
-				}
-
-				// change sail image
-				std::ostringstream tOss;
-				tOss << "Boat_S" << so->sail << ".png";
-				so->renderable = tOss.str();
-
-				mm->type = CHANGE_MAST;
-				oss << so->id << "," << so->sail << "," << so->renderable;
-				mm->data = oss.str();
-				msgBus->postMessage(mm, this);
-
-				Msg* mm2 = new Msg(UPDATE_OBJ_SPRITE, oss.str());
-				msgBus->postMessage(mm2, this);
-				break;
-			}
+		default:
+			break;
 		}
-		break;
-	case KEY_D_PRESSED:
-		// change rudder to right
-		for (GameObject* g : gameObjects) {
-			if (g->getObjectType() == "ShipObj") {
-				ShipObj* so = dynamic_cast<ShipObj*>(g);
-				so->rudder++;
-				if (so->rudder > 4) {
-					so->rudder = 4;
-				}
-
-				mm->type = CHANGE_RUDDER;
-				oss << so->id << "," << so->rudder;
-				mm->data = oss.str();
-				msgBus->postMessage(mm, this);
-				break;
-			}
-		}
-		break;
-	case KEY_A_PRESSED:
-		// change rudder left
-		for (GameObject* g : gameObjects) {
-			if (g->getObjectType() == "ShipObj") {
-				ShipObj* so = dynamic_cast<ShipObj*>(g);
-				so->rudder--;
-				if (so->rudder < 0) {
-					so->rudder = 0;
-				}
-
-				mm->type = CHANGE_RUDDER;
-				oss << so->id << "," << so->rudder;
-				mm->data = oss.str();
-				msgBus->postMessage(mm, this);
-				break;
-			}
-		}
-		break;
-	case KEY_E_PRESSED: {
-		// fire a cannon ball to the right. 
-
-		for (GameObject* g : gameObjects) {
-			if (g->id == "playerShip") {
-				ShipObj* so = dynamic_cast<ShipObj*>(g);
-				so->shoot("right");
-				break;
-			}
-		}
-
-		break;
-	}
-	case KEY_Q_PRESSED: {
-		// fire a cannon ball to the left.
-		for (GameObject* g : gameObjects) {
-			if (g->id == "playerShip") {
-				ShipObj* so = dynamic_cast<ShipObj*>(g);
-				so->shoot("left");
-				break;
-			}
-		}
-		break;
-	}
-	case UPDATE_OBJECT_POSITION: {
-
-		vector<string> data = split(msg->data, ',');
-
-		for (GameObject* g : gameObjects) {
-			//OutputDebugString(g->id.c_str());
-
-			if (g->id == data[0]) {
-				g->x = atof(data[2].c_str());
-				g->y = atof(data[3].c_str());
-				g->orientation = atof(data[5].c_str());
-			}
-
-		}
-		break;
-	}
-	default:
-		break;
-	}
 }
 
-//gameober menu message handler
+//gameover menu message handler
 void GameSystem::gameOverMenuHandler(Msg * msg) {
 	std::ostringstream oss;
 	Msg* mm = new Msg(EMPTY_MESSAGE, "");
@@ -739,7 +664,7 @@ void GameSystem::gameOverMenuHandler(Msg * msg) {
 			removeAllGameObjects();
 
 			// then, load new objects
-			addGameObjects("Level_1Simplified.txt"); // TEMPORARY 
+			addGameObjects("prototype_level.txt"); // TEMPORARY 
 			levelLoaded = 2;
 			Msg* m = new Msg(LEVEL_LOADED, "2");
 			msgBus->postMessage(m, this);
@@ -750,3 +675,23 @@ void GameSystem::gameOverMenuHandler(Msg * msg) {
 	}
 }
 
+void GameSystem::sendUpdatePosMessage(GameObject* g) {
+	std::ostringstream oss;
+	Msg* mm = new Msg(EMPTY_MESSAGE, "");
+
+	//UPDATE_OBJECT_POSITION, //id,renderable,x,y,z,orientation,width,length,physEnabled,type
+	oss << g->id << ","
+		<< g->renderable << ","
+		<< g->x << ","
+		<< g->y << ","
+		<< g->z << ","
+		<< g->orientation << ","
+		<< g->width << ","
+		<< g->length << ","
+		<< g->physicsEnabled << ","
+		<< g->getObjectType();
+
+	mm->type = UPDATE_OBJECT_POSITION;
+	mm->data = oss.str();
+	msgBus->postMessage(mm, this);
+}

@@ -75,7 +75,7 @@ void NetworkSystem::broadcastTurnInfo() {
 	// im being lazy here and just sending out the string since ideally the network class doesn't know how to parse. alternatively i can parse here, depends on
 	// what we decide later
 	Msg* tm = new Msg(NETWORK_TURN_BROADCAST, turnInfo);
-	msgBus->postMessage(tm);
+	msgBus->postMessage(tm, this);
 
 	// reset the action counter when we broadcast 
 	actionCounter = 0;

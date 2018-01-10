@@ -576,7 +576,8 @@ void RenderSystem::handleMessage(Msg *msg) {
 		levelLoaded(msg);
 		break;
 	//PANNING CAMERA
-	case SPACEBAR_PRESSED:
+
+	/*case SPACEBAR_PRESSED:
 		if (loadedLevel == 2) {
 			cameraToPlayer();
 		}
@@ -604,7 +605,7 @@ void RenderSystem::handleMessage(Msg *msg) {
 			panLeft();
 			positionUpdated();
 		}
-		break;
+		break;*/
 	default:
 		break;
 	}

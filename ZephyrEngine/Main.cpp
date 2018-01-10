@@ -138,3 +138,7 @@ void startGameSystem(GameSystem* s) {
 void startAudioSystem(AudioSystem* s) {
 	s->startSystemLoop();
 }
+
+void startNetworkSystem(NetworkSystem* s) {
+	s->startSystemLoop();
+}

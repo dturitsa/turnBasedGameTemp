@@ -28,7 +28,6 @@ public:
 	void startSystemLoop();
 	//void startTestLevel();
 	void addGameObjects(string fileName);
-	void addNewEnemy(int playerX, int playerY);
 	void saveToFIle(string fileName);
 	void createGameObject(GameObject* g);
 	void GameSystem::gameObjectRemoved(GameObject* g);
@@ -56,6 +55,8 @@ private:
 	void lvl1Handler(Msg * msg);
 	void gameOverMenuHandler(Msg * msg);
 
+	//send a message with updated object position
+	void sendUpdatePosMessage(GameObject* g);
 	// The position of the marker, goes from 0 to 2, 0 being the top
 	int markerPosition = 0;
 };
