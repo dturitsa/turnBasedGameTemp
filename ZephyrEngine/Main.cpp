@@ -21,12 +21,6 @@ int main(int argc, char *argv[]) {
 	GameSystem* gs = new GameSystem(mbus);
 	mbus->addSystem(gs);
 
-	PhysicsSystem* ps = new PhysicsSystem(mbus);
-	mbus->addSystem(ps);
-
-	AISystem* ais = new AISystem(mbus);
-	mbus->addSystem(ais);
-
 	AudioSystem* aus = new AudioSystem(mbus);
 	mbus->addSystem(aus);
 
@@ -61,10 +55,8 @@ int main(int argc, char *argv[]) {
 	//				Start Core System Threads     					//
 	//////////////////////////////////////////////////////////////////
 	std::thread gameSystemThread(startGameSystem, gs);
-	std::thread physicsThread(startPhysicsSystem, ps);
 	std::thread renderThread(startRenderSystem, rs);
 	std::thread ioThread(startIOSystem, ios);
-	std::thread aiThread(startAISystem, ais);
 	std::thread audThread(startAudioSystem, aus);
 	std::thread nsThread(startNetworkSystem, ns);
 	
@@ -91,9 +83,7 @@ int main(int argc, char *argv[]) {
 				ios->alive = false;
 				gs->alive = false;
 				rs->alive = false;
-				ps->alive = false;
 				malive = false;
-				ais->alive = false;
 				aus->alive = false;
 				ns->alive = false;
 			}
@@ -106,8 +96,6 @@ int main(int argc, char *argv[]) {
 	ios->alive = false;
 	gs->alive = false;
 	rs->alive = false;
-	ps->alive = false;
-	ais->alive = false;
 	aus->alive = false;
 	ns->alive = false;
 
@@ -116,14 +104,10 @@ int main(int argc, char *argv[]) {
 	//////////////////////////////////////////////////////////////////
 	ioThread.join();
 	OutputDebugString("\nIO Ended\n");
-	physicsThread.join();
-	OutputDebugString("\nPS Ended\n");
 	renderThread.join();
 	OutputDebugString("\nRT Ended\n");
 	gameSystemThread.join();
 	OutputDebugString("\nGS Ended\n");
-	aiThread.join();
-	OutputDebugString("\nAI Ended\n");
 	audThread.join();
 	OutputDebugString("\nAudio Ended\n");
 	nsThread.join();
@@ -148,14 +132,6 @@ void startRenderSystem(RenderSystem* s) {
 }
 
 void startGameSystem(GameSystem* s) {
-	s->startSystemLoop();
-}
-
-void startPhysicsSystem(PhysicsSystem* s) {
-	s->startSystemLoop();
-}
-
-void startAISystem(AISystem* s) {
 	s->startSystemLoop();
 }
 

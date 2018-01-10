@@ -27,13 +27,7 @@
     <ClInclude Include="Main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ConsoleRenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="IOSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ConsoleRenderSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RenderSystem.h">
@@ -51,22 +45,7 @@
     <ClInclude Include="ShipObj.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PhysicsHeader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Vector2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysicsObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysicsEngine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysicsSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Axis.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FullscreenObj.h">
@@ -78,25 +57,10 @@
     <ClInclude Include="ObjectData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WindArrowObj.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AISystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AIObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AIData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AudioEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AudioSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AIDNA.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -113,13 +77,7 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ConsoleRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="IOSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ConsoleRenderSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RenderSystem.cpp">
@@ -137,18 +95,6 @@
     <ClCompile Include="Vector2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PhysicsObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysicsEngine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysicsSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Axis.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FullscreenObj.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -161,22 +107,10 @@
     <ClCompile Include="Cannonball.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WindArrowObj.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AISystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AIObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AudioEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AudioSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AIDNA.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

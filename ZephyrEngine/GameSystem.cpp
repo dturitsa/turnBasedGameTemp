@@ -41,9 +41,6 @@ void GameSystem::addGameObjects(string fileName) {
 		else if (gameObjectType.compare("FullscreenObj") == 0) {
 			g = new FullscreenObj(gameObjDataMap, &objData);
 		}
-		else if (gameObjectType.compare("WindArrowObj") == 0) {
-			g = new WindArrowObj(gameObjDataMap, &objData);
-		}
 
 		if (g != NULL) {
 			createGameObject(g);
@@ -112,9 +109,7 @@ void GameSystem::addNewEnemy(int playerX, int playerY) {
 		g = new GameObject(gameObjDataMap, &objData);
 	} else if (gameObjectType.compare("FullscreenObj") == 0) {
 		g = new FullscreenObj(gameObjDataMap, &objData);
-	} else if (gameObjectType.compare("WindArrowObj") == 0) {
-		g = new WindArrowObj(gameObjDataMap, &objData);
-	}
+	} 
 
 	if (g != NULL) {
 		createGameObject(g);
@@ -246,13 +241,9 @@ void GameSystem::startSystemLoop() {
 				obj->earlyUpdate();
 			}
 
-			// wait for all threads to complete (not yet implemented)
-
 			for (GameObject* obj : gameObjects) {
 				obj->midUpdate();
 			}
-
-			// wait for all threads to complete (not yet implemented)
 
 			for (GameObject* obj : gameObjects) {
 				obj->lateUpdate();
@@ -351,86 +342,147 @@ void GameSystem::handleMessage(Msg *msg) {
 	// call the parent first 
 	System::handleMessage(msg);
 
-	////Display Thread ID for Debugging
-	//std::string s = std::to_string(std::hash<std::thread::id>()(std::this_thread::get_id()));
-	//OutputDebugString("GameSystem Handle on thread: ");
-	//OutputDebugString(s.c_str());
-	//OutputDebugString("\n");
+	//selects loaded level and calls the message handler for that level
+	switch (levelLoaded) {
+	case 0:
+		mainMenuHandler(msg);
+		break;
+	case 1:
+		settingsMenuHandler(msg);
+		break;
+	case 2:
+		lvl1Handler(msg);
+		break;
+	case 3:
+		gameOverMenuHandler(msg);
+		break;
+	case 4:
+		instructionMenuHandler(msg);
+		break;
+	default:
+		break;
+	}
+}
 
+//handles messages when in the main menu screen
+void GameSystem::mainMenuHandler(Msg * msg) {
 	std::ostringstream oss;
 	Msg* mm = new Msg(EMPTY_MESSAGE, "");
 	GameObject* g;
 
-	if (levelLoaded == 0) {
-		// main menu switch case
-		switch (msg->type) {
-		case DOWN_ARROW_PRESSED:
-			// move the marker location and let rendering know?
-			markerPosition++;
-			if (markerPosition > 3) {
-				markerPosition = 3;
-			}
-
-			mm->type = UPDATE_OBJ_SPRITE;
-			oss <<"obj3,1,MZ6_Marker_P" << markerPosition << ".png,";
-			mm->data = oss.str();
-			msgBus->postMessage(mm, this);
-			break;
-		case UP_ARROW_PRESSED:
-			// move the marker location and let rendering know?
-			markerPosition--;
-			if (markerPosition < 0) {
-				markerPosition = 0;
-			}
-			markerPosition = markerPosition % 4;
-
-			mm->type = UPDATE_OBJ_SPRITE;
-			oss << "obj3,1,MZ6_Marker_P" << markerPosition << ".png,";
-			mm->data = oss.str();
-			msgBus->postMessage(mm, this);
-			break;
-		case SPACEBAR_PRESSED:
-			if (markerPosition == 3) {
-				// Exit was selected, kill main
-				malive = false;
-			} else if (markerPosition == 2) {
-				// Go to settings
-				removeAllGameObjects();
-				addGameObjects("settings_menu.txt");
-				levelLoaded = 1;
-				markerPosition = 0;
-				Msg* m = new Msg(LEVEL_LOADED, "1");
-				msgBus->postMessage(m, this);
-			} else if (markerPosition == 1) {
-				// start the game (or go to level select?)
-				// first, clear all objects
-				removeAllGameObjects();
-
-				// then, load new objects
-				//addGameObjects("Level_1.txt");
-				addGameObjects("Level_1Simplified.txt");
-				levelLoaded = 2;
-				Msg* m = new Msg(LEVEL_LOADED, "2");
-				msgBus->postMessage(m, this);
-				score = 0;
-			} else if (markerPosition == 0) {
-				// instructions page
-				removeAllGameObjects();
-				addGameObjects("instructions_menu.txt");
-				levelLoaded = 4;
-				markerPosition = 0;
-				Msg* m = new Msg(LEVEL_LOADED, "4");
-				msgBus->postMessage(m, this);
-			}
-			break;
-		default:
-			break;
+	switch (msg->type) {
+	case DOWN_ARROW_PRESSED:
+		// move the marker location and let rendering know?
+		markerPosition++;
+		if (markerPosition > 3) {
+			markerPosition = 3;
 		}
 
-	} else if (levelLoaded == 4) {
-		// instructions menu
-		// only one option; to go back to menu
-		if (msg->type == SPACEBAR_PRESSED) {
+		mm->type = UPDATE_OBJ_SPRITE;
+		oss << "obj3,1,MZ6_Marker_P" << markerPosition << ".png,";
+		mm->data = oss.str();
+		msgBus->postMessage(mm, this);
+		break;
+	case UP_ARROW_PRESSED:
+		// move the marker location and let rendering know?
+		markerPosition--;
+		if (markerPosition < 0) {
+			markerPosition = 0;
+		}
+		markerPosition = markerPosition % 4;
+
+		mm->type = UPDATE_OBJ_SPRITE;
+		oss << "obj3,1,MZ6_Marker_P" << markerPosition << ".png,";
+		mm->data = oss.str();
+		msgBus->postMessage(mm, this);
+		break;
+	case SPACEBAR_PRESSED:
+		if (markerPosition == 3) {
+			// Exit was selected, kill main
+			malive = false;
+		}
+		else if (markerPosition == 2) {
+			// Go to settings
+			removeAllGameObjects();
+			addGameObjects("settings_menu.txt");
+			levelLoaded = 1;
+			markerPosition = 0;
+			Msg* m = new Msg(LEVEL_LOADED, "1");
+			msgBus->postMessage(m, this);
+		}
+		else if (markerPosition == 1) {
+			// start the game (or go to level select?)
+			// first, clear all objects
+			removeAllGameObjects();
+
+			// then, load new objects
+			//addGameObjects("Level_1.txt");
+			addGameObjects("Level_1Simplified.txt");
+			levelLoaded = 2;
+			Msg* m = new Msg(LEVEL_LOADED, "2");
+			msgBus->postMessage(m, this);
+			score = 0;
+		}
+		else if (markerPosition == 0) {
+			// instructions page
+			removeAllGameObjects();
+			addGameObjects("instructions_menu.txt");
+			levelLoaded = 4;
+			markerPosition = 0;
+			Msg* m = new Msg(LEVEL_LOADED, "4");
+			msgBus->postMessage(m, this);
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+//message handling when in the instructions screen
+void GameSystem::instructionMenuHandler(Msg * msg) {
+	// only one option; to go back to menu
+	if (msg->type == SPACEBAR_PRESSED) {
+		removeAllGameObjects();
+		addGameObjects("main_menu.txt");
+		levelLoaded = 0;
+		markerPosition = 0;
+		Msg* m = new Msg(LEVEL_LOADED, "0");
+		msgBus->postMessage(m, this);
+	}
+}
+//the settings menu message handler
+void GameSystem::settingsMenuHandler(Msg * msg) {
+	std::ostringstream oss;
+	Msg* mm = new Msg(EMPTY_MESSAGE, "");
+	switch (msg->type) {
+	case DOWN_ARROW_PRESSED:
+		// move the marker location and let rendering know?
+		markerPosition++;
+		if (markerPosition > 2) {
+			markerPosition = 2;
+		}
+
+		mm->type = UPDATE_OBJ_SPRITE;
+		oss << "obj3,1,Z6_Marker_P" << markerPosition << ".png,";
+		mm->data = oss.str();
+		msgBus->postMessage(mm, this);
+		break;
+	case UP_ARROW_PRESSED:
+		// move the marker location and let rendering know?
+		markerPosition--;
+		if (markerPosition < 0) {
+			markerPosition = 0;
+		}
+		markerPosition = markerPosition % 3;
+
+		mm->type = UPDATE_OBJ_SPRITE;
+		oss << "obj3,1,Z6_Marker_P" << markerPosition << ".png,";
+		mm->data = oss.str();
+		msgBus->postMessage(mm, this);
+		break;
+	case SPACEBAR_PRESSED:
+		if (markerPosition == 2) {
+			// Back button, go to menu
 			removeAllGameObjects();
 			addGameObjects("main_menu.txt");
 			levelLoaded = 0;
@@ -438,310 +490,263 @@ void GameSystem::handleMessage(Msg *msg) {
 			Msg* m = new Msg(LEVEL_LOADED, "0");
 			msgBus->postMessage(m, this);
 		}
-	} else if (levelLoaded == 1) {
-		// settings menu
-		switch (msg->type) {
-		case DOWN_ARROW_PRESSED:
-			// move the marker location and let rendering know?
-			markerPosition++;
-			if (markerPosition > 2) {
-				markerPosition = 2;
-			}
-
-			mm->type = UPDATE_OBJ_SPRITE;
-			oss << "obj3,1,Z6_Marker_P" << markerPosition << ".png,";
-			mm->data = oss.str();
+		else if (markerPosition == 1) {
+			// change game sound to "off"
+			mm->type = AUDIO_MUTE;
+			mm->data = "1";
 			msgBus->postMessage(mm, this);
-			break;
-		case UP_ARROW_PRESSED:
-			// move the marker location and let rendering know?
-			markerPosition--;
-			if (markerPosition < 0) {
-				markerPosition = 0;
-			}
-			markerPosition = markerPosition % 3;
-
-			mm->type = UPDATE_OBJ_SPRITE;
-			oss << "obj3,1,Z6_Marker_P" << markerPosition << ".png,";
-			mm->data = oss.str();
+		}
+		else if (markerPosition == 0) {
+			// change game sound to "on"
+			mm->type = AUDIO_MUTE;
+			mm->data = "0";
 			msgBus->postMessage(mm, this);
-			break;
-		case SPACEBAR_PRESSED:
-			if (markerPosition == 2) {
-				// Back button, go to menu
-				removeAllGameObjects();
-				addGameObjects("main_menu.txt");
-				levelLoaded = 0;
-				markerPosition = 0;
-				Msg* m = new Msg(LEVEL_LOADED, "0");
-				msgBus->postMessage(m, this);
-			} else if (markerPosition == 1) {
-				// change game sound to "off"
-				mm->type = AUDIO_MUTE;
-				mm->data = "1";
-				msgBus->postMessage(mm, this);
-			} else if (markerPosition == 0) {
-				// change game sound to "on"
-				mm->type = AUDIO_MUTE;
-				mm->data = "0";
-				msgBus->postMessage(mm, this);
-			}
-			break;
-		default:
-			break;
 		}
-	}
-	else if (levelLoaded == 2) {
-		//lvl1Handler(msg);
-		// game running switch case
-		switch (msg->type) {
-		case TEST_KEY_PRESSED:
-			for (GameObject* g : gameObjects) {
-				if (g->id == "shipwreck") {
-					Msg* m = new Msg(CHANGE_MAST,"shipwreck,2,Boat_S2.png");
-					msgBus->postMessage(m, this);
-
-					Msg* m2 = new Msg(CHANGE_RUDDER, "shipwreck,1");
-					msgBus->postMessage(m2, this);
-					//gameObjectRemoved(g);
-					//gameObjects.erase(remove(gameObjects.begin(), gameObjects.end(), g), gameObjects.end());
-					/*
-					g->x++;
-					g->y++;
-					g->orientation += 10.0;
-					oss << g->id << ',' << g->renderable << ',' << g->x << ',' << g->y << ',' << g->z << ',' << g->orientation << ",20,20,1,0";
-					mm = new Msg(UPDATE_OBJECT_POSITION, oss.str());
-					msgBus->postMessage(mm);
-					*/
-				}
-			}
-			break;
-		case SHOOT_CANNON: {
-			
-			vector<string> data = split(msg->data, ',');
-			for (GameObject* g : gameObjects) {
-				if (g->id == data[0]) {
-					ShipObj* so = dynamic_cast<ShipObj*>(g);
-					
-					so->shoot(data[1]);
-				}
-			}
-			break;
-		}
-		case GO_COLLISION: {
-			vector<string> data = split(msg->data, ',');
-
-			for (GameObject* g : gameObjects) {
-				//OutputDebugString(g->id.c_str());
-				if (g->id == data[0]) {
-					for (GameObject* o : gameObjects) {
-						if (o->id == data[1]) {
-							g->onCollide(o);
-							break;
-						}
-					}
-				}
-
-			}
-			break;
-		}
-		case KEY_W_PRESSED:
-			// increase mast
-			// find the ship obj, and when you find it, increase mast
-			for (GameObject* g : gameObjects) {
-				if (g->getObjectType() == "ShipObj") {
-					ShipObj* so = dynamic_cast<ShipObj*>(g);
-					so->sail++;
-					if (so->sail > 2) {
-						so->sail = 2;
-					}
-
-
-					// change sail image
-					std::ostringstream tOss;
-					tOss << "Boat_S" << so->sail << ".png";
-					so->renderable = tOss.str();
-
-					mm->type = CHANGE_MAST;
-					oss << so->id << "," << so->sail << "," << so->renderable;
-					mm->data = oss.str();
-					msgBus->postMessage(mm, this);
-
-					Msg* mm2 = new Msg(UPDATE_OBJ_SPRITE, oss.str());
-					msgBus->postMessage(mm2, this);
-
-					break;
-				}
-			}
-			break;
-		case KEY_S_PRESSED:
-			// decrease mast
-			for (GameObject* g : gameObjects) {
-				if (g->getObjectType() == "ShipObj") {
-					ShipObj* so = dynamic_cast<ShipObj*>(g);
-					so->sail--;
-					if (so->sail < 0) {
-						so->sail = 0;
-					}
-
-					// change sail image
-					std::ostringstream tOss;
-					tOss << "Boat_S" << so->sail << ".png";
-					so->renderable = tOss.str();
-
-					mm->type = CHANGE_MAST;
-					oss << so->id << "," << so->sail << "," << so->renderable;
-					mm->data = oss.str();
-					msgBus->postMessage(mm, this);
-
-					Msg* mm2 = new Msg(UPDATE_OBJ_SPRITE, oss.str());
-					msgBus->postMessage(mm2, this);
-					break;
-				}
-			}
-			break;
-		case KEY_D_PRESSED:
-			// change rudder to right
-			for (GameObject* g : gameObjects) {
-				if (g->getObjectType() == "ShipObj") {
-					ShipObj* so = dynamic_cast<ShipObj*>(g);
-					so->rudder++;
-					if (so->rudder > 4) {
-						so->rudder = 4;
-					}
-
-					mm->type = CHANGE_RUDDER;
-					oss << so->id << "," << so->rudder;
-					mm->data = oss.str();
-					msgBus->postMessage(mm, this);
-					break;
-				}
-			}
-			break;
-		case KEY_A_PRESSED:
-			// change rudder left
-			for (GameObject* g : gameObjects) {
-				if (g->getObjectType() == "ShipObj") {
-					ShipObj* so = dynamic_cast<ShipObj*>(g);
-					so->rudder--;
-					if (so->rudder < 0) {
-						so->rudder = 0;
-					}
-
-					mm->type = CHANGE_RUDDER;
-					oss << so->id << "," << so->rudder;
-					mm->data = oss.str();
-					msgBus->postMessage(mm, this);
-					break;
-				}
-			}
-			break;
-		case KEY_E_PRESSED: {
-			// fire a cannon ball to the right. 
-
-			for (GameObject* g : gameObjects) {
-				if (g->id == "playerShip") {
-					ShipObj* so = dynamic_cast<ShipObj*>(g);
-					so->shoot("right");
-					break;
-				}
-			}
-
-			break;
-		}
-		case KEY_Q_PRESSED: {
-			// fire a cannon ball to the left.
-			for (GameObject* g : gameObjects) {
-				if (g->id == "playerShip") {
-					ShipObj* so = dynamic_cast<ShipObj*>(g);
-					so->shoot("left");
-					break;
-				}
-			}
-			break;
-		}
-		case UPDATE_OBJECT_POSITION: {
-
-			vector<string> data = split(msg->data, ',');
-
-			for (GameObject* g : gameObjects) {
-				//OutputDebugString(g->id.c_str());
-
-				if (g->id == data[0]) {
-					g->x = atof(data[2].c_str());
-					g->y = atof(data[3].c_str());
-					g->orientation = atof(data[5].c_str());
-				}
-
-			}
-			break;
-		}
-		default:
-			break;
-		}
-	} else if (levelLoaded == 3) {
-		switch (msg->type) {
-		case DOWN_ARROW_PRESSED:
-			// move the marker location and let rendering know?
-			markerPosition++;
-			if (markerPosition > 2) {
-				markerPosition = 2;
-			}
-
-			mm->type = UPDATE_OBJ_SPRITE;
-			oss << "obj3,1,Z6_Marker_P" << markerPosition << ".png,";
-			mm->data = oss.str();
-			msgBus->postMessage(mm, this);
-			break;
-		case UP_ARROW_PRESSED:
-			// move the marker location and let rendering know?
-			markerPosition--;
-			if (markerPosition < 1) {
-				markerPosition = 1;
-			}
-			markerPosition = markerPosition % 3;
-
-			mm->type = UPDATE_OBJ_SPRITE;
-			oss << "obj3,1,Z6_Marker_P" << markerPosition << ".png,";
-			mm->data = oss.str();
-			msgBus->postMessage(mm, this);
-			break;
-		case SPACEBAR_PRESSED:
-			// End Game Screen
-			if (markerPosition == 2) {
-				// go to menu
-				removeAllGameObjects();
-				addGameObjects("main_menu.txt");
-				levelLoaded = 0;
-				markerPosition = 0;
-				Msg* m = new Msg(LEVEL_LOADED, "0");
-				msgBus->postMessage(m, this);
-			} else if (markerPosition == 1) {
-				// start the game (or go to level select?)
-				// first, clear all objects
-				removeAllGameObjects();
-
-				// then, load new objects
-				addGameObjects("Level_1Simplified.txt"); // TEMPORARY 
-				levelLoaded = 2;
-				Msg* m = new Msg(LEVEL_LOADED, "2");
-				msgBus->postMessage(m, this);
-				score = 0;
-			}
-		default:
-			break;
-		}
-	} else {
-		// -1 case; ignore since we haven't even loaded anything yet
+		break;
+	default:
+		break;
 	}
 }
 
-//should probably break the massive switch statements into functions or even classes
-void GameSystem::mainMenuHandler(Msg * msg) {
-
-}
-
-//should probably break the massive switch statements into functions or even classes
+//handles messages in level1 scene
 void GameSystem::lvl1Handler(Msg * msg) {
+	std::ostringstream oss;
+	Msg* mm = new Msg(EMPTY_MESSAGE, "");
+	GameObject* g;
 
+
+	switch (msg->type) {
+	case TEST_KEY_PRESSED:
+		for (GameObject* g : gameObjects) {
+			if (g->id == "shipwreck") {
+				Msg* m = new Msg(CHANGE_MAST, "shipwreck,2,Boat_S2.png");
+				msgBus->postMessage(m, this);
+
+				Msg* m2 = new Msg(CHANGE_RUDDER, "shipwreck,1");
+				msgBus->postMessage(m2, this);
+			}
+		}
+		break;
+	case SHOOT_CANNON: {
+
+		vector<string> data = split(msg->data, ',');
+		for (GameObject* g : gameObjects) {
+			if (g->id == data[0]) {
+				ShipObj* so = dynamic_cast<ShipObj*>(g);
+
+				so->shoot(data[1]);
+			}
+		}
+		break;
+	}
+	case GO_COLLISION: {
+		vector<string> data = split(msg->data, ',');
+
+		for (GameObject* g : gameObjects) {
+			//OutputDebugString(g->id.c_str());
+			if (g->id == data[0]) {
+				for (GameObject* o : gameObjects) {
+					if (o->id == data[1]) {
+						g->onCollide(o);
+						break;
+					}
+				}
+			}
+
+		}
+		break;
+	}
+	case KEY_W_PRESSED:
+		// increase mast
+		// find the ship obj, and when you find it, increase mast
+		for (GameObject* g : gameObjects) {
+			if (g->getObjectType() == "ShipObj") {
+				ShipObj* so = dynamic_cast<ShipObj*>(g);
+				so->sail++;
+				if (so->sail > 2) {
+					so->sail = 2;
+				}
+
+
+				// change sail image
+				std::ostringstream tOss;
+				tOss << "Boat_S" << so->sail << ".png";
+				so->renderable = tOss.str();
+
+				mm->type = CHANGE_MAST;
+				oss << so->id << "," << so->sail << "," << so->renderable;
+				mm->data = oss.str();
+				msgBus->postMessage(mm, this);
+
+				Msg* mm2 = new Msg(UPDATE_OBJ_SPRITE, oss.str());
+				msgBus->postMessage(mm2, this);
+
+				break;
+			}
+		}
+		break;
+	case KEY_S_PRESSED:
+		// decrease mast
+		for (GameObject* g : gameObjects) {
+			if (g->getObjectType() == "ShipObj") {
+				ShipObj* so = dynamic_cast<ShipObj*>(g);
+				so->sail--;
+				if (so->sail < 0) {
+					so->sail = 0;
+				}
+
+				// change sail image
+				std::ostringstream tOss;
+				tOss << "Boat_S" << so->sail << ".png";
+				so->renderable = tOss.str();
+
+				mm->type = CHANGE_MAST;
+				oss << so->id << "," << so->sail << "," << so->renderable;
+				mm->data = oss.str();
+				msgBus->postMessage(mm, this);
+
+				Msg* mm2 = new Msg(UPDATE_OBJ_SPRITE, oss.str());
+				msgBus->postMessage(mm2, this);
+				break;
+			}
+		}
+		break;
+	case KEY_D_PRESSED:
+		// change rudder to right
+		for (GameObject* g : gameObjects) {
+			if (g->getObjectType() == "ShipObj") {
+				ShipObj* so = dynamic_cast<ShipObj*>(g);
+				so->rudder++;
+				if (so->rudder > 4) {
+					so->rudder = 4;
+				}
+
+				mm->type = CHANGE_RUDDER;
+				oss << so->id << "," << so->rudder;
+				mm->data = oss.str();
+				msgBus->postMessage(mm, this);
+				break;
+			}
+		}
+		break;
+	case KEY_A_PRESSED:
+		// change rudder left
+		for (GameObject* g : gameObjects) {
+			if (g->getObjectType() == "ShipObj") {
+				ShipObj* so = dynamic_cast<ShipObj*>(g);
+				so->rudder--;
+				if (so->rudder < 0) {
+					so->rudder = 0;
+				}
+
+				mm->type = CHANGE_RUDDER;
+				oss << so->id << "," << so->rudder;
+				mm->data = oss.str();
+				msgBus->postMessage(mm, this);
+				break;
+			}
+		}
+		break;
+	case KEY_E_PRESSED: {
+		// fire a cannon ball to the right. 
+
+		for (GameObject* g : gameObjects) {
+			if (g->id == "playerShip") {
+				ShipObj* so = dynamic_cast<ShipObj*>(g);
+				so->shoot("right");
+				break;
+			}
+		}
+
+		break;
+	}
+	case KEY_Q_PRESSED: {
+		// fire a cannon ball to the left.
+		for (GameObject* g : gameObjects) {
+			if (g->id == "playerShip") {
+				ShipObj* so = dynamic_cast<ShipObj*>(g);
+				so->shoot("left");
+				break;
+			}
+		}
+		break;
+	}
+	case UPDATE_OBJECT_POSITION: {
+
+		vector<string> data = split(msg->data, ',');
+
+		for (GameObject* g : gameObjects) {
+			//OutputDebugString(g->id.c_str());
+
+			if (g->id == data[0]) {
+				g->x = atof(data[2].c_str());
+				g->y = atof(data[3].c_str());
+				g->orientation = atof(data[5].c_str());
+			}
+
+		}
+		break;
+	}
+	default:
+		break;
+	}
 }
+
+//gameober menu message handler
+void GameSystem::gameOverMenuHandler(Msg * msg) {
+	std::ostringstream oss;
+	Msg* mm = new Msg(EMPTY_MESSAGE, "");
+	switch (msg->type) {
+	case DOWN_ARROW_PRESSED:
+		// move the marker location and let rendering know?
+		markerPosition++;
+		if (markerPosition > 2) {
+			markerPosition = 2;
+		}
+
+		mm->type = UPDATE_OBJ_SPRITE;
+		oss << "obj3,1,Z6_Marker_P" << markerPosition << ".png,";
+		mm->data = oss.str();
+		msgBus->postMessage(mm, this);
+		break;
+	case UP_ARROW_PRESSED:
+		// move the marker location and let rendering know?
+		markerPosition--;
+		if (markerPosition < 1) {
+			markerPosition = 1;
+		}
+		markerPosition = markerPosition % 3;
+
+		mm->type = UPDATE_OBJ_SPRITE;
+		oss << "obj3,1,Z6_Marker_P" << markerPosition << ".png,";
+		mm->data = oss.str();
+		msgBus->postMessage(mm, this);
+		break;
+	case SPACEBAR_PRESSED:
+		// End Game Screen
+		if (markerPosition == 2) {
+			// go to menu
+			removeAllGameObjects();
+			addGameObjects("main_menu.txt");
+			levelLoaded = 0;
+			markerPosition = 0;
+			Msg* m = new Msg(LEVEL_LOADED, "0");
+			msgBus->postMessage(m, this);
+		}
+		else if (markerPosition == 1) {
+			// start the game (or go to level select?)
+			// first, clear all objects
+			removeAllGameObjects();
+
+			// then, load new objects
+			addGameObjects("Level_1Simplified.txt"); // TEMPORARY 
+			levelLoaded = 2;
+			Msg* m = new Msg(LEVEL_LOADED, "2");
+			msgBus->postMessage(m, this);
+			score = 0;
+		}
+	default:
+		break;
+	}
+}
+
