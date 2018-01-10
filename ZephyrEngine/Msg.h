@@ -25,15 +25,23 @@ enum MSG_TYPE {
 	CHECK_KEY_PRESSES, TEST_KEY_PRESSED,
 	UP_ARROW_PRESSED, DOWN_ARROW_PRESSED, RIGHT_ARROW_PRESSED, LEFT_ARROW_PRESSED, SPACEBAR_PRESSED, KEY_A_PRESSED, KEY_D_PRESSED, KEY_S_PRESSED, KEY_W_PRESSED, KEY_Q_PRESSED, KEY_E_PRESSED,
 
-	//Audio System
+	// Audio System
 	AUDIO_MUTE, CHANGE_SOUNDTRACK,
 
-	//AI system
+	// AI system
 	SCORED_HIT, //the object scored a hit on an enemy (used in AI learning) shooterId,shotObjectID, projectileID
 	SHOOT_CANNON, //id,direction
 
-	//Render System
-	CAMERA_OFFSET //the position of the camera in world space :   xposition,yposition
+	// Render System
+	CAMERA_OFFSET, //the position of the camera in world space :   xposition,yposition
+
+	// Network System
+	// Format: 
+	// NETWORK_S_ACTION for sending to network
+	// NETWOR_R_ACTION is what network system will send to our game system when it receives an action
+	NETWORK_TURN_BROADCAST,
+	NETWORK_R_IDLE,
+	NETWORK_S_IDLE
 };
 
 class Msg {

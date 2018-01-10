@@ -30,6 +30,9 @@ int main(int argc, char *argv[]) {
 	AudioSystem* aus = new AudioSystem(mbus);
 	mbus->addSystem(aus);
 
+	NetworkSystem* ns = new NetworkSystem(mbus);
+	mbus->addSystem(ns);
+
 	std::cout << "All systems created";
 
 	//////////////////////////////////////////////////////////////////
@@ -63,6 +66,7 @@ int main(int argc, char *argv[]) {
 	std::thread ioThread(startIOSystem, ios);
 	std::thread aiThread(startAISystem, ais);
 	std::thread audThread(startAudioSystem, aus);
+	std::thread nsThread(startNetworkSystem, ns);
 	
 
 
@@ -91,7 +95,7 @@ int main(int argc, char *argv[]) {
 				malive = false;
 				ais->alive = false;
 				aus->alive = false;
-
+				ns->alive = false;
 			}
 		}
 		//OutputDebugString("outside\n");
@@ -105,6 +109,7 @@ int main(int argc, char *argv[]) {
 	ps->alive = false;
 	ais->alive = false;
 	aus->alive = false;
+	ns->alive = false;
 
 	//////////////////////////////////////////////////////////////////
 	//						Thread Joining							//
@@ -120,7 +125,9 @@ int main(int argc, char *argv[]) {
 	aiThread.join();
 	OutputDebugString("\nAI Ended\n");
 	audThread.join();
-
+	OutputDebugString("\nAudio Ended\n");
+	nsThread.join();
+	OutputDebugString("\nNetwork Ended\n");
 
 	return 1;
 }

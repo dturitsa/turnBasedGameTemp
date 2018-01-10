@@ -7,7 +7,9 @@
 #include "PhysicsSystem.h"
 #include "AISystem.h"
 #include "AudioSystem.h"
+#include "NetworkSystem.h"
 #include <time.h>
+
 
 
 MessageBus* mbus;
@@ -22,5 +24,6 @@ void startGameSystem(GameSystem* s);
 void startPhysicsSystem(PhysicsSystem* s);
 void startAISystem(AISystem* s); 
 void startAudioSystem(AudioSystem* s);
+void startNetworkSystem(NetworkSystem* s);
 
 
