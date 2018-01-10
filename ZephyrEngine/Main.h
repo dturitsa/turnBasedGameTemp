@@ -5,7 +5,6 @@
 #include "GameSystem.h"
 #include "IOSystem.h"
 #include "PhysicsSystem.h"
-#include "AISystem.h"
 #include "AudioSystem.h"
 #include <time.h>
 
@@ -20,7 +19,6 @@ void startIOSystem(IOSystem* s);
 void startRenderSystem(RenderSystem* s);
 void startGameSystem(GameSystem* s);
 void startPhysicsSystem(PhysicsSystem* s);
-void startAISystem(AISystem* s); 
 void startAudioSystem(AudioSystem* s);
 
 

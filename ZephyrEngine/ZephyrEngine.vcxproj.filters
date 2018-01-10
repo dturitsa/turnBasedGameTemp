@@ -81,22 +81,10 @@
     <ClInclude Include="WindArrowObj.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AISystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AIObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AIData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AudioEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AudioSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AIDNA.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -164,19 +152,10 @@
     <ClCompile Include="WindArrowObj.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AISystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AIObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AudioEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AudioSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AIDNA.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
