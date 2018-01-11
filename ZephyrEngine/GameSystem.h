@@ -54,9 +54,18 @@ private:
 	void instructionMenuHandler(Msg * msg);
 	void lvl1Handler(Msg * msg);
 	void gameOverMenuHandler(Msg * msg);
+	void executeAction(int actionNumber);
 
 	//send a message with updated object position
 	void sendUpdatePosMessage(GameObject* g);
 	// The position of the marker, goes from 0 to 2, 0 being the top
 	int markerPosition = 0;
+
+	int currentAction = 0;//the current action that is being set
+
+	vector<string> actionsToExecute; //the actions to be executed this turn. Received from the network system
+
+	//time since the start of the current turn
+	int framesSinceTurnStart = 0;
+
 };

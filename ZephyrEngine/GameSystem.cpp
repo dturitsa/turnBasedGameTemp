@@ -93,12 +93,14 @@ void GameSystem::startSystemLoop() {
 	int enemySpawnCooldownCounter = 0;
 
 	int currentGameTime = 0;
+	framesSinceTurnStart = 9999;
 	while (alive) {
 		thisTime = clock();
 		if (thisTime  < currentGameTime) {
 			Sleep(currentGameTime - thisTime);
 		}
 		currentGameTime = thisTime + timeFrame;
+		
 
 		handleMsgQ();
 
@@ -134,7 +136,27 @@ void GameSystem::startSystemLoop() {
 			// the Menu page tho
 			break;
 		case 2: { // Game loaded
+			//execute actions
+			OutputDebugString("\n");
+			OutputDebugString(to_string(framesSinceTurnStart).c_str());
+			if (framesSinceTurnStart == 0) {
+				executeAction(0);	
+			}
+			else if (framesSinceTurnStart == 100) {
+				executeAction(1);
+			}
+			else if (framesSinceTurnStart == 200) {
+				executeAction(2);
+			}
+			else if (framesSinceTurnStart == 300) {
+				executeAction(3);
+			}
+			framesSinceTurnStart++;
+
 			bool endgame = false;
+
+
+
 			for (GameObject* obj : gameObjects) {
 				obj->earlyUpdate();
 			}
@@ -420,6 +442,16 @@ void GameSystem::lvl1Handler(Msg * msg) {
 		}
 	}
 
+	GameObject* player = nullptr;
+	for (GameObject* g : gameObjects) {
+		if (g->id == "player1") {
+			player = g;
+		}
+	}
+	//vector<string> actionsArray;
+	vector<string> playersArray;
+	vector<string> playerAction;
+
 		switch (msg->type) {
 		case DOWN_ARROW_PRESSED: 
 			reticle->y -= 10;
@@ -441,30 +473,43 @@ void GameSystem::lvl1Handler(Msg * msg) {
 			sendUpdatePosMessage(reticle);
 			break;
 
+		case SPACEBAR_PRESSED:
+			//send messsage with the confirmed action
+
+			//message format: playerID,actionName,actionNumber,targetX,targetY
+			oss << player->id << ","//playerID
+				<< "MOVE" << ","//action type just MOVE for now
+				<< currentAction << ","//the action number 0 to <number of actions/turn>
+				<< reticle->x << "," //target x pos
+				<< reticle->y; //target y pos
+				
+			mm->type = NETWORK_R_ACTION;
+			mm->data = oss.str();
+			msgBus->postMessage(mm, this);	
+			currentAction++;
+			break;
+
+		case NETWORK_TURN_BROADCAST:
+			actionsToExecute = split(msg->data, '\n');
+			OutputDebugString(actionsToExecute[0].c_str());
+	/*		playersArray = split(actionsToExecute[0], ']');
+			playerAction = split(playersArray[0], ',');
+			player->x = stoi(playerAction[2]);
+			player->y = stoi(playerAction[3]);
+			sendUpdatePosMessage(player);*/
+			currentAction = 0;
+			framesSinceTurnStart = 0;
+			break;
+
 		case TEST_KEY_PRESSED:
-			for (GameObject* g : gameObjects) {
-				if (g->id == "shipwreck") {
-					Msg* m = new Msg(CHANGE_MAST, "shipwreck,2,Boat_S2.png");
-					msgBus->postMessage(m, this);
-
-					Msg* m2 = new Msg(CHANGE_RUDDER, "shipwreck,1");
-					msgBus->postMessage(m2, this);
-				}
-			}
 			break;
-		case SHOOT_CANNON: {
 
-			vector<string> data = split(msg->data, ',');
-			for (GameObject* g : gameObjects) {
-				if (g->id == data[0]) {
-					ShipObj* so = dynamic_cast<ShipObj*>(g);
-
-					so->shoot(data[1]);
-				}
-			}
+		case SHOOT_CANNON: 
 			break;
-		}
-		case GO_COLLISION: {
+	
+		case GO_COLLISION:
+		/*
+		{
 			vector<string> data = split(msg->data, ',');
 
 			for (GameObject* g : gameObjects) {
@@ -481,121 +526,25 @@ void GameSystem::lvl1Handler(Msg * msg) {
 			}
 			break;
 		}
+		*/
 		case KEY_W_PRESSED:
-			// increase mast
-			// find the ship obj, and when you find it, increase mast
-			for (GameObject* g : gameObjects) {
-				if (g->getObjectType() == "ShipObj") {
-					ShipObj* so = dynamic_cast<ShipObj*>(g);
-					so->sail++;
-					if (so->sail > 2) {
-						so->sail = 2;
-					}
-
-
-					// change sail image
-					std::ostringstream tOss;
-					tOss << "Boat_S" << so->sail << ".png";
-					so->renderable = tOss.str();
-
-					mm->type = CHANGE_MAST;
-					oss << so->id << "," << so->sail << "," << so->renderable;
-					mm->data = oss.str();
-					msgBus->postMessage(mm, this);
-
-					Msg* mm2 = new Msg(UPDATE_OBJ_SPRITE, oss.str());
-					msgBus->postMessage(mm2, this);
-
-					break;
-				}
-			}
 			break;
+
 		case KEY_S_PRESSED:
-			// decrease mast
-			for (GameObject* g : gameObjects) {
-				if (g->getObjectType() == "ShipObj") {
-					ShipObj* so = dynamic_cast<ShipObj*>(g);
-					so->sail--;
-					if (so->sail < 0) {
-						so->sail = 0;
-					}
-
-					// change sail image
-					std::ostringstream tOss;
-					tOss << "Boat_S" << so->sail << ".png";
-					so->renderable = tOss.str();
-
-					mm->type = CHANGE_MAST;
-					oss << so->id << "," << so->sail << "," << so->renderable;
-					mm->data = oss.str();
-					msgBus->postMessage(mm, this);
-
-					Msg* mm2 = new Msg(UPDATE_OBJ_SPRITE, oss.str());
-					msgBus->postMessage(mm2, this);
-					break;
-				}
-			}
 			break;
+
 		case KEY_D_PRESSED:
-			// change rudder to right
-			for (GameObject* g : gameObjects) {
-				if (g->getObjectType() == "ShipObj") {
-					ShipObj* so = dynamic_cast<ShipObj*>(g);
-					so->rudder++;
-					if (so->rudder > 4) {
-						so->rudder = 4;
-					}
-
-					mm->type = CHANGE_RUDDER;
-					oss << so->id << "," << so->rudder;
-					mm->data = oss.str();
-					msgBus->postMessage(mm, this);
-					break;
-				}
-			}
 			break;
+
 		case KEY_A_PRESSED:
-			// change rudder left
-			for (GameObject* g : gameObjects) {
-				if (g->getObjectType() == "ShipObj") {
-					ShipObj* so = dynamic_cast<ShipObj*>(g);
-					so->rudder--;
-					if (so->rudder < 0) {
-						so->rudder = 0;
-					}
-
-					mm->type = CHANGE_RUDDER;
-					oss << so->id << "," << so->rudder;
-					mm->data = oss.str();
-					msgBus->postMessage(mm, this);
-					break;
-				}
-			}
 			break;
-		case KEY_E_PRESSED: {
-			// fire a cannon ball to the right. 
 
-			for (GameObject* g : gameObjects) {
-				if (g->id == "playerShip") {
-					ShipObj* so = dynamic_cast<ShipObj*>(g);
-					so->shoot("right");
-					break;
-				}
-			}
+		case KEY_E_PRESSED:
+			break;
 
+		case KEY_Q_PRESSED:
 			break;
-		}
-		case KEY_Q_PRESSED: {
-			// fire a cannon ball to the left.
-			for (GameObject* g : gameObjects) {
-				if (g->id == "playerShip") {
-					ShipObj* so = dynamic_cast<ShipObj*>(g);
-					so->shoot("left");
-					break;
-				}
-			}
-			break;
-		}
+		
 		case UPDATE_OBJECT_POSITION: {
 
 			vector<string> data = split(msg->data, ',');
@@ -694,4 +643,25 @@ void GameSystem::sendUpdatePosMessage(GameObject* g) {
 	mm->type = UPDATE_OBJECT_POSITION;
 	mm->data = oss.str();
 	msgBus->postMessage(mm, this);
+}
+
+//execute the actions received from the network
+void GameSystem::executeAction(int a) {
+	vector<string> playerAction;
+	vector<string> players = split(actionsToExecute[a], ']');
+
+	for each (string s in players) {
+		playerAction = split(s, ',');
+
+		//display player actions for players whose id's are found
+		for (GameObject* g : gameObjects) {
+			if (g->id == playerAction[0]) {
+				g->x = stoi(playerAction[2]);
+				g->y = stoi(playerAction[3]);
+				sendUpdatePosMessage(g);
+			}
+			
+		}
+	}
+
 }

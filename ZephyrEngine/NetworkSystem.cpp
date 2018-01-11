@@ -1,6 +1,7 @@
 #include "NetworkSystem.h"
 
 
+using namespace std;
 
 NetworkSystem::NetworkSystem(MessageBus* mbus) : System(mbus) {
 	m = new Msg(EMPTY_MESSAGE, "");
@@ -22,6 +23,7 @@ void NetworkSystem::startSystemLoop() {
 		if (thisTime  < currentGameTime) {
 			Sleep(currentGameTime - thisTime);
 		}
+		handleMsgQ();
 
 		// if testing mode
 		if (echoMode) {
@@ -43,12 +45,26 @@ void NetworkSystem::handleMessage(Msg *msg) {
 	// call the parent first 
 	System::handleMessage(msg);
 
+
+	vector<string> data = split(msg->data, ',');
 	// personal call 
 	switch (msg->type) {
-		case NETWORK_S_IDLE:
-			playerTurnAction[actionCounter] = "NETWORK_S_IDLE";
+		
+		case NETWORK_R_IDLE:
+			playerTurnAction[actionCounter] = "NETWORK_R_IDLE";
 			playerTurnTarget[actionCounter] = "A0"; // can be changed to use -- later
 			// always add 1 to the action counter
+			actionCounter++;
+			break;
+		case NETWORK_R_ACTION:
+			if (actionCounter > 3) { break;
+			}
+			playerTurnAction[stoi(data[2])] = data[1];
+			playerTurnTargetX[stoi(data[2])] = data[3]; //seperateX and y to match gamesystem
+			playerTurnTargetY[stoi(data[2])] = data[4];//seperateX and y to match gamesystem
+			
+			// always add 1 to the action counter
+			//may not be needed if action # passed in from game systems
 			actionCounter++;
 			break;
 	default:
@@ -66,10 +82,10 @@ void NetworkSystem::broadcastTurnInfo() {
 	if (echoMode) {
 		// needs to be changed later to use a loop in case we change max action count
 		turnInfo =
-			playerID + "," + playerTurnAction[0] + "," + playerTurnTarget[0] + "]D1, NETWORK_R_IDLE, A0]D2, NETWORK_R_IDLE, A0]D3, NETWORK_R_IDLE, A0]\n" +
-			playerID + "," + playerTurnAction[1] + "," + playerTurnTarget[1] + "]D1, NETWORK_R_IDLE, A0]D2, NETWORK_R_IDLE, A0]D3, NETWORK_R_IDLE, A0]\n" +
-			playerID + "," + playerTurnAction[2] + "," + playerTurnTarget[2] + "]D1, NETWORK_R_IDLE, A0]D2, NETWORK_R_IDLE, A0]D3, NETWORK_R_IDLE, A0]\n" +
-			playerID + "," + playerTurnAction[3] + "," + playerTurnTarget[3] + "]D1, NETWORK_R_IDLE, A0]D2, NETWORK_R_IDLE, A0]D3, NETWORK_R_IDLE, A0]";
+			playerID + "," + playerTurnAction[0] + "," + playerTurnTargetX[0] + "," + playerTurnTargetY[0] + "]D1, NETWORK_R_IDLE, 0,0]D2, NETWORK_R_IDLE, 0,0]D3, NETWORK_R_IDLE, 0,0]\n" +
+			playerID + "," + playerTurnAction[1] + "," + playerTurnTargetX[1] + "," + playerTurnTargetY[1] + "]D1, NETWORK_R_IDLE, 0,0]D2, NETWORK_R_IDLE, 0,0]D3, NETWORK_R_IDLE, 0,0]\n" +
+			playerID + "," + playerTurnAction[2] + "," + playerTurnTargetX[2] + "," + playerTurnTargetY[2] + "]D1, NETWORK_R_IDLE, 0,0]D2, NETWORK_R_IDLE, 0,0]D3, NETWORK_R_IDLE, 0,0]\n" +
+			playerID + "," + playerTurnAction[3] + "," + playerTurnTargetX[3] + "," + playerTurnTargetY[3] + "]D1, NETWORK_R_IDLE, 0,0]D2, NETWORK_R_IDLE, 0,0]D3, NETWORK_R_IDLE, 0,0]";
 	}
 
 	// im being lazy here and just sending out the string since ideally the network class doesn't know how to parse. alternatively i can parse here, depends on

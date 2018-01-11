@@ -4,6 +4,7 @@
 #include <queue>
 #include <mutex>
 #include <windows.h>
+#include <string>  
 
 class MessageBus;
 
