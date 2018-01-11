@@ -54,7 +54,7 @@ imageFrames: 1;
 
 gameObjectType: GameObject,
 id: player2,
-renderable: sciFiTank.png,
+renderable: sciFiTank1.png,
 xPos: 100,
 yPos: 120,
 zPos: 1,
@@ -69,7 +69,7 @@ imageFrames: 1;
 
 gameObjectType: GameObject,
 id: player3,
-renderable: sciFiTank.png,
+renderable: sciFiTank1.png,
 xPos: -20,
 yPos: 120,
 zPos: 1,
@@ -84,7 +84,7 @@ imageFrames: 1;
 
 gameObjectType: GameObject,
 id: player4,
-renderable: sciFiTank.png,
+renderable: sciFiTank1.png,
 xPos: -120,
 yPos: 20,
 zPos: 1,
